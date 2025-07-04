@@ -12,7 +12,7 @@ import { supabase } from '../../lib/supabase';
 import { uploadRecipeImage } from '../../lib/imageUtils';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import AIRecipeSummary from './AIRecipeSummary';
+import { generateRecipeSummary, isOpenAIAvailable } from '../../lib/openai';
 
 interface Ingredient {
   name: string;
@@ -40,7 +40,7 @@ const RecipeForm: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showPreview, setShowPreview] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -115,6 +115,36 @@ const RecipeForm: React.FC = () => {
     setSteps(renumberedSteps);
   };
 
+  const generateAIDescription = async () => {
+    if (!isOpenAIAvailable || !title || ingredients.length === 0 || steps.length === 0) {
+      return;
+    }
+
+    setGeneratingDescription(true);
+    try {
+      const recipe = {
+        title,
+        ingredients,
+        steps,
+        cuisine,
+        difficulty,
+        cookingTime,
+        dietaryTags
+      };
+
+      const aiDescription = await generateRecipeSummary(recipe);
+      if (aiDescription) {
+        setDescription(aiDescription);
+      } else {
+        setError('Failed to generate AI description. Please try again.');
+      }
+    } catch (err) {
+      console.error('Failed to generate AI description:', err);
+      setError('An error occurred while generating the description.');
+    } finally {
+      setGeneratingDescription(false);
+    }
+  };
   const updateStep = (index: number, field: keyof Step, value: string | number) => {
     const newSteps = [...steps];
     newSteps[index][field] = value as any;
@@ -217,16 +247,40 @@ const RecipeForm: React.FC = () => {
 
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-              Description
+              Description {isOpenAIAvailable && <span className="text-purple-600">(AI-Enhanced)</span>}
             </label>
-            <InputTextarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-              className="w-full p-3 border border-gray-300 rounded-md"
-              placeholder="Describe your recipe"
-            />
+            <div className="space-y-2">
+              <InputTextarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Describe your recipe or let AI generate an appetizing description..."
+              />
+              {isOpenAIAvailable && title && ingredients.length > 0 && steps.length > 0 && (
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    label="Generate AI Description"
+                    icon="pi pi-sparkles"
+                    onClick={generateAIDescription}
+                    loading={generatingDescription}
+                    className="p-button-outlined p-button-sm"
+                    style={{ 
+                      borderColor: '#8b5cf6', 
+                      color: '#8b5cf6',
+                      backgroundColor: 'transparent'
+                    }}
+                  />
+                </div>
+              )}
+              {!isOpenAIAvailable && (
+                <p className="text-xs text-gray-500">
+                  💡 Configure OpenAI API key to enable AI-generated descriptions
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -427,30 +481,21 @@ const RecipeForm: React.FC = () => {
           </div>
         </form>
 
-        {/* AI Preview Section */}
-        {title && ingredients.length > 0 && steps.length > 0 && (
-          <div className="mt-8 pt-6 border-t">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-gray-800">AI Recipe Preview</h3>
-              <Button
-                label={showPreview ? 'Hide Preview' : 'Show AI Preview'}
-                icon={showPreview ? 'pi pi-eye-slash' : 'pi pi-eye'}
-                onClick={() => setShowPreview(!showPreview)}
-                className="p-button-outlined p-button-sm"
-              />
+        {/* AI Description Help */}
+        {isOpenAIAvailable && (
+          <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+            <div className="flex items-start space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <i className="pi pi-sparkles text-white text-sm"></i>
+              </div>
+              <div>
+                <h4 className="font-medium text-purple-800 mb-1">AI-Powered Descriptions</h4>
+                <p className="text-sm text-purple-700">
+                  Fill in your recipe details (title, ingredients, and steps) then click "Generate AI Description" 
+                  to create a mouth-watering, sensory-rich description that makes your recipe irresistible.
+                </p>
+              </div>
             </div>
-            
-            {showPreview && (
-              <AIRecipeSummary
-                title={title}
-                ingredients={ingredients}
-                steps={steps}
-                cuisine={cuisine}
-                difficulty={difficulty}
-                cookingTime={cookingTime}
-                dietaryTags={dietaryTags}
-              />
-            )}
           </div>
         )}
       </Card>
