@@ -267,8 +267,8 @@ const ShoppingListManager: React.FC = () => {
             <Button
               label="Create Shopping List"
               icon="pi pi-plus"
-              onClick={() => setShowCreateDialog(true)}
-              className="p-button-success"
+             className="p-button-success p-button-outlined"
+             onClick={() => setShowCreateDialog(true)}
             />
           </div>
         </Card>

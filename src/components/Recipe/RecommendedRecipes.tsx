@@ -313,8 +313,8 @@ const RecommendedRecipes: React.FC = () => {
               <Button
                 label="Browse Recipes"
                 icon="pi pi-search"
-                onClick={() => navigate('/recipes')}
-                className="p-button-primary"
+               className="p-button-outlined"
+               onClick={() => navigate('/recipes')}
               />
               <Button
                 label="Generate Recommendations"

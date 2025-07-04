@@ -129,15 +129,13 @@ const Home: React.FC = () => {
             <Button
               label="Create Recipe"
               icon="pi pi-plus"
-              size="large"
-              className="p-button-lg p-button-outlined p-button-success"
+              className="p-button-lg p-button-success p-button-outlined"
               onClick={() => navigate('/recipes/new')}
             />
           )}
         </div>
       </div>
-    </div>
-  );
+              className="p-button-lg p-button-outlined"
 
   const featuresSection = (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
