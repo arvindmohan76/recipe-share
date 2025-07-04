@@ -215,26 +215,6 @@
   flex-shrink: 0;
 }
 
-/* Force proper colors for Create Recipe button */
-.p-button-success {
-  background-color: #10b981 !important;
-  border-color: #10b981 !important;
-  color: #ffffff !important;
-}
-
-.p-button-success:hover {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-  color: #ffffff !important;
-}
-
-.p-button-success:focus {
-  background-color: #10b981 !important;
-  border-color: #10b981 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
-}
-
 /* Sidebar improvements */
 .p-sidebar {
   z-index: 1000;

@@ -90,22 +90,12 @@ const Navbar: React.FC = () => {
                 <Button
                   label="Create Recipe"
                   icon="pi pi-plus"
-                  className="p-button-success p-button-sm hidden md:flex"
-                  style={{ 
-                    backgroundColor: '#10b981', 
-                    borderColor: '#10b981', 
-                    color: '#ffffff' 
-                  }}
+                  className="hidden md:flex px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600 rounded-md font-medium transition-colors"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Button
                   icon="pi pi-plus"
-                  className="p-button-success p-button-sm md:hidden"
-                  style={{ 
-                    backgroundColor: '#10b981', 
-                    borderColor: '#10b981', 
-                    color: '#ffffff' 
-                  }}
+                  className="md:hidden px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600 rounded-md transition-colors"
                   onClick={() => navigate('/recipes/new')}
                 />
                 

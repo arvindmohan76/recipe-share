@@ -242,7 +242,7 @@ const RecipeForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <Card>
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Recipe</h1>
 
