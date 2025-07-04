@@ -344,13 +344,13 @@ const RecipeListWithHistory: React.FC = () => {
             <div className="ml-auto">
               <span className="text-xs text-gray-500">
                 Search tracking disabled in privacy settings
-              )}
-              {allowsTracking && (
-                <div className="ml-auto">
-                  <span className="text-xs text-green-600">
-                    ✓ Search history enabled
-                  </span>
-                </div>
+              </span>
+            </div>
+          )}
+          {allowsTracking && (
+            <div className="ml-auto">
+              <span className="text-xs text-green-600">
+                ✓ Search history enabled
               </span>
             </div>
           )}
