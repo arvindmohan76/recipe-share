@@ -640,7 +640,7 @@ const RecipeEdit: React.FC = () => {
             />
             <Button
               type="submit"
-              label="Update Recipe"
+              label="Update"
               className="p-button-success"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}

@@ -552,7 +552,7 @@ const RecipeForm: React.FC = () => {
             />
             <Button
               type="submit"
-              label="Create Recipe"
+              label="Create"
               className="p-button-success"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}

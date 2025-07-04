@@ -288,21 +288,21 @@ const RecipeDetail: React.FC = () => {
             <div className="flex items-center gap-4">
               <Rating value={4.5} readOnly stars={5} cancel={false} />
               <Button
-                label="Share Recipe"
+                label="Share"
                 icon="pi pi-share-alt"
                 className="p-button-outlined"
                 onClick={handleShareRecipe}
               />
               {user && recipe.user_id === user.id && (
                 <Button
-                  label="Edit Recipe"
+                  label="Edit"
                   icon="pi pi-pencil"
                   className="p-button-outlined mr-3"
                   onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
                 />
               )}
               <Button
-                label={isCookingMode ? 'Stop Cooking Mode' : 'Start Cooking Mode'}
+                label={isCookingMode ? 'Stop Cooking' : 'Start Cooking'}
                 icon={isCookingMode ? 'pi pi-stop' : 'pi pi-play'}
                 className={`px-4 py-2 ${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
                 onClick={() => setIsCookingMode(!isCookingMode)}

@@ -22,9 +22,13 @@
 
 /* Button spacing and styling improvements */
 .p-button {
-  @apply font-normal transition-all duration-200 mx-1 px-4 py-2;
+  @apply font-normal transition-all duration-200 mx-1 px-3 py-2;
   font-weight: 400 !important;
   letter-spacing: 0.025em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: fit-content;
 }
 
 .p-button:hover {
@@ -183,37 +187,47 @@
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 border-gray-300 text-gray-700 px-4 py-2;
+  @apply bg-gray-200 hover:bg-gray-300 border-gray-300 text-gray-700 px-3 py-2;
   font-weight: 400 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-600 px-4 py-2;
+  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-600 px-3 py-2;
   font-weight: 400 !important;
 }
 
 /* Primary button improvements */
 .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info):not(.p-button-secondary) {
-  @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-4 py-2;
+  @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-3 py-2;
   font-weight: 400 !important;
 }
 
 /* Small button improvements */
 .p-button-sm {
-  @apply px-3 py-1.5 text-sm;
+  @apply px-2 py-1 text-sm;
   font-weight: 400 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Large button improvements */
 .p-button-lg {
-  @apply px-6 py-3 text-base;
+  @apply px-4 py-2.5 text-base;
   font-weight: 400 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Button label improvements */
 .p-button .p-button-label {
   font-weight: 400 !important;
   line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Icon button improvements */

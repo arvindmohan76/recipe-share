@@ -245,7 +245,7 @@ const ShoppingListManager: React.FC = () => {
           </p>
         </div>
         <Button
-          label="New List"
+          label="New"
           icon="pi pi-plus"
           onClick={() => setShowCreateDialog(true)}
           className="p-button-success"
@@ -265,7 +265,7 @@ const ShoppingListManager: React.FC = () => {
               Create your first shopping list to organize your grocery shopping and meal planning.
             </p>
             <Button
-              label="Create Shopping List"
+              label="Create List"
               icon="pi pi-plus"
              className="p-button-success p-button-outlined"
              onClick={() => setShowCreateDialog(true)}

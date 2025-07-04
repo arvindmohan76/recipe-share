@@ -120,14 +120,14 @@ const Home: React.FC = () => {
         </p>
         <div className="flex justify-center gap-4">
           <Button
-            label="Explore Recipes"
+            label="Explore"
             icon="pi pi-search"
             className="p-button-lg bg-white text-blue-600 hover:bg-blue-50 border-blue-200 mr-3"
             onClick={() => navigate('/recipes')}
           />
           {user && (
             <Button
-              label="Create Recipe"
+              label="Create"
               icon="pi pi-plus"
               className="p-button-lg p-button-success p-button-outlined"
               onClick={() => navigate('/recipes/new')}

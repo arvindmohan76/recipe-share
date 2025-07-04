@@ -126,7 +126,7 @@ const Navbar: React.FC = () => {
             {user ? (
               <>
                 <Button
-                  label="Create Recipe"
+                  label="Create"
                   icon="pi pi-plus"
                   className="p-button-success"
                   onClick={() => navigate('/recipes/new')}
@@ -137,7 +137,7 @@ const Navbar: React.FC = () => {
                   onClick={() => navigate('/privacy-settings')}
                 />
                 <Button
-                  label="Sign Out"
+                  label="Logout"
                   icon="pi pi-sign-out"
                   className="p-button-text"
                   onClick={handleSignOut}
@@ -146,13 +146,13 @@ const Navbar: React.FC = () => {
             ) : (
               <>
                 <Button
-                  label="Sign In"
+                  label="Login"
                   icon="pi pi-sign-in"
                   className="p-button-text"
                   onClick={() => navigate('/auth')}
                 />
                 <Button
-                  label="Sign Up"
+                  label="Register"
                   icon="pi pi-user-plus"
                   className="p-button-outlined"
                   onClick={() => navigate('/auth?mode=signup')}

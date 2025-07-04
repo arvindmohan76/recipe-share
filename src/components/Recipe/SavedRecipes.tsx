@@ -108,7 +108,7 @@ const SavedRecipes: React.FC = () => {
           </p>
         </div>
         <Button
-          label="Browse More Recipes"
+          label="Browse More"
           icon="pi pi-search"
           className="p-button-outlined"
           onClick={() => navigate('/recipes')}
@@ -124,7 +124,7 @@ const SavedRecipes: React.FC = () => {
               Start exploring recipes and bookmark your favorites to see them here.
             </p>
             <Button
-              label="Discover Recipes"
+              label="Discover"
               icon="pi pi-search"
              className="p-button-outlined"
               onClick={() => navigate('/recipes')}

@@ -311,13 +311,13 @@ const RecommendedRecipes: React.FC = () => {
             </p>
             <div className="flex justify-center gap-4">
               <Button
-                label="Browse Recipes"
+                label="Browse"
                 icon="pi pi-search"
                className="p-button-outlined"
                onClick={() => navigate('/recipes')}
               />
               <Button
-                label="Generate Recommendations"
+                label="Generate"
                 icon="pi pi-refresh"
                 onClick={handleGenerateRecommendations}
                 loading={generating}

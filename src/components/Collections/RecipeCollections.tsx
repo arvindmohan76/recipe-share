@@ -326,7 +326,7 @@ const RecipeCollections: React.FC = () => {
           </p>
         </div>
         <Button
-          label="New Collection"
+          label="New"
           icon="pi pi-plus"
           onClick={openCreateDialog}
           className="p-button-success"
@@ -346,7 +346,7 @@ const RecipeCollections: React.FC = () => {
               Create your first recipe collection to organize your favorite recipes by theme, cuisine, or occasion.
             </p>
             <Button
-              label="Create Collection"
+              label="Create"
               icon="pi pi-plus"
               className="p-button-success p-button-outlined"
               onClick={openCreateDialog}

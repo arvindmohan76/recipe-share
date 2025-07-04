@@ -148,7 +148,7 @@ const PrivacySettings: React.FC = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Privacy Settings</h1>
         <Button
-          label="Save Changes"
+          label="Save"
           icon="pi pi-save"
           onClick={handleSaveSettings}
           loading={saving}
@@ -216,7 +216,7 @@ const PrivacySettings: React.FC = () => {
               </p>
             </div>
             <Button
-              label="Clear History"
+              label="Clear"
               icon="pi pi-trash"
               onClick={() => setShowClearDialog(true)}
               className="p-button-danger p-button-outlined"
