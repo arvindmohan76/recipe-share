@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Sidebar } from 'primereact/sidebar';
+import { Menu } from 'primereact/menu';
+import { MenuItem } from 'primereact/menuitem';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,10 +11,13 @@ const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+  const profileMenuRef = React.useRef<Menu>(null);
 
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
+    setProfileMenuVisible(false);
   };
 
   const navigationItems = [
@@ -53,6 +58,33 @@ const Navbar: React.FC = () => {
     setSidebarVisible(false);
   };
 
+  const profileMenuItems: MenuItem[] = [
+    {
+      label: 'Privacy Settings',
+      icon: 'pi pi-cog',
+      command: () => {
+        navigate('/privacy-settings');
+        setProfileMenuVisible(false);
+      }
+    },
+    {
+      label: 'My Profile',
+      icon: 'pi pi-user',
+      command: () => {
+        // Placeholder for future profile page
+        setProfileMenuVisible(false);
+      }
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Sign Out',
+      icon: 'pi pi-sign-out',
+      command: handleSignOut
+    }
+  ];
+
   return (
     <div className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,60 +115,58 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="navbar-end">
             {user ? (
               <>
                 {/* Create Recipe Button - Fixed color contrast */}
                 <Button
                   label="Create Recipe"
                   icon="pi pi-plus"
-                  className="hidden md:flex px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600 rounded-md font-medium transition-colors"
+                  className="hidden lg:flex p-button-success"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Button
                   icon="pi pi-plus"
-                  className="md:hidden px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600 rounded-md transition-colors"
+                  className="lg:hidden p-button-success p-button-sm"
                   onClick={() => navigate('/recipes/new')}
                 />
                 
-                {/* User Avatar */}
-                <Avatar
-                  icon="pi pi-user"
-                  className="bg-blue-500 text-white cursor-pointer"
-                  size="normal"
-                  onClick={() => navigate('/privacy-settings')}
-                />
-                
-                {/* Sign Out Button */}
-                <Button
-                  label="Sign Out"
-                  icon="pi pi-sign-out"
-                  className="p-button-text p-button-sm hidden lg:flex text-gray-600 hover:text-gray-800"
-                  onClick={handleSignOut}
-                />
-                <Button
-                  icon="pi pi-sign-out"
-                  className="p-button-text p-button-sm lg:hidden text-gray-600 hover:text-gray-800"
-                  onClick={handleSignOut}
-                />
+                {/* User Avatar with Profile Menu */}
+                <div className="relative">
+                  <Avatar
+                    icon="pi pi-user"
+                    className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 transition-colors"
+                    size="normal"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      profileMenuRef.current?.toggle(e);
+                    }}
+                  />
+                  <Menu
+                    ref={profileMenuRef}
+                    model={profileMenuItems}
+                    popup
+                    className="profile-menu"
+                  />
+                </div>
               </>
             ) : (
               <>
                 <Button
                   label="Sign In"
                   icon="pi pi-sign-in"
-                  className="p-button-text p-button-sm hidden sm:flex text-gray-600 hover:text-gray-800"
+                  className="p-button-text p-button-sm hidden lg:flex"
                   onClick={() => navigate('/auth')}
                 />
                 <Button
                   label="Sign Up"
                   icon="pi pi-user-plus"
-                  className="p-button-outlined p-button-sm hidden sm:flex text-gray-700 border-gray-300 hover:bg-gray-50"
+                  className="p-button-outlined p-button-sm hidden lg:flex"
                   onClick={() => navigate('/auth?mode=signup')}
                 />
                 <Button
                   icon="pi pi-sign-in"
-                  className="p-button-text p-button-sm sm:hidden text-gray-600 hover:text-gray-800"
+                  className="p-button-text p-button-sm lg:hidden"
                   onClick={() => navigate('/auth')}
                 />
               </>
@@ -147,7 +177,7 @@ const Navbar: React.FC = () => {
           <div className="xl:hidden ml-2">
             <Button
               icon="pi pi-bars"
-              className="p-button-text p-button-sm text-gray-600 hover:text-gray-800"
+              className="p-button-text p-button-sm"
               onClick={() => setSidebarVisible(true)}
             />
           </div>
@@ -183,11 +213,20 @@ const Navbar: React.FC = () => {
           {user && (
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button
-                onClick={() => handleNavClick(() => navigate('/privacy-settings'))}
+                onClick={() => handleNavClick(() => {
+                  navigate('/privacy-settings');
+                })}
                 className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 text-left"
               >
                 <i className="pi pi-cog text-lg"></i>
                 <span className="font-medium">Settings</span>
+              </button>
+              <button
+                onClick={() => handleNavClick(handleSignOut)}
+                className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 text-left"
+              >
+                <i className="pi pi-sign-out text-lg"></i>
+                <span className="font-medium">Sign Out</span>
               </button>
             </div>
           )}

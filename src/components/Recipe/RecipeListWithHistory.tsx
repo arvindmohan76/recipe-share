@@ -263,7 +263,7 @@ const RecipeListWithHistory: React.FC = () => {
 
   const itemTemplate = (recipe: Recipe) => {
     return (
-      <div className="col-12 md:col-6 lg:col-4 p-3">
+      <div className="p-3">
         <div onClick={() => handleRecipeClick(recipe.id)}>
           <RecipeCard
             recipe={recipe}
@@ -470,10 +470,11 @@ const RecipeListWithHistory: React.FC = () => {
         <DataView
           value={filteredRecipes}
           itemTemplate={itemTemplate}
-          layout="grid"
+          layout="list"
           paginator
           rows={9}
           emptyMessage="No recipes found matching your criteria."
+          className="recipe-grid"
         />
       </Card>
     </div>

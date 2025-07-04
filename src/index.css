@@ -328,6 +328,35 @@
   width: auto !important;
 }
 
+/* Recipe grid layout for 4 columns */
+.recipe-grid .p-dataview-content {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .recipe-grid .p-dataview-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .recipe-grid .p-dataview-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .recipe-grid .p-dataview-content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.recipe-grid .p-dataview-content > div {
+  display: contents;
+}
+
 /* Full width button override */
 .p-button.w-full {
   width: 100% !important;
@@ -346,5 +375,61 @@
   
   .p-button-lg {
     @apply px-4 py-2.5 text-base;
+  }
+}
+
+/* Profile menu styles */
+.profile-menu {
+  min-width: 200px;
+}
+
+.profile-menu .p-menu-list {
+  padding: 0.5rem 0;
+}
+
+.profile-menu .p-menuitem-link {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #374151;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.profile-menu .p-menuitem-link:hover {
+  background-color: #f3f4f6;
+}
+
+.profile-menu .p-menuitem-icon {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.profile-menu .p-menuitem-text {
+  font-weight: 500;
+}
+
+/* Navbar improvements for better button spacing */
+.navbar-end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.navbar-end .p-button {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .navbar-end .p-button .p-button-label {
+    display: none;
+  }
+  
+  .navbar-end .p-button {
+    min-width: 2.5rem;
+    justify-content: center;
   }
 }
