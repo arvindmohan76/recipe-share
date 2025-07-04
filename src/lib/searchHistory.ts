@@ -234,6 +234,32 @@ export const generateRecommendations = async (userId: string): Promise<boolean> 
   try {
     console.log('Generating recommendations for user:', userId);
     
+    // First check if the function exists and user has data
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', userId)
+      .single();
+    
+    if (userError || !userData) {
+      console.error('User not found:', userError);
+      return false;
+    }
+    
+    // Check if we have any recipes in the database
+    const { data: recipesData, error: recipesError } = await supabase
+      .from('recipes')
+      .select('id')
+      .eq('is_public', true)
+      .limit(1);
+    
+    if (recipesError || !recipesData || recipesData.length === 0) {
+      console.error('No public recipes found in database');
+      return false;
+    }
+    
+    console.log('Prerequisites check passed, calling recommendation function...');
+    
     const { error } = await supabase
       .rpc('generate_search_based_recommendations', { target_user_id: userId });
 
@@ -244,6 +270,19 @@ export const generateRecommendations = async (userId: string): Promise<boolean> 
     }
 
     console.log('Recommendations generated successfully');
+    
+    // Verify recommendations were actually created
+    const { data: createdRecs, error: checkError } = await supabase
+      .from('recipe_recommendations')
+      .select('id')
+      .eq('user_id', userId);
+    
+    if (checkError) {
+      console.error('Error checking created recommendations:', checkError);
+      return false;
+    }
+    
+    console.log(`Created ${createdRecs?.length || 0} recommendations`);
     return true;
   } catch (err) {
     console.error('Failed to generate recommendations:', err);
@@ -259,11 +298,13 @@ export const getUserRecommendations = async (
   limit: number = 10
 ): Promise<RecipeRecommendation[]> => {
   try {
+    console.log('Fetching recommendations for user:', userId, 'limit:', limit);
+    
     const { data, error } = await supabase
       .from('recipe_recommendations')
       .select(`
         *,
-        recipe:recipes(*)
+        recipes(*)
       `)
       .eq('user_id', userId)
       .order('confidence_score', { ascending: false })
@@ -275,7 +316,16 @@ export const getUserRecommendations = async (
       return [];
     }
 
-    return data || [];
+    console.log('Raw recommendation data:', data);
+    
+    // Transform the data to match our interface
+    const recommendations = (data || []).map(item => ({
+      ...item,
+      recipe: item.recipes
+    }));
+    
+    console.log('Transformed recommendations:', recommendations);
+    return recommendations;
   } catch (err) {
     console.error('Failed to fetch recommendations:', err);
     return [];

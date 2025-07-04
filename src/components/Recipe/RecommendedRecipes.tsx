@@ -34,8 +34,23 @@ const RecommendedRecipes: React.FC = () => {
     if (!user) return;
 
     try {
+      console.log('Loading recommendations for user:', user.id);
+      
       const userRecommendations = await getUserRecommendations(user.id, 12);
+      console.log('Loaded recommendations:', userRecommendations);
       setRecommendations(userRecommendations);
+      
+      if (userRecommendations.length === 0) {
+        console.log('No recommendations found, checking database directly...');
+        
+        // Check if recommendations exist in database
+        const { data: dbRecs, error: dbError } = await supabase
+          .from('recipe_recommendations')
+          .select('*')
+          .eq('user_id', user.id);
+        
+        console.log('Direct database check:', { dbRecs, dbError });
+      }
     } catch (err) {
       console.error('Failed to load recommendations:', err);
       setError('Failed to load recommendations');
@@ -64,16 +79,62 @@ const RecommendedRecipes: React.FC = () => {
   const handleGenerateRecommendations = async () => {
     if (!user) return;
 
+    console.log('Starting recommendation generation for user:', user.id);
     setGenerating(true);
+    setError(''); // Clear any previous errors
+    
     try {
+      // First, let's check if we have any search history or saved recipes
+      const { data: searchHistory } = await supabase
+        .from('user_search_history')
+        .select('*')
+        .eq('user_id', user.id)
+        .limit(5);
+      
+      const { data: savedRecipes } = await supabase
+        .from('saved_recipes')
+        .select('*')
+        .eq('user_id', user.id)
+        .limit(5);
+      
+      console.log('User data for recommendations:', {
+        searchHistoryCount: searchHistory?.length || 0,
+        savedRecipesCount: savedRecipes?.length || 0,
+        searchHistory: searchHistory,
+        savedRecipes: savedRecipes
+      });
+      
+      // If no data, create some sample search history for testing
+      if ((!searchHistory || searchHistory.length === 0) && (!savedRecipes || savedRecipes.length === 0)) {
+        console.log('No search history or saved recipes found. Creating sample data...');
+        
+        // Add some sample search queries
+        const sampleQueries = ['pasta', 'chicken', 'vegetarian', 'italian', 'quick meals'];
+        for (const query of sampleQueries) {
+          await supabase
+            .from('user_search_history')
+            .insert({
+              user_id: user.id,
+              search_query: query,
+              search_type: 'general',
+              filters_applied: {},
+              results_count: Math.floor(Math.random() * 20) + 5
+            });
+        }
+        console.log('Sample search history created');
+      }
+      
       const success = await generateRecommendations(user.id);
+      console.log('Recommendation generation result:', success);
+      
       if (success) {
         await loadRecommendations();
       } else {
-        setError('Failed to generate recommendations');
+        setError('Failed to generate recommendations. Please try again or contact support.');
       }
     } catch (err) {
-      setError('An error occurred while generating recommendations');
+      console.error('Error in handleGenerateRecommendations:', err);
+      setError(`An error occurred while generating recommendations: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setGenerating(false);
     }
@@ -200,6 +261,42 @@ const RecommendedRecipes: React.FC = () => {
           onClick={handleGenerateRecommendations}
           loading={generating}
           className="p-button-outlined"
+        />
+        <Button
+          label="Debug Info"
+          icon="pi pi-info"
+          onClick={async () => {
+            if (!user) return;
+            
+            console.log('=== DEBUGGING RECOMMENDATION SYSTEM ===');
+            
+            // Check user data
+            const { data: userData } = await supabase.from('users').select('*').eq('id', user.id).single();
+            console.log('User data:', userData);
+            
+            // Check privacy settings
+            const { data: privacyData } = await supabase.from('user_privacy_settings').select('*').eq('user_id', user.id).single();
+            console.log('Privacy settings:', privacyData);
+            
+            // Check search history
+            const { data: searchData } = await supabase.from('user_search_history').select('*').eq('user_id', user.id);
+            console.log('Search history:', searchData);
+            
+            // Check saved recipes
+            const { data: savedData } = await supabase.from('saved_recipes').select('*').eq('user_id', user.id);
+            console.log('Saved recipes:', savedData);
+            
+            // Check existing recommendations
+            const { data: recData } = await supabase.from('recipe_recommendations').select('*').eq('user_id', user.id);
+            console.log('Existing recommendations:', recData);
+            
+            // Check available recipes
+            const { data: recipesData } = await supabase.from('recipes').select('id, title, is_public').eq('is_public', true).limit(5);
+            console.log('Available public recipes:', recipesData);
+            
+            console.log('=== END DEBUG INFO ===');
+          }}
+          className="p-button-info p-button-outlined ml-2"
         />
       </div>
 

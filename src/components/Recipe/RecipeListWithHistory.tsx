@@ -354,6 +354,32 @@ const RecipeListWithHistory: React.FC = () => {
               </span>
             </div>
           )}
+          <Button
+            label="Add Test Search"
+            icon="pi pi-plus"
+            onClick={async () => {
+              if (!user) return;
+              
+              const testQueries = ['pasta carbonara', 'chicken stir fry', 'vegetarian bowl', 'italian cuisine', 'quick meals'];
+              const randomQuery = testQueries[Math.floor(Math.random() * testQueries.length)];
+              
+              try {
+                const searchId = await recordSearchQuery(
+                  user.id,
+                  randomQuery,
+                  'general',
+                  { test: true },
+                  Math.floor(Math.random() * 10) + 1
+                );
+                console.log('Added test search:', randomQuery, 'ID:', searchId);
+                alert(`Added test search: "${randomQuery}"`);
+              } catch (err) {
+                console.error('Failed to add test search:', err);
+                alert('Failed to add test search');
+              }
+            }}
+            className="p-button-sm p-button-outlined ml-2"
+          />
         </div>
       )}
 
