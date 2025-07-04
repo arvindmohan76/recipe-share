@@ -116,7 +116,7 @@ const Home: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-5xl font-bold mb-4">Welcome to RecipeHub</h1>
         <p className="text-xl mb-6">
-          Discover amazing recipes with AI-generated descriptions that make every dish irresistible. Plan your meals and cook with confidence using our intelligent cooking assistant.
+          Discover amazing recipes from around the world. Find your next favorite dish and start cooking today.
         </p>
         <div className="button-container justify-center">
           <Button
@@ -138,31 +138,6 @@ const Home: React.FC = () => {
     </div>
   );
 
-  const featuresSection = (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-        <div className="text-4xl text-blue-500 mb-4">🎤</div>
-        <h3 className="text-xl font-bold mb-2">Voice Cooking</h3>
-        <p className="text-gray-600">
-          Cook hands-free with voice commands. Navigate through recipes without touching your device.
-        </p>
-      </Card>
-      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-        <div className="text-4xl text-green-500 mb-4">🤖</div>
-        <h3 className="text-xl font-bold mb-2">AI-Powered Descriptions</h3>
-        <p className="text-gray-600">
-          Mouth-watering, sensory-rich descriptions that make every recipe irresistible and help you choose what to cook.
-        </p>
-      </Card>
-      <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-        <div className="text-4xl text-purple-500 mb-4">📅</div>
-        <h3 className="text-xl font-bold mb-2">Meal Planning</h3>
-        <p className="text-gray-600">
-          Plan your weekly meals and automatically generate shopping lists.
-        </p>
-      </Card>
-    </div>
-  );
 
   const recipeTemplate = (recipe: Recipe) => {
     return (
@@ -187,7 +162,6 @@ const Home: React.FC = () => {
   return (
     <div className="space-y-8">
       {heroSection}
-      {featuresSection}
 
       {/* Featured Recipes */}
       <section>
@@ -238,8 +212,31 @@ const Home: React.FC = () => {
         </section>
       )}
 
+      {/* Recipe Categories - More recipe-focused */}
+      <section>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Browse by Category</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {[
+            { name: 'Italian', emoji: '🍝', color: 'bg-red-100 text-red-700' },
+            { name: 'Asian', emoji: '🥢', color: 'bg-yellow-100 text-yellow-700' },
+            { name: 'Mexican', emoji: '🌮', color: 'bg-orange-100 text-orange-700' },
+            { name: 'Indian', emoji: '🍛', color: 'bg-amber-100 text-amber-700' },
+            { name: 'French', emoji: '🥐', color: 'bg-blue-100 text-blue-700' },
+            { name: 'Healthy', emoji: '🥗', color: 'bg-green-100 text-green-700' }
+          ].map((category) => (
+            <button
+              key={category.name}
+              onClick={() => navigate(`/recipes?cuisine=${category.name}`)}
+              className={`${category.color} p-4 rounded-lg text-center hover:shadow-md transition-all duration-200 hover:scale-105`}
+            >
+              <div className="text-2xl mb-2">{category.emoji}</div>
+              <div className="font-medium text-sm">{category.name}</div>
+            </button>
+          ))}
+        </div>
+      </section>
       {/* Call to Action */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+      <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200">
         <div className="text-center p-6">
           <h3 className="text-2xl font-bold text-gray-800 mb-4">
             Ready to Start Cooking?
@@ -280,6 +277,27 @@ const Home: React.FC = () => {
           )}
         </div>
       </Card>
+
+      {/* Subtle Features Footer - Much more subtle */}
+      <div className="text-center py-8 border-t border-gray-200">
+        <p className="text-sm text-gray-500 mb-4">
+          Enhanced with smart features to make cooking easier
+        </p>
+        <div className="flex justify-center items-center gap-8 text-xs text-gray-400">
+          <span className="flex items-center gap-1">
+            <i className="pi pi-microphone"></i>
+            Voice commands
+          </span>
+          <span className="flex items-center gap-1">
+            <i className="pi pi-sparkles"></i>
+            Smart descriptions
+          </span>
+          <span className="flex items-center gap-1">
+            <i className="pi pi-calendar"></i>
+            Meal planning
+          </span>
+        </div>
+      </div>
     </div>
   );
 };
