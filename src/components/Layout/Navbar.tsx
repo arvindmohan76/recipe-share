@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
               <>
                 {/* Create Recipe Button */}
                 <Button
-                  label="Create"
+                  label="Create Recipe"
                   icon="pi pi-plus"
                   className="hidden md:flex p-button-success"
                   onClick={() => navigate('/recipes/new')}
