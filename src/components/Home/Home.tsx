@@ -122,7 +122,7 @@ const Home: React.FC = () => {
           <Button
             label="Explore Recipes"
             icon="pi pi-search"
-            className="p-button-lg p-button-outlined"
+            className="p-button-lg p-button-success"
             onClick={() => navigate('/recipes')}
           />
           {user && (
@@ -258,7 +258,7 @@ const Home: React.FC = () => {
               <Button
                 label="Browse Recipes"
                 icon="pi pi-search"
-                className="p-button-lg p-button-outlined"
+                className="p-button-lg p-button-success"
                 onClick={() => navigate('/recipes')}
               />
             </div>
@@ -273,7 +273,7 @@ const Home: React.FC = () => {
               <Button
                 label="View My Bookmarks"
                 icon="pi pi-heart"
-                className="p-button-lg p-button-outlined"
+                className="p-button-lg p-button-success"
                 onClick={() => navigate('/saved-recipes')}
               />
             </div>
