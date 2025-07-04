@@ -31,7 +31,7 @@ const Home: React.FC = () => {
         .select('*')
         .eq('is_public', true)
         .order('created_at', { ascending: false })
-        .limit(6);
+        .limit(12);
 
       if (!error) {
         setFeaturedRecipes(data || []);
@@ -167,6 +167,9 @@ const Home: React.FC = () => {
       <section>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Featured Recipes</h2>
+          <div className="text-sm text-gray-600">
+            Showing {featuredRecipes.length} recipes
+          </div>
           <Button
             label="View All"
             icon="pi pi-arrow-right"
@@ -174,7 +177,7 @@ const Home: React.FC = () => {
             onClick={() => navigate('/recipes')}
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
           {featuredRecipes.map((recipe) => (
             <RecipeCard
               key={recipe.id}
@@ -184,6 +187,18 @@ const Home: React.FC = () => {
             />
           ))}
         </div>
+        
+        {/* Show "Load More" if there are more recipes */}
+        {featuredRecipes.length >= 12 && (
+          <div className="text-center">
+            <Button
+              label="View All Recipes"
+              icon="pi pi-arrow-right"
+              className="p-button-outlined p-button-lg"
+              onClick={() => navigate('/recipes')}
+            />
+          </div>
+        )}
       </section>
 
       {/* Trending Recipes */}
