@@ -229,63 +229,63 @@ const RecipeDetail: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
       <Toast ref={toast} />
       
       {/* Recipe Header */}
-      <Card>
+      <Card className="overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <img
               src={getRecipeImageUrl(recipe.image_url, 'large')}
               alt={recipe.title}
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 object-cover rounded-lg"
               onError={handleImageError}
               loading="lazy"
             />
           </div>
-          <div>
+          <div className="flex flex-col justify-between">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{recipe.title}</h1>
             {recipe.description && (
-              <div className="mb-4 p-4 bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-400 rounded-r-lg">
-                <p className="text-gray-700 leading-relaxed italic">
+              <div className="mb-6 p-5 bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-400 rounded-r-lg">
+                <p className="text-gray-700 leading-relaxed italic text-lg">
                   "{recipe.description}"
                 </p>
               </div>
             )}
             
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-3 mb-6">
               {recipe.dietary_tags.map((tag, index) => (
-                <Tag key={index} value={tag} className="bg-green-100 text-green-800" />
+                <Tag key={index} value={tag} className="bg-green-100 text-green-800 px-3 py-1" />
               ))}
-              <Tag value={recipe.cuisine} className="bg-blue-100 text-blue-800" />
-              <Tag value={recipe.difficulty} className="bg-yellow-100 text-yellow-800" />
+              <Tag value={recipe.cuisine} className="bg-blue-100 text-blue-800 px-3 py-1" />
+              <Tag value={recipe.difficulty} className="bg-yellow-100 text-yellow-800 px-3 py-1" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 mb-2">
                   <i className="pi pi-clock"></i>
-                  <span>Prep: {recipe.prep_time}min</span>
+                  <span className="font-medium">Prep: {recipe.prep_time}min</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600">
                   <i className="pi pi-clock"></i>
-                  <span>Cook: {recipe.cooking_time}min</span>
+                  <span className="font-medium">Cook: {recipe.cooking_time}min</span>
                 </div>
               </div>
               <div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 mb-2">
                   <i className="pi pi-users"></i>
-                  <span>{recipe.servings} servings</span>
+                  <span className="font-medium">{recipe.servings} servings</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600">
                   <i className="pi pi-eye"></i>
-                  <span>{recipe.view_count} views</span>
+                  <span className="font-medium">{recipe.view_count} views</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-4">
               <Rating value={4.5} readOnly stars={5} cancel={false} />
               <Button
                 label="Share"
@@ -304,11 +304,11 @@ const RecipeDetail: React.FC = () => {
             </div>
             
             {/* Cooking Mode Button - Separate Row */}
-            <div className="mt-4">
+            <div>
               <Button
                 label={isCookingMode ? 'Stop Cooking' : 'Start Cooking'}
                 icon={isCookingMode ? 'pi pi-stop' : 'pi pi-play'}
-                className={`${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
+                className={`w-full ${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
                 onClick={() => setIsCookingMode(!isCookingMode)}
               />
             </div>
@@ -429,12 +429,12 @@ const RecipeDetail: React.FC = () => {
 
       {/* Ingredients */}
       <Card>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Ingredients</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Ingredients</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {recipe.ingredients.map((ingredient, index) => (
-            <div key={index} className="flex items-center gap-2 p-2 border rounded">
+            <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
               <i className="pi pi-check-circle text-green-500"></i>
-              <span>
+              <span className="font-medium">
                 {ingredient.amount} {ingredient.unit} {ingredient.name}
               </span>
             </div>
@@ -444,26 +444,33 @@ const RecipeDetail: React.FC = () => {
 
       {/* Instructions */}
       <Card>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Instructions</h2>
-        <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Instructions</h2>
+        <div className="space-y-6">
           {recipe.steps.map((step, index) => (
             <div
               key={index}
-              className={`p-4 border rounded-lg ${
-                isCookingMode && index === currentStep ? 'bg-blue-50 border-blue-300' : ''
+              className={`p-6 border rounded-lg transition-all duration-200 ${
+                isCookingMode && index === currentStep 
+                  ? 'bg-blue-50 border-blue-300 shadow-md transform scale-[1.02]' 
+                  : 'bg-white border-gray-200 hover:border-gray-300'
               }`}
             >
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                  isCookingMode && index === currentStep ? 'bg-blue-600' : 'bg-gray-500'
+                }`}>
                   {step.step}
                 </div>
                 <div className="flex-1">
-                  <p className="text-gray-800 mb-2">{step.instruction}</p>
+                  <p className="text-gray-800 text-lg leading-relaxed mb-3">{step.instruction}</p>
                   {step.tips && (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded p-2">
-                      <div className="flex items-center gap-2">
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
                         <i className="pi pi-lightbulb text-yellow-600"></i>
-                        <span className="text-sm text-yellow-800">Tip: {step.tips}</span>
+                        <div>
+                          <span className="text-sm font-medium text-yellow-800">Pro Tip:</span>
+                          <span className="text-sm text-yellow-800 ml-1">{step.tips}</span>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -476,7 +483,7 @@ const RecipeDetail: React.FC = () => {
 
       {/* Comments */}
       <Card>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Comments</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Comments</h2>
         
         {user && (
           <div className="mb-6">
@@ -484,33 +491,40 @@ const RecipeDetail: React.FC = () => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Share your thoughts about this recipe..."
-              rows={3}
-              className="w-full mb-3 p-3 border border-gray-300 rounded-md"
+              rows={4}
+              className="w-full mb-4"
             />
             <Button
               label="Add Comment"
-              className="bg-blue-500 hover:bg-blue-600 px-4 py-2"
+              className="p-button-success"
               disabled={!newComment.trim()}
               onClick={handleAddComment}
             />
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {comments.map((comment) => (
-            <div key={comment.id} className="border-b pb-4">
-              <div className="flex items-center gap-2 mb-2">
+            <div key={comment.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
                 <i className="pi pi-user text-gray-500"></i>
-                <span className="font-medium">
+                <span className="font-semibold text-gray-800">
                   {comment.user?.full_name || comment.user?.username || 'Anonymous'}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 ml-auto">
                   {new Date(comment.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-gray-700">{comment.comment}</p>
+              <p className="text-gray-700 leading-relaxed">{comment.comment}</p>
             </div>
           ))}
+          
+          {comments.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              <i className="pi pi-comment text-4xl mb-3 block"></i>
+              <p>No comments yet. Be the first to share your thoughts!</p>
+            </div>
+          )}
         </div>
       </Card>
     </div>
