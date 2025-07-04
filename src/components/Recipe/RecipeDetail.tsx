@@ -190,7 +190,13 @@ const RecipeDetail: React.FC = () => {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{recipe.title}</h1>
-            <p className="text-gray-600 mb-4">{recipe.description}</p>
+            {recipe.description && (
+              <div className="mb-4 p-4 bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-400 rounded-r-lg">
+                <p className="text-gray-700 leading-relaxed italic">
+                  "{recipe.description}"
+                </p>
+              </div>
+            )}
             
             <div className="flex flex-wrap gap-2 mb-4">
               {recipe.dietary_tags.map((tag, index) => (

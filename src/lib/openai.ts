@@ -35,19 +35,25 @@ export async function generateRecipeSummary(recipe: any): Promise<string | null>
           
           Ingredients: ${recipe.ingredients?.map((ing: any) => `${ing.amount} ${ing.unit} ${ing.name}`).join(', ') || 'Not specified'}
           
-          Cooking Steps: ${recipe.steps?.map((step: any, index: number) => `${index + 1}. ${step.instruction || step}`).join(' ') || 'Not specified'}
+          Cooking Steps: ${recipe.steps?.length > 0 ? recipe.steps.map((step: any, index: number) => `${index + 1}. ${step.instruction || step}`).join(' ') : 'Steps will be added later'}
           
           Write a compelling, mouth-watering description that focuses on:
-          - The sensory experience (how it looks, smells, tastes, feels)
-          - The cooking process and techniques
-          - The final result and satisfaction
-          - Use vivid, appetizing language that makes readers want to cook this immediately
-          - Keep it between 100-150 words
-          - Make it sound absolutely delicious and irresistible`
+          - Rich sensory details: how it looks, smells, tastes, and feels
+          - The cooking aromas and sounds that fill the kitchen
+          - Texture contrasts and flavor combinations
+          - The satisfaction and comfort the dish provides
+          - Use vivid, appetizing language that makes readers crave this dish
+          - Focus on what makes this recipe special and irresistible
+          - Keep it between 80-120 words for easy reading
+          - Write in an engaging, enthusiastic tone that celebrates the food
+          
+          Example style: "Golden, crispy edges give way to a tender, melting center as aromatic herbs dance with rich, savory flavors. Each bite delivers a symphony of textures..."
+          
+          Make this recipe sound absolutely irresistible!`
         }
       ],
-      max_tokens: 250,
-      temperature: 0.8
+      max_tokens: 200,
+      temperature: 0.9
     });
 
     return response.choices[0]?.message?.content || null;

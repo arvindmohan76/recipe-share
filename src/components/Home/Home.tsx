@@ -116,7 +116,7 @@ const Home: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-5xl font-bold mb-4">Welcome to RecipeHub</h1>
         <p className="text-xl mb-6">
-          Discover amazing recipes, plan your meals, and cook with confidence using our AI-powered cooking assistant.
+          Discover amazing recipes with AI-generated descriptions that make every dish irresistible. Plan your meals and cook with confidence using our intelligent cooking assistant.
         </p>
         <div className="flex justify-center gap-4">
           <Button
@@ -151,9 +151,9 @@ const Home: React.FC = () => {
       </Card>
       <Card className="text-center p-6 hover:shadow-lg transition-shadow">
         <div className="text-4xl text-green-500 mb-4">🤖</div>
-        <h3 className="text-xl font-bold mb-2">AI Recommendations</h3>
+        <h3 className="text-xl font-bold mb-2">AI-Powered Descriptions</h3>
         <p className="text-gray-600">
-          Get personalized recipe suggestions based on your preferences and cooking history.
+          Mouth-watering, sensory-rich descriptions that make every recipe irresistible and help you choose what to cook.
         </p>
       </Card>
       <Card className="text-center p-6 hover:shadow-lg transition-shadow">

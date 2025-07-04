@@ -59,7 +59,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
   return (
     <Card
       title={recipe.title}
-      subTitle={recipe.description}
+      subTitle={recipe.description ? (
+        recipe.description.length > 120 
+          ? `${recipe.description.substring(0, 120)}...` 
+          : recipe.description
+      ) : undefined}
       header={header}
       footer={footer}
       className="mb-4 hover:shadow-lg transition-shadow"

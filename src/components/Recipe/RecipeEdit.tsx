@@ -44,6 +44,7 @@ const RecipeEdit: React.FC = () => {
   const [error, setError] = useState('');
   const [fetchLoading, setFetchLoading] = useState(true);
   const [generatingDescription, setGeneratingDescription] = useState(false);
+  const [hasGeneratedDescription, setHasGeneratedDescription] = useState(false);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -128,6 +129,7 @@ const RecipeEdit: React.FC = () => {
       setDifficulty(data.difficulty || '');
       setServings(data.servings || 1);
       setCurrentImageUrl(data.image_url || '');
+      setHasGeneratedDescription(!!data.description); // Mark as generated if description exists
     } catch (err) {
       setError('Failed to fetch recipe');
     } finally {
@@ -196,8 +198,29 @@ const RecipeEdit: React.FC = () => {
     setSteps(newSteps);
   };
 
+  // Auto-generate description when user has added enough content (only if no description exists)
+  useEffect(() => {
+    const shouldAutoGenerate = 
+      isOpenAIAvailable && 
+      title.trim() && 
+      ingredients.length > 0 && 
+      ingredients.some(ing => ing.name.trim()) &&
+      !description.trim() && 
+      !hasGeneratedDescription &&
+      !generatingDescription &&
+      !fetchLoading; // Don't auto-generate while loading existing data
+
+    if (shouldAutoGenerate) {
+      const timer = setTimeout(() => {
+        generateAIDescription();
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [title, ingredients, isOpenAIAvailable, description, hasGeneratedDescription, generatingDescription, fetchLoading]);
+
   const generateAIDescription = async () => {
-    if (!isOpenAIAvailable || !title || ingredients.length === 0 || steps.length === 0) {
+    if (!isOpenAIAvailable || !title || ingredients.length === 0) {
       return;
     }
 
@@ -216,6 +239,7 @@ const RecipeEdit: React.FC = () => {
       const aiDescription = await generateRecipeSummary(recipe);
       if (aiDescription) {
         setDescription(aiDescription);
+        setHasGeneratedDescription(true);
       } else {
         setError('Failed to generate AI description. Please try again.');
       }
@@ -325,44 +349,6 @@ const RecipeEdit: React.FC = () => {
                 filterBy="label"
                 showClear
               />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-              Description {isOpenAIAvailable && <span className="text-purple-600">(AI-Enhanced)</span>}
-            </label>
-            <div className="space-y-2">
-              <InputTextarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                placeholder="Describe your recipe or let AI generate an appetizing description..."
-              />
-              {isOpenAIAvailable && title && ingredients.length > 0 && steps.length > 0 && (
-                <div className="flex justify-end">
-                  <Button
-                    type="button"
-                    label="Generate AI Description"
-                    icon="pi pi-sparkles"
-                    onClick={generateAIDescription}
-                    loading={generatingDescription}
-                    className="p-button-outlined p-button-sm"
-                    style={{ 
-                      borderColor: '#8b5cf6', 
-                      color: '#8b5cf6',
-                      backgroundColor: 'transparent'
-                    }}
-                  />
-                </div>
-              )}
-              {!isOpenAIAvailable && (
-                <p className="text-xs text-gray-500">
-                  💡 Configure OpenAI API key to enable AI-generated descriptions
-                </p>
-              )}
             </div>
           </div>
 
@@ -516,6 +502,77 @@ const RecipeEdit: React.FC = () => {
             ))}
           </div>
 
+          {/* AI Description Section - Positioned after ingredients for better UX */}
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              Recipe Description {isOpenAIAvailable && <span className="text-purple-600">(AI-Enhanced)</span>}
+            </label>
+            <div className="space-y-3">
+              {generatingDescription && (
+                <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+                  <i className="pi pi-spinner pi-spin text-purple-600"></i>
+                  <div>
+                    <p className="text-purple-800 font-medium">Enhancing your recipe description...</p>
+                    <p className="text-purple-600 text-sm">Creating an irresistible summary that highlights the best of your recipe</p>
+                  </div>
+                </div>
+              )}
+              
+              <InputTextarea
+                id="description"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  if (e.target.value.trim()) {
+                    setHasGeneratedDescription(true);
+                  }
+                }}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder={
+                  isOpenAIAvailable 
+                    ? "Update your recipe details above to regenerate an appetizing description..."
+                    : "Describe your recipe - what makes it special, how it tastes, and why people will love it..."
+                }
+              />
+              
+              <div className="flex justify-between items-center">
+                {isOpenAIAvailable && title && ingredients.length > 0 && (
+                  <Button
+                    type="button"
+                    label="Regenerate AI Description"
+                    icon="pi pi-sparkles"
+                    onClick={() => {
+                      setHasGeneratedDescription(false);
+                      generateAIDescription();
+                    }}
+                    loading={generatingDescription}
+                    className="p-button-outlined p-button-sm"
+                    style={{ 
+                      borderColor: '#8b5cf6', 
+                      color: '#8b5cf6',
+                      backgroundColor: 'transparent'
+                    }}
+                  />
+                )}
+                
+                {description && (
+                  <span className="text-xs text-gray-500">
+                    {description.length} characters
+                  </span>
+                )}
+              </div>
+              
+              {!isOpenAIAvailable && (
+                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <p className="text-xs text-gray-600">
+                    💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated descriptions
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div>
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700">
@@ -578,17 +635,22 @@ const RecipeEdit: React.FC = () => {
 
         {/* AI Description Help */}
         {isOpenAIAvailable && (
-          <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+          <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <i className="pi pi-sparkles text-white text-sm"></i>
               </div>
               <div>
-                <h4 className="font-medium text-purple-800 mb-1">AI-Powered Descriptions</h4>
-                <p className="text-sm text-purple-700">
-                  Click "Generate AI Description" to create a mouth-watering, sensory-rich description 
-                  that highlights the flavors, textures, and cooking experience of your recipe.
+                <h4 className="font-medium text-purple-800 mb-2">🍳 AI Culinary Assistant</h4>
+                <p className="text-sm text-purple-700 mb-2">
+                  Our AI chef creates appetizing descriptions that make your recipes irresistible. 
+                  The description automatically updates when you modify ingredients or recipe details.
                 </p>
+                <div className="text-xs text-purple-600 space-y-1">
+                  <p>• <strong>Smart updates:</strong> Regenerates when you change key recipe elements</p>
+                  <p>• <strong>Sensory language:</strong> Focuses on taste, aroma, and cooking experience</p>
+                  <p>• <strong>Your control:</strong> Edit and customize the generated text as needed</p>
+                </div>
               </div>
             </div>
           </div>
