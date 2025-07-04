@@ -189,7 +189,7 @@ const Home: React.FC = () => {
         </div>
         
         {/* Show "Load More" if there are more recipes */}
-        {featuredRecipes.length >= 12 && (
+        {featuredRecipes.length === 12 && (
           <div className="text-center">
             <Button
               label="View All Recipes"

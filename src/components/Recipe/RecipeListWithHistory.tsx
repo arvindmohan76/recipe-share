@@ -263,14 +263,12 @@ const RecipeListWithHistory: React.FC = () => {
 
   const itemTemplate = (recipe: Recipe) => {
     return (
-      <div className="p-3">
-        <div onClick={() => handleRecipeClick(recipe.id)}>
-          <RecipeCard
-            recipe={recipe}
-            onSave={handleSaveRecipe}
-            isSaved={savedRecipes.has(recipe.id)}
-          />
-        </div>
+      <div onClick={() => handleRecipeClick(recipe.id)}>
+        <RecipeCard
+          recipe={recipe}
+          onSave={handleSaveRecipe}
+          isSaved={savedRecipes.has(recipe.id)}
+        />
       </div>
     );
   };
@@ -457,7 +455,7 @@ const RecipeListWithHistory: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Discover Recipes</h1>
         <div className="text-sm text-gray-600">
@@ -467,15 +465,34 @@ const RecipeListWithHistory: React.FC = () => {
 
       <Card>
         {header}
-        <DataView
-          value={filteredRecipes}
-          itemTemplate={itemTemplate}
-          layout="list"
-          paginator
-          rows={9}
-          emptyMessage="No recipes found matching your criteria."
-          className="recipe-grid"
-        />
+        {filteredRecipes.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No recipes found matching your criteria.
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredRecipes.slice(0, 12).map((recipe) => (
+                <div key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
+                  <RecipeCard
+                    recipe={recipe}
+                    onSave={handleSaveRecipe}
+                    isSaved={savedRecipes.has(recipe.id)}
+                  />
+                </div>
+              ))}
+            </div>
+            {filteredRecipes.length > 12 && (
+              <div className="text-center mt-8">
+                <Button
+                  label="Load More"
+                  icon="pi pi-chevron-down"
+                  className="p-button-outlined"
+                />
+              </div>
+            )}
+          </>
+        )}
       </Card>
     </div>
   );

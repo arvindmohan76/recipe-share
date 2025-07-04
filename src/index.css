@@ -328,35 +328,6 @@
   width: auto !important;
 }
 
-/* Recipe grid layout for 4 columns */
-.recipe-grid .p-dataview-content {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .recipe-grid .p-dataview-content {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .recipe-grid .p-dataview-content {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .recipe-grid .p-dataview-content {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.recipe-grid .p-dataview-content > div {
-  display: contents;
-}
-
 /* Full width button override */
 .p-button.w-full {
   width: 100% !important;
@@ -408,28 +379,4 @@
 
 .profile-menu .p-menuitem-text {
   font-weight: 500;
-}
-
-/* Navbar improvements for better button spacing */
-.navbar-end {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.navbar-end .p-button {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-@media (max-width: 1024px) {
-  .navbar-end .p-button .p-button-label {
-    display: none;
-  }
-  
-  .navbar-end .p-button {
-    min-width: 2.5rem;
-    justify-content: center;
-  }
 }
