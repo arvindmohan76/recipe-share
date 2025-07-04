@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
           <Button
             label="Create Recipe"
             icon="pi pi-plus"
-            className="p-button-success mr-2"
+            className="p-button-success p-button-outlined mr-2"
             onClick={() => navigate('/recipes/new')}
           />
           <Avatar

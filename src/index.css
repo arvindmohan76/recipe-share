@@ -22,7 +22,9 @@
 
 /* Button spacing and styling improvements */
 .p-button {
-  @apply font-medium transition-all duration-200 mx-1;
+  @apply font-normal transition-all duration-200 mx-1 px-4 py-2;
+  font-weight: 400 !important;
+  letter-spacing: 0.025em;
 }
 
 .p-button:hover {
@@ -128,60 +130,111 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-green-50 hover:bg-green-100 border-green-200 text-green-700;
+  @apply bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700;
+  font-weight: 400 !important;
 }
 
 .p-button-success.p-button-outlined {
-  @apply bg-transparent hover:bg-green-50 border-green-300 text-green-600;
+  @apply bg-transparent hover:bg-emerald-50 border-emerald-300 text-emerald-600;
+  font-weight: 400 !important;
 }
 
 .p-button-success:not(.p-button-outlined):not(.p-button-text) {
-  @apply bg-green-500 hover:bg-green-600 border-green-500 text-white;
+  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white;
+  font-weight: 400 !important;
 }
 
 /* Subtle success button styles */
 .p-button-text.p-button-success {
-  @apply text-green-600 hover:text-green-700 hover:bg-green-50;
+  @apply text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-3 py-2;
+  font-weight: 400 !important;
 }
 
 .p-button-sm.p-button-success {
-  @apply text-green-500 hover:text-green-600 hover:bg-green-50;
+  @apply text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 text-sm;
+  font-weight: 400 !important;
 }
 
 .p-button-danger {
-  @apply bg-red-50 hover:bg-red-100 border-red-200 text-red-700;
+  @apply bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700;
+  font-weight: 400 !important;
 }
 
 .p-button-danger.p-button-outlined {
-  @apply bg-transparent hover:bg-red-50 border-red-300 text-red-600;
+  @apply bg-transparent hover:bg-rose-50 border-rose-300 text-rose-600;
+  font-weight: 400 !important;
 }
 
 .p-button-danger:not(.p-button-outlined):not(.p-button-text) {
-  @apply bg-red-500 hover:bg-red-600 border-red-500 text-white;
+  @apply bg-rose-500 hover:bg-rose-600 border-rose-500 text-white;
+  font-weight: 400 !important;
 }
 
 .p-button-info {
   @apply bg-blue-500 hover:bg-blue-600 border-blue-500;
+  font-weight: 400 !important;
 }
 
 .p-button-warning {
-  @apply bg-yellow-500 hover:bg-yellow-600 border-yellow-500;
+  @apply bg-amber-500 hover:bg-amber-600 border-amber-500;
+  font-weight: 400 !important;
 }
 
 /* Subtle delete button styles */
 .p-button-text.p-button-danger {
-  @apply text-gray-500 hover:text-red-600 hover:bg-red-50;
+  @apply text-gray-500 hover:text-rose-600 hover:bg-rose-50 px-3 py-2;
+  font-weight: 400 !important;
 }
 
 .p-button-sm.p-button-danger {
-  @apply text-gray-400 hover:text-red-500 hover:bg-red-50;
+  @apply text-gray-400 hover:text-rose-500 hover:bg-rose-50 px-3 py-1.5 text-sm;
+  font-weight: 400 !important;
 }
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700;
+  @apply bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700 px-4 py-2;
+  font-weight: 400 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50;
+  @apply bg-transparent hover:bg-gray-50 px-4 py-2;
+  font-weight: 400 !important;
+}
+
+/* Primary button improvements */
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info) {
+  @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-4 py-2;
+  font-weight: 400 !important;
+}
+
+/* Small button improvements */
+.p-button-sm {
+  @apply px-3 py-1.5 text-sm;
+  font-weight: 400 !important;
+}
+
+/* Large button improvements */
+.p-button-lg {
+  @apply px-6 py-3 text-base;
+  font-weight: 400 !important;
+}
+
+/* Button label improvements */
+.p-button .p-button-label {
+  font-weight: 400 !important;
+  line-height: 1.5;
+}
+
+/* Icon button improvements */
+.p-button .p-button-icon {
+  font-size: 1rem;
+}
+
+.p-button-sm .p-button-icon {
+  font-size: 0.875rem;
+}
+
+.p-button-lg .p-button-icon {
+  font-size: 1.125rem;
 }

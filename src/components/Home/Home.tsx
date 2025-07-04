@@ -122,8 +122,7 @@ const Home: React.FC = () => {
           <Button
             label="Explore Recipes"
             icon="pi pi-search"
-            size="large"
-            className="bg-white text-orange-500 hover:bg-gray-100 mr-3"
+            className="p-button-lg bg-white text-blue-600 hover:bg-blue-50 border-blue-200 mr-3"
             onClick={() => navigate('/recipes')}
           />
           {user && (
@@ -131,9 +130,8 @@ const Home: React.FC = () => {
               label="Create Recipe"
               icon="pi pi-plus"
               size="large"
-              className="p-button-outlined p-button-success px-6 py-3"
-              className="p-button-outlined"
-              style={{ borderColor: '#3b82f6', color: '#3b82f6' }}
+              className="p-button-lg p-button-outlined p-button-success"
+              onClick={() => navigate('/recipes/new')}
             />
           )}
         </div>
