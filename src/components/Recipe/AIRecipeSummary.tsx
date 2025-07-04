@@ -173,3 +173,6 @@ export const AIRecipeSummary: React.FC<AIRecipeSummaryProps> = ({
     </Card>
   );
 };
+
+
+export default AIRecipeSummary
