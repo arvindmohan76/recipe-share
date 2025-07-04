@@ -135,7 +135,8 @@ const Home: React.FC = () => {
           )}
         </div>
       </div>
-              className="p-button-lg p-button-outlined"
+    </div>
+  );
 
   const featuresSection = (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
