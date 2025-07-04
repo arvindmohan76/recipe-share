@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Rating } from 'primereact/rating';
 import { Recipe } from '../../lib/supabase';
+import { getRecipeImageUrl } from '../../lib/imageUtils';
 import { useNavigate } from 'react-router-dom';
 
 interface RecipeCardProps {
@@ -19,8 +20,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
     <div className="relative">
       <img
         alt={recipe.title}
-        src={recipe.image_url || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400'}
+        src={getRecipeImageUrl(recipe.image_url, 'medium')}
         className="w-full h-48 object-cover rounded-t-lg"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
+        }}
       />
       <div className="absolute top-2 right-2">
         <Button

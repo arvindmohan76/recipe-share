@@ -9,6 +9,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { FileUpload } from 'primereact/fileupload';
 import { Message } from 'primereact/message';
 import { supabase } from '../../lib/supabase';
+import { uploadRecipeImage } from '../../lib/imageUtils';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -118,31 +119,6 @@ const RecipeForm: React.FC = () => {
     setSteps(newSteps);
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id}/${Date.now()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('recipe-images')
-        .upload(fileName, file);
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        return null;
-      }
-
-      const { data } = supabase.storage
-        .from('recipe-images')
-        .getPublicUrl(fileName);
-
-      return data.publicUrl;
-    } catch (err) {
-      console.error('Image upload failed:', err);
-      return null;
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -154,9 +130,12 @@ const RecipeForm: React.FC = () => {
       let imageUrl = '';
 
       if (imageFile) {
-        const uploadedUrl = await uploadImage(imageFile);
+        const uploadedUrl = await uploadRecipeImage(imageFile, user.id);
         if (uploadedUrl) {
           imageUrl = uploadedUrl;
+        } else {
+          setError('Failed to upload image. Please try again.');
+          return;
         }
       }
 

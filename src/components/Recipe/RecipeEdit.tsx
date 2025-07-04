@@ -10,6 +10,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { FileUpload } from 'primereact/fileupload';
 import { Message } from 'primereact/message';
 import { supabase } from '../../lib/supabase';
+import { uploadRecipeImage } from '../../lib/imageUtils';
 import { useAuth } from '../../context/AuthContext';
 
 interface Ingredient {
@@ -162,31 +163,6 @@ const RecipeEdit: React.FC = () => {
   };
 
   const removeIngredient = (index: number) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
-
-  const updateIngredient = (index: number, field: keyof Ingredient, value: string) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index][field] = value;
-    setIngredients(newIngredients);
-  };
-
-  const addStep = () => {
-    setSteps([...steps, { step: steps.length + 1, instruction: '', tips: '' }]);
-  };
-
-  const removeStep = (index: number) => {
-    const newSteps = steps.filter((_, i) => i !== index);
-    const renumberedSteps = newSteps.map((step, i) => ({ ...step, step: i + 1 }));
-    setSteps(renumberedSteps);
-  };
-
-  const updateStep = (index: number, field: keyof Step, value: string | number) => {
-    const newSteps = [...steps];
-    newSteps[index][field] = value as any;
-    setSteps(newSteps);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !id) return;
@@ -198,9 +174,12 @@ const RecipeEdit: React.FC = () => {
       let imageUrl = currentImageUrl;
 
       if (imageFile) {
-        const uploadedUrl = await uploadImage(imageFile);
+        const uploadedUrl = await uploadRecipeImage(imageFile, user.id);
         if (uploadedUrl) {
           imageUrl = uploadedUrl;
+        } else {
+          setError('Failed to upload image. Please try again.');
+          return;
         }
       }
 
@@ -306,9 +285,13 @@ const RecipeEdit: React.FC = () => {
             {currentImageUrl && (
               <div className="mb-4">
                 <img
-                  src={currentImageUrl}
+                  src={getRecipeImageUrl(currentImageUrl, 'medium')}
                   alt="Current recipe"
                   className="w-32 h-32 object-cover rounded-lg border"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
+                  }}
                 />
                 <p className="text-sm text-gray-600 mt-1">Current image</p>
               </div>

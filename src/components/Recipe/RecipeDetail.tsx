@@ -8,6 +8,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
 import { supabase, Recipe, RecipeComment } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { getRecipeImageUrl } from '../../lib/imageUtils';
 import VoiceController from '../Voice/VoiceController';
 
 const RecipeDetail: React.FC = () => {
@@ -152,9 +153,13 @@ const RecipeDetail: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <img
-              src={recipe.image_url || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800'}
+              src={getRecipeImageUrl(recipe.image_url, 'large')}
               alt={recipe.title}
               className="w-full h-64 object-cover rounded-lg"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800';
+              }}
             />
           </div>
           <div>
