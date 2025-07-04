@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for better visual hierarchy */
+.custom-carousel .p-carousel-content {
+  @apply bg-white rounded-lg shadow-sm;
+}
+
+.custom-carousel .p-carousel-indicators .p-carousel-indicator {
+  @apply bg-orange-300;
+}
+
+.custom-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight {
+  @apply bg-orange-500;
+}
+
+/* PrimeReact overrides for better integration */
+.p-card {
+  @apply shadow-md hover:shadow-lg transition-shadow duration-200;
+}
+
+/* Button spacing and styling improvements */
+.p-button {
+  @apply font-medium transition-all duration-200 mx-1;
+}
+
+.p-button:hover {
+  @apply transform translate-y-[-1px];
+}
+
+.p-button + .p-button {
+  @apply ml-2;
+}
+
+/* Input field styling */
+.p-inputtext {
+  @apply border-2 border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+}
+
+.p-inputtextarea {
+  @apply border-2 border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+}
+
+.p-dropdown {
+  @apply border-2 border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 transition-all duration-200;
+}
+
+.p-multiselect {
+  @apply border-2 border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 transition-all duration-200;
+}
+
+.p-inputnumber {
+  @apply border-2 border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 transition-all duration-200;
+}
+
+.p-fileupload {
+  @apply border-2 border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 transition-all duration-200;
+}
+
+.p-button-outlined {
+  @apply border-2;
+}
+
+.p-menubar {
+  @apply bg-white border-b border-gray-200;
+}
+
+.p-menubar .p-menubar-start {
+  @apply text-orange-500;
+}
+
+/* Focus states */
+.p-inputtext:focus,
+.p-inputtextarea:focus,
+.p-dropdown:focus-within,
+.p-multiselect:focus-within,
+.p-inputnumber:focus-within {
+  @apply ring-2 ring-blue-200 ring-opacity-50 border-blue-500 outline-none;
+}
+
+/* Card spacing improvements */
+.p-card .p-card-body {
+  @apply p-6;
+}
+
+.p-card .p-card-content {
+  @apply pt-0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* Responsive design utilities */
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .p-card {
+    @apply mx-2;
+  }
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom button styles */
+.p-button-success {
+  @apply bg-green-500 hover:bg-green-600 border-green-500;
+}
+
+.p-button-danger {
+  @apply bg-red-500 hover:bg-red-600 border-red-500;
+}
+
+.p-button-info {
+  @apply bg-blue-500 hover:bg-blue-600 border-blue-500;
+}
+
+.p-button-warning {
+  @apply bg-yellow-500 hover:bg-yellow-600 border-yellow-500;
+}
