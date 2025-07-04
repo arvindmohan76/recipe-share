@@ -297,14 +297,18 @@ const RecipeDetail: React.FC = () => {
                 <Button
                   label="Edit"
                   icon="pi pi-pencil"
-                  className="p-button-outlined mr-3"
+                  className="p-button-outlined"
                   onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
                 />
               )}
+            </div>
+            
+            {/* Cooking Mode Button - Separate Row */}
+            <div className="mt-4">
               <Button
                 label={isCookingMode ? 'Stop Cooking' : 'Start Cooking'}
                 icon={isCookingMode ? 'pi pi-stop' : 'pi pi-play'}
-                className={`px-4 py-2 ${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
+                className={`${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
                 onClick={() => setIsCookingMode(!isCookingMode)}
               />
             </div>
