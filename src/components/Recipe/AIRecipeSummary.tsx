@@ -64,3 +64,5 @@ export const AIRecipeSummary: React.FC<AIRecipeSummaryProps> = ({ recipe }) => {
     </div>
   );
 };
+
+export default AIRecipeSummary
