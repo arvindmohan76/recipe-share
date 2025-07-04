@@ -42,17 +42,22 @@ export async function generateRecipeSummary(recipe: any): Promise<string | null>
           Cooking Steps: ${recipe.steps?.length > 0 ? recipe.steps.map((step: any, index: number) => `${index + 1}. ${step.instruction || step}`).join(' ') : 'Steps will be added later'}
           
           IMPORTANT: Write a compelling, mouth-watering description in EXACTLY 50 words or less that focuses on:
+          - MUST mention the cuisine type prominently (e.g., "This authentic Italian...", "Traditional Korean flavors...", "Classic French technique...")
           - Rich sensory details based on the specific ingredients listed above
           - How the key ingredients combine to create amazing flavors
           - Texture contrasts and flavor combinations from these specific ingredients
+          - Cultural authenticity and traditional cooking methods when relevant to the cuisine
           - Use vivid, appetizing language that makes readers crave this dish
           - Focus on what makes this specific combination of ingredients irresistible
           - Write in an engaging, enthusiastic tone
           - MUST be 50 words or less - this is critical for UX
           
-          Example style (but adapt to the actual ingredients): "Golden, crispy edges give way to tender centers as aromatic garlic and herbs dance with rich, savory flavors..."
+          Example styles (adapt to actual cuisine and ingredients): 
+          - "This authentic Italian pasta combines al dente noodles with rich, slow-simmered tomato sauce..."
+          - "Traditional Korean flavors burst through tender beef, crisp vegetables, and spicy gochujang..."
+          - "Classic French technique creates silky béchamel that melts perfectly with caramelized onions..."
           
-          Make this recipe sound absolutely irresistible using the specific ingredients provided! Remember: 50 words maximum.`
+          Make this recipe sound absolutely irresistible using the specific cuisine and ingredients provided! Remember: 50 words maximum with cuisine prominence.`
         }
       ],
       max_tokens: 80, // Reduced to ensure 50-word limit
