@@ -163,6 +163,11 @@ const RecipeEdit: React.FC = () => {
   };
 
   const removeIngredient = (index: number) => {
+    const newIngredients = [...ingredients];
+    newIngredients.splice(index, 1);
+    setIngredients(newIngredients);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !id) return;
