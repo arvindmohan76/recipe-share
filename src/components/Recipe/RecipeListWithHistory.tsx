@@ -62,16 +62,17 @@ const RecipeListWithHistory: React.FC = () => {
   }, [user]);
 
   useEffect(() => {
-    // Debounced search with history tracking
+    // Immediate search tracking for better data collection
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
     searchTimeoutRef.current = setTimeout(() => {
-      if (user && allowsTracking && (searchTerm || ingredientSearch || selectedCuisines.length || selectedDietary.length || difficulty)) {
+      // Track any meaningful search activity
+      if (user && allowsTracking) {
         trackSearch();
       }
-    }, 1000);
+    }, 500); // Reduced delay for better tracking
 
     return () => {
       if (searchTimeoutRef.current) {
@@ -94,8 +95,18 @@ const RecipeListWithHistory: React.FC = () => {
   const trackSearch = async () => {
     if (!user || !allowsTracking) return;
 
-    const query = [searchTerm, ingredientSearch].filter(Boolean).join(' ');
-    if (!query.trim()) return;
+    // Create a meaningful query from all search inputs
+    const queryParts = [];
+    if (searchTerm.trim()) queryParts.push(searchTerm.trim());
+    if (ingredientSearch.trim()) queryParts.push(`ingredient:${ingredientSearch.trim()}`);
+    if (selectedCuisines.length) queryParts.push(`cuisine:${selectedCuisines.join(',')}`);
+    if (selectedDietary.length) queryParts.push(`dietary:${selectedDietary.join(',')}`);
+    if (difficulty) queryParts.push(`difficulty:${difficulty}`);
+    
+    const query = queryParts.join(' ');
+    
+    // Only track if there's actual search content
+    if (!query.trim() || query.length < 2) return;
 
     const filters = {
       cuisines: selectedCuisines,
@@ -105,12 +116,21 @@ const RecipeListWithHistory: React.FC = () => {
       showBookmarkedOnly
     };
 
-    const searchType = ingredientSearch ? 'ingredient' : 'general';
+    // Determine search type based on primary search method
+    let searchType: 'general' | 'ingredient' | 'cuisine' | 'dietary' | 'difficulty' = 'general';
+    if (ingredientSearch.trim()) searchType = 'ingredient';
+    else if (selectedCuisines.length > 0) searchType = 'cuisine';
+    else if (selectedDietary.length > 0) searchType = 'dietary';
+    else if (difficulty) searchType = 'difficulty';
+    
     const resultsCount = filteredRecipes.length;
+
+    console.log('Tracking search:', { query, searchType, resultsCount, filters });
 
     try {
       const searchId = await recordSearchQuery(user.id, query, searchType, filters, resultsCount);
       setCurrentSearchId(searchId);
+      console.log('Search tracked with ID:', searchId);
     } catch (err) {
       console.error('Failed to track search:', err);
     }
@@ -188,10 +208,13 @@ const RecipeListWithHistory: React.FC = () => {
   };
 
   const handleRecipeClick = async (recipeId: string) => {
+    console.log('Recipe clicked:', recipeId, 'Search ID:', currentSearchId);
+    
     // Track recipe click if we have a current search
     if (currentSearchId && user && allowsTracking) {
       try {
         await recordRecipeClick(currentSearchId, recipeId);
+        console.log('Recipe click tracked successfully');
       } catch (err) {
         console.error('Failed to track recipe click:', err);
       }
@@ -265,6 +288,13 @@ const RecipeListWithHistory: React.FC = () => {
               suggestions={searchSuggestions}
               completeMethod={(e) => handleSearchSuggestions(e.query)}
               onChange={(e) => setSearchTerm(e.value)}
+              onSelect={(e) => {
+                setSearchTerm(e.value);
+                // Immediately track when user selects a suggestion
+                if (user && allowsTracking && e.value && e.value.length >= 2) {
+                  setTimeout(() => trackSearch(), 100);
+                }
+              }}
               placeholder="Search by title or description..."
               className="w-full"
               inputClassName="w-full p-3 border-2 border-gray-300 rounded-md"
@@ -290,6 +320,12 @@ const RecipeListWithHistory: React.FC = () => {
             onChange={(e) => setIngredientSearch(e.target.value)}
             placeholder="Search by ingredient (e.g., chicken, tomato)..."
             className="w-full p-3 border-2 border-gray-300 rounded-md"
+            onBlur={() => {
+              // Track when user finishes typing in ingredient search
+              if (user && allowsTracking && ingredientSearch.trim().length >= 2) {
+                setTimeout(() => trackSearch(), 100);
+              }
+            }}
           />
         </div>
       </div>

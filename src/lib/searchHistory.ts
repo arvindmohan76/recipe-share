@@ -94,11 +94,19 @@ export const recordSearchQuery = async (
   resultsCount: number
 ): Promise<string | null> => {
   try {
+    // Don't record empty or very short queries
+    if (!searchQuery || searchQuery.trim().length < 2) {
+      return null;
+    }
+
     // Check if user allows search history tracking
     const privacySettings = await getUserPrivacySettings(userId);
-    if (privacySettings && !privacySettings.allow_search_history) {
+    // Default to allowing tracking if no privacy settings exist
+    if (privacySettings && privacySettings.allow_search_history === false) {
       return null; // User has opted out
     }
+
+    console.log('Recording search query:', { userId, searchQuery, searchType, resultsCount });
 
     const { data, error } = await supabase
       .from('user_search_history')
@@ -117,6 +125,7 @@ export const recordSearchQuery = async (
       return null;
     }
 
+    console.log('Search query recorded successfully:', data.id);
     return data.id;
   } catch (err) {
     console.error('Failed to record search query:', err);
