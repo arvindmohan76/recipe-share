@@ -25,6 +25,13 @@ const RecipeDetail: React.FC = () => {
 
   const { user } = useAuth();
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    // Only set fallback if it's not already a fallback image
+    if (!target.src.includes('pexels.com')) {
+      target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800';
+    }
+  };
   useEffect(() => {
     if (id) {
       fetchRecipe();
@@ -121,14 +128,35 @@ const RecipeDetail: React.FC = () => {
           `${ing.amount} ${ing.unit} ${ing.name}`
         ).join(', ');
         const utterance = new SpeechSynthesisUtterance(`Ingredients: ${ingredientsList}`);
+        utterance.rate = 0.8; // Slower speech for better comprehension
+        utterance.volume = 0.8;
+        speechSynthesis.speak(utterance);
+      }
+    } else if (lowerCommand.includes('read current step') || lowerCommand.includes('read step')) {
+      console.log('Reading current step...');
+      if (recipe && 'speechSynthesis' in window && recipe.steps[currentStep]) {
+        const currentStepText = recipe.steps[currentStep].instruction;
+        const utterance = new SpeechSynthesisUtterance(`Step ${currentStep + 1}: ${currentStepText}`);
+        utterance.rate = 0.8;
+        utterance.volume = 0.8;
         speechSynthesis.speak(utterance);
       }
     } else if (lowerCommand.includes('start cooking')) {
       setIsCookingMode(true);
       console.log('Starting cooking mode');
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance('Cooking mode activated. You can now use voice commands to navigate through the recipe.');
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+      }
     } else if (lowerCommand.includes('stop cooking')) {
       setIsCookingMode(false);
       console.log('Stopping cooking mode');
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance('Cooking mode deactivated.');
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+      }
     }
   };
 
@@ -156,10 +184,8 @@ const RecipeDetail: React.FC = () => {
               src={getRecipeImageUrl(recipe.image_url, 'large')}
               alt={recipe.title}
               className="w-full h-64 object-cover rounded-lg"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800';
-              }}
+              onError={handleImageError}
+              loading="lazy"
             />
           </div>
           <div>

@@ -16,16 +16,21 @@ interface RecipeCardProps {
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
   const navigate = useNavigate();
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    // Only set fallback if it's not already a fallback image
+    if (!target.src.includes('pexels.com')) {
+      target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
+    }
+  };
   const header = (
     <div className="relative">
       <img
         alt={recipe.title}
         src={getRecipeImageUrl(recipe.image_url, 'medium')}
         className="w-full h-48 object-cover rounded-t-lg"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
-        }}
+        onError={handleImageError}
+        loading="lazy"
       />
       <div className="absolute top-2 right-2">
         <Button

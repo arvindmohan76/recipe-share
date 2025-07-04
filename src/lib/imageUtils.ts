@@ -95,7 +95,9 @@ export const getRecipeImageUrl = (imageUrl?: string | null, size: 'small' | 'med
 
   // For Supabase URLs, add transformation parameters for optimization
   try {
-    const url = new URL(imageUrl);
+    // Handle relative URLs by making them absolute
+    const fullUrl = imageUrl.startsWith('http') ? imageUrl : `https://${imageUrl}`;
+    const url = new URL(fullUrl);
     const sizeParams = {
       small: 'width=400&height=300',
       medium: 'width=800&height=600', 
@@ -104,7 +106,11 @@ export const getRecipeImageUrl = (imageUrl?: string | null, size: 'small' | 'med
     
     // Add transformation parameters if it's a Supabase URL
     if (url.hostname.includes('supabase')) {
-      url.searchParams.set('transform', sizeParams[size]);
+      // Use Supabase's image transformation API
+      const transformParams = sizeParams[size];
+      if (!url.searchParams.has('transform')) {
+        url.searchParams.set('transform', transformParams);
+      }
     }
     
     const optimizedUrl = url.toString();

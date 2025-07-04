@@ -250,21 +250,39 @@ const Home: React.FC = () => {
             Join thousands of home cooks sharing their favorite recipes and discovering new ones.
           </p>
           {!user ? (
-            <Button
-              label="Sign Up Now"
-              icon="pi pi-user-plus"
-              size="large"
-              onClick={() => navigate('/auth?mode=signup')}
-              className="bg-blue-500 hover:bg-blue-600"
-            />
+            <div className="flex justify-center gap-4">
+              <Button
+                label="Sign Up Now"
+                icon="pi pi-user-plus"
+                size="large"
+                onClick={() => navigate('/auth?mode=signup')}
+                className="bg-blue-500 hover:bg-blue-600"
+              />
+              <Button
+                label="Browse Recipes"
+                icon="pi pi-search"
+                size="large"
+                onClick={() => navigate('/recipes')}
+                className="p-button-outlined"
+              />
+            </div>
           ) : (
-            <Button
-              label="Share Your Recipe"
-              icon="pi pi-plus"
-              size="large"
-              className="bg-green-500 hover:bg-green-600 px-6 py-3"
-              onClick={() => navigate('/recipes/new')}
-            />
+            <div className="flex justify-center gap-4">
+              <Button
+                label="Share Your Recipe"
+                icon="pi pi-plus"
+                size="large"
+                className="bg-green-500 hover:bg-green-600 px-6 py-3"
+                onClick={() => navigate('/recipes/new')}
+              />
+              <Button
+                label="View My Bookmarks"
+                icon="pi pi-heart"
+                size="large"
+                className="p-button-outlined"
+                onClick={() => navigate('/saved-recipes')}
+              />
+            </div>
           )}
         </div>
       </Card>

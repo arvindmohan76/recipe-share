@@ -319,6 +319,13 @@ const RecipeEdit: React.FC = () => {
                   src={currentImageUrl}
                   alt="Current recipe"
                   className="w-32 h-32 object-cover rounded-lg border"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes('pexels.com')) {
+                      target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
+                    }
+                  }}
+                  loading="lazy"
                 />
                 <p className="text-sm text-gray-600 mt-1">Current image</p>
               </div>
