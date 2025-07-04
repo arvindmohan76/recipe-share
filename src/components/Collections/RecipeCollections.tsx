@@ -277,7 +277,7 @@ const RecipeCollections: React.FC = () => {
         {collection.recipes && collection.recipes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {collection.recipes.map((recipe) => (
-              <div key={recipe.id}>
+              <div key={recipe.id} className="h-full">
                 <RecipeCard
                   recipe={recipe}
                   onSave={handleSaveRecipe}

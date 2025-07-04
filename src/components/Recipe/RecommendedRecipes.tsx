@@ -354,11 +354,13 @@ const RecommendedRecipes: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {recs.map((recommendation) => (
                   <div key={recommendation.id} className="relative">
-                    <RecipeCard
-                      recipe={recommendation.recipe}
-                      onSave={handleSaveRecipe}
-                      isSaved={savedRecipes.has(recommendation.recipe_id)}
-                    />
+                    <div className="h-full">
+                      <RecipeCard
+                        recipe={recommendation.recipe}
+                        onSave={handleSaveRecipe}
+                        isSaved={savedRecipes.has(recommendation.recipe_id)}
+                      />
+                    </div>
                     
                     {/* Confidence indicator */}
                     <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">

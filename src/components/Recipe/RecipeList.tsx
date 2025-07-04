@@ -292,12 +292,13 @@ const RecipeList: React.FC = () => {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredRecipes.slice(0, 12).map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onSave={handleSaveRecipe}
-                  isSaved={savedRecipes.has(recipe.id)}
-                />
+                <div key={recipe.id} className="h-full">
+                  <RecipeCard
+                    recipe={recipe}
+                    onSave={handleSaveRecipe}
+                    isSaved={savedRecipes.has(recipe.id)}
+                  />
+                </div>
               ))}
             </div>
             {filteredRecipes.length > 12 && (
