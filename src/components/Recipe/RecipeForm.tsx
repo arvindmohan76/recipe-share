@@ -49,14 +49,29 @@ const RecipeForm: React.FC = () => {
   const cuisineOptions = [
     { label: 'Italian', value: 'Italian' },
     { label: 'Mexican', value: 'Mexican' },
-    { label: 'Asian', value: 'Asian' },
+    { label: 'Chinese', value: 'Chinese' },
     { label: 'Indian', value: 'Indian' },
-    { label: 'Mediterranean', value: 'Mediterranean' },
-    { label: 'American', value: 'American' },
     { label: 'French', value: 'French' },
     { label: 'Thai', value: 'Thai' },
     { label: 'Japanese', value: 'Japanese' },
-    { label: 'Chinese', value: 'Chinese' }
+    { label: 'Korean', value: 'Korean' },
+    { label: 'Greek', value: 'Greek' },
+    { label: 'Lebanese', value: 'Lebanese' },
+    { label: 'Moroccan', value: 'Moroccan' },
+    { label: 'Brazilian', value: 'Brazilian' },
+    { label: 'Ethiopian', value: 'Ethiopian' },
+    { label: 'Peruvian', value: 'Peruvian' },
+    { label: 'Vietnamese', value: 'Vietnamese' },
+    { label: 'Turkish', value: 'Turkish' },
+    { label: 'Russian', value: 'Russian' },
+    { label: 'Spanish', value: 'Spanish' },
+    { label: 'German', value: 'German' },
+    { label: 'British', value: 'British' },
+    { label: 'Jamaican', value: 'Jamaican' },
+    { label: 'Polish', value: 'Polish' },
+    { label: 'Mediterranean', value: 'Mediterranean' },
+    { label: 'American', value: 'American' },
+    { label: 'Asian', value: 'Asian' }
   ];
 
   const dietaryOptions = [

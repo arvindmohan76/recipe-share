@@ -39,7 +39,7 @@ const RecipeListWithHistory: React.FC = () => {
   const { user } = useAuth();
 
   const cuisineOptions = [
-    'Italian', 'Mexican', 'Asian', 'Indian', 'Mediterranean', 'American', 'French', 'Thai', 'Japanese', 'Chinese'
+    'Italian', 'Mexican', 'Chinese', 'Indian', 'French', 'Thai', 'Japanese', 'Korean', 'Greek', 'Lebanese', 'Moroccan', 'Brazilian', 'Ethiopian', 'Peruvian', 'Vietnamese', 'Turkish', 'Russian', 'Spanish', 'German', 'British', 'Jamaican', 'Polish', 'Mediterranean', 'American', 'Asian'
   ];
 
   const dietaryOptions = [
