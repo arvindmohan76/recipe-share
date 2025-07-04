@@ -43,14 +43,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
   );
 
   const footer = (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center gap-2">
       <div className="flex items-center gap-2">
         <Rating value={4.5} readOnly stars={5} cancel={false} />
-        <span className="text-sm text-gray-600">({recipe.view_count} views)</span>
+        <span className="text-xs text-gray-600 hidden sm:inline">({recipe.view_count})</span>
       </div>
       <Button
-        label="View Recipe"
+        label="View"
         icon="pi pi-eye"
+        className="p-button-sm flex-shrink-0"
         onClick={() => navigate(`/recipes/${recipe.id}`)}
       />
     </div>

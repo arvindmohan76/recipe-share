@@ -275,9 +275,9 @@ const RecipeCollections: React.FC = () => {
         </div>
 
         {collection.recipes && collection.recipes.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {collection.recipes.map((recipe) => (
-              <div key={recipe.id} className="transform scale-90">
+              <div key={recipe.id}>
                 <RecipeCard
                   recipe={recipe}
                   onSave={handleSaveRecipe}
@@ -291,9 +291,9 @@ const RecipeCollections: React.FC = () => {
             <i className="pi pi-book text-4xl text-gray-300 mb-3"></i>
             <p className="text-gray-500">No recipes in this collection yet</p>
             <Button
-              label="Add Recipes"
+              label="Add"
               icon="pi pi-plus"
-              className="p-button-outlined p-button-sm mt-3"
+              className="p-button-outlined p-button-sm mt-3 flex-shrink-0"
               onClick={() => openEditDialog(collection)}
             />
           </div>

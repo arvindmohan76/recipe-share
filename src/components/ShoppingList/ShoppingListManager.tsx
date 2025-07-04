@@ -191,10 +191,11 @@ const ShoppingListManager: React.FC = () => {
 
         <div className="space-y-2">
           {list.ingredients.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 p-2 border rounded">
+            <div key={index} className="shopping-list-item flex items-center gap-3 p-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
               <Checkbox
                 checked={item.checked}
                 onChange={() => toggleItemChecked(list, index)}
+                className="flex-shrink-0"
               />
               <span className={`flex-1 ${item.checked ? 'line-through text-gray-500' : ''}`}>
                 {item.amount} {item.unit} {item.name}

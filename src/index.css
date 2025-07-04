@@ -464,3 +464,60 @@
 .p-slider:not(.p-disabled) .p-slider-handle:active {
   cursor: grabbing;
 }
+/* Checkbox improvements for better visibility */
+.p-checkbox {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.p-checkbox .p-checkbox-box {
+  @apply border-2 border-gray-400 rounded bg-white;
+  width: 20px !important;
+  height: 20px !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-checkbox .p-checkbox-box:hover {
+  @apply border-blue-500 bg-blue-50;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  @apply bg-blue-500 border-blue-500;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight:hover {
+  @apply bg-blue-600 border-blue-600;
+}
+
+.p-checkbox .p-checkbox-box .p-checkbox-icon {
+  color: white !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+}
+
+.p-checkbox .p-checkbox-box:focus {
+  @apply ring-2 ring-blue-200 ring-opacity-50 border-blue-500 outline-none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Shopping list specific checkbox styling */
+.shopping-list-item .p-checkbox {
+  margin-right: 12px;
+}
+
+.shopping-list-item .p-checkbox .p-checkbox-box {
+  @apply border-2 border-gray-500 bg-white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shopping-list-item .p-checkbox .p-checkbox-box:hover {
+  @apply border-green-500 bg-green-50;
+}
+
+.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight {
+  @apply bg-green-500 border-green-500;
+}
+
+.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight:hover {
+  @apply bg-green-600 border-green-600;
+}
