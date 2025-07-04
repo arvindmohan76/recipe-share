@@ -26,6 +26,11 @@ const Navbar: React.FC = () => {
       command: () => navigate('/recipes'),
     },
     {
+      label: 'Recommendations',
+      icon: 'pi pi-lightbulb',
+      command: () => navigate('/recommendations'),
+    },
+    {
       label: 'My Bookmarks',
       icon: 'pi pi-heart',
       command: () => navigate('/saved-recipes'),
@@ -57,7 +62,7 @@ const Navbar: React.FC = () => {
           <Avatar
             icon="pi pi-user"
             className="bg-blue-500 text-white cursor-pointer mr-2"
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('/privacy-settings')}
           />
           <Button
             label="Sign Out"

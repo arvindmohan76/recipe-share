@@ -9,6 +9,9 @@ import RecipeForm from './components/Recipe/RecipeForm';
 import RecipeDetail from './components/Recipe/RecipeDetail';
 import RecipeEdit from './components/Recipe/RecipeEdit';
 import SavedRecipes from './components/Recipe/SavedRecipes';
+import RecommendedRecipes from './components/Recipe/RecommendedRecipes';
+import PrivacySettings from './components/Privacy/PrivacySettings';
+import RecipeListWithHistory from './components/Recipe/RecipeListWithHistory';
 
 // Import PrimeReact CSS
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -23,11 +26,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<AuthForm />} />
-            <Route path="/recipes" element={<RecipeList />} />
+            <Route path="/recipes" element={<RecipeListWithHistory />} />
             <Route path="/recipes/new" element={<RecipeForm />} />
             <Route path="/recipes/:id/edit" element={<RecipeEdit />} />
             <Route path="/recipes/:id" element={<RecipeDetail />} />
             <Route path="/saved-recipes" element={<SavedRecipes />} />
+            <Route path="/recommendations" element={<RecommendedRecipes />} />
+            <Route path="/privacy-settings" element={<PrivacySettings />} />
           </Routes>
         </Layout>
       </Router>
