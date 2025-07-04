@@ -10,6 +10,7 @@ import { supabase, Recipe, RecipeComment } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { getRecipeImageUrl } from '../../lib/imageUtils';
 import VoiceController from '../Voice/VoiceController';
+import AIRecipeSummary from './AIRecipeSummary';
 
 const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -243,6 +244,17 @@ const RecipeDetail: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* AI-Generated Recipe Summary */}
+      <AIRecipeSummary
+        title={recipe.title}
+        ingredients={recipe.ingredients}
+        steps={recipe.steps}
+        cuisine={recipe.cuisine}
+        difficulty={recipe.difficulty}
+        cookingTime={recipe.cooking_time}
+        dietaryTags={recipe.dietary_tags}
+      />
 
       {/* Voice Controller */}
       {isCookingMode && (

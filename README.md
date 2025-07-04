@@ -26,6 +26,7 @@ A comprehensive recipe management application built with React, Supabase, and Pr
 - **Database**: PostgreSQL with Row Level Security (RLS)
 - **File Storage**: Supabase Storage for recipe images
 - **Voice Recognition**: Web Speech API integration
+- **AI-Powered Content**: OpenAI integration for recipe summaries and cooking tips
 
 ## Technology Stack
 
@@ -35,6 +36,7 @@ A comprehensive recipe management application built with React, Supabase, and Pr
 - **Routing**: React Router DOM
 - **Voice**: Web Speech API
 - **Build Tool**: Vite
+- **AI**: OpenAI GPT-4 for content generation
 
 ## Getting Started
 
@@ -58,6 +60,7 @@ A comprehensive recipe management application built with React, Supabase, and Pr
    ```
    VITE_SUPABASE_URL=your_supabase_project_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_OPENAI_API_KEY=your_openai_api_key
    ```
 
 4. Set up Supabase:
@@ -91,6 +94,18 @@ When in cooking mode, the following voice commands are available:
 - "Read ingredients" - Read out the ingredients list
 - "Start cooking" - Enter cooking mode
 - "Stop cooking" - Exit cooking mode
+
+## AI Features
+
+The application includes AI-powered features using OpenAI:
+- **Recipe Summaries**: Mouth-watering, sensory-rich descriptions that make recipes irresistible
+- **Cooking Tips**: Expert advice and techniques for better cooking results
+- **Ingredient Substitutions**: Smart alternatives for dietary restrictions and availability
+
+To enable AI features, add your OpenAI API key to the environment variables:
+```
+VITE_OPENAI_API_KEY=your_openai_api_key
+```
 
 ## Contributing
 

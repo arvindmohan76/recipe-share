@@ -12,6 +12,7 @@ import { supabase } from '../../lib/supabase';
 import { uploadRecipeImage } from '../../lib/imageUtils';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AIRecipeSummary from './AIRecipeSummary';
 
 interface Ingredient {
   name: string;
@@ -39,6 +40,7 @@ const RecipeForm: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -424,6 +426,33 @@ const RecipeForm: React.FC = () => {
             />
           </div>
         </form>
+
+        {/* AI Preview Section */}
+        {title && ingredients.length > 0 && steps.length > 0 && (
+          <div className="mt-8 pt-6 border-t">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-gray-800">AI Recipe Preview</h3>
+              <Button
+                label={showPreview ? 'Hide Preview' : 'Show AI Preview'}
+                icon={showPreview ? 'pi pi-eye-slash' : 'pi pi-eye'}
+                onClick={() => setShowPreview(!showPreview)}
+                className="p-button-outlined p-button-sm"
+              />
+            </div>
+            
+            {showPreview && (
+              <AIRecipeSummary
+                title={title}
+                ingredients={ingredients}
+                steps={steps}
+                cuisine={cuisine}
+                difficulty={difficulty}
+                cookingTime={cookingTime}
+                dietaryTags={dietaryTags}
+              />
+            )}
+          </div>
+        )}
       </Card>
     </div>
   );
