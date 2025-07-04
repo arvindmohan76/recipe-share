@@ -97,7 +97,80 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="bg-white shadow-lg">
-      <Menubar model={items} start={start} end={end} className="border-none" />
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between py-3">
+          {/* Logo/Brand */}
+          <div className="flex items-center gap-2">
+            <i className="pi pi-apple text-2xl text-orange-500"></i>
+            <span className="text-xl font-bold text-gray-800">RecipeHub</span>
+          </div>
+          
+          {/* Center Navigation */}
+          <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+            <div className="flex items-center gap-6">
+              {items.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={item.command}
+                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                >
+                  <i className={item.icon}></i>
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-3">
+            {user ? (
+              <>
+                <Button
+                  label="Create Recipe"
+                  icon="pi pi-plus"
+                  className="p-button-success"
+                  onClick={() => navigate('/recipes/new')}
+                />
+                <Avatar
+                  icon="pi pi-user"
+                  className="bg-blue-500 text-white cursor-pointer"
+                  onClick={() => navigate('/privacy-settings')}
+                />
+                <Button
+                  label="Sign Out"
+                  icon="pi pi-sign-out"
+                  className="p-button-text"
+                  onClick={handleSignOut}
+                />
+              </>
+            ) : (
+              <>
+                <Button
+                  label="Sign In"
+                  icon="pi pi-sign-in"
+                  className="p-button-text"
+                  onClick={() => navigate('/auth')}
+                />
+                <Button
+                  label="Sign Up"
+                  icon="pi pi-user-plus"
+                  className="p-button-outlined"
+                  onClick={() => navigate('/auth?mode=signup')}
+                />
+              </>
+            )}
+          </div>
+          
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button
+              icon="pi pi-bars"
+              className="p-button-text"
+              onClick={() => {/* Add mobile menu toggle */}}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

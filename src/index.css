@@ -130,17 +130,12 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700;
+  @apply bg-emerald-600 hover:bg-emerald-700 border-emerald-600 text-white;
   font-weight: 400 !important;
 }
 
 .p-button-success.p-button-outlined {
-  @apply bg-transparent hover:bg-emerald-50 border-emerald-300 text-emerald-600;
-  font-weight: 400 !important;
-}
-
-.p-button-success:not(.p-button-outlined):not(.p-button-text) {
-  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white;
+  @apply bg-transparent hover:bg-emerald-50 border-emerald-600 text-emerald-600;
   font-weight: 400 !important;
 }
 
@@ -156,17 +151,12 @@
 }
 
 .p-button-danger {
-  @apply bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700;
+  @apply bg-rose-600 hover:bg-rose-700 border-rose-600 text-white;
   font-weight: 400 !important;
 }
 
 .p-button-danger.p-button-outlined {
-  @apply bg-transparent hover:bg-rose-50 border-rose-300 text-rose-600;
-  font-weight: 400 !important;
-}
-
-.p-button-danger:not(.p-button-outlined):not(.p-button-text) {
-  @apply bg-rose-500 hover:bg-rose-600 border-rose-500 text-white;
+  @apply bg-transparent hover:bg-rose-50 border-rose-600 text-rose-600;
   font-weight: 400 !important;
 }
 
@@ -193,17 +183,17 @@
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700 px-4 py-2;
+  @apply bg-gray-200 hover:bg-gray-300 border-gray-300 text-gray-700 px-4 py-2;
   font-weight: 400 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 px-4 py-2;
+  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-600 px-4 py-2;
   font-weight: 400 !important;
 }
 
 /* Primary button improvements */
-.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info) {
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info):not(.p-button-secondary) {
   @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-4 py-2;
   font-weight: 400 !important;
 }

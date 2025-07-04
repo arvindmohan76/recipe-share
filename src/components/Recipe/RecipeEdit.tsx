@@ -399,7 +399,7 @@ const RecipeEdit: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
               <label htmlFor="prepTime" className="block text-sm font-medium text-gray-700 mb-2">
                 Prep Time (min)
@@ -635,13 +635,13 @@ const RecipeEdit: React.FC = () => {
             <Button
               type="button"
               label="Cancel"
-              className="p-button-secondary"
+              className="p-button-outlined"
               onClick={() => navigate(`/recipes/${id}`)}
             />
             <Button
               type="submit"
               label="Update Recipe"
-              className="p-button-success p-button-outlined"
+              className="p-button-success"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}
             />
