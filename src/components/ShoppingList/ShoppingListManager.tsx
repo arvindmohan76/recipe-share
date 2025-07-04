@@ -379,7 +379,7 @@ const AddItemForm: React.FC<{ onAddItem: (item: ShoppingListItem) => void }> = (
         <Button
           type="submit"
           icon="pi pi-check"
-          className="p-button-success p-button-sm"
+          className="p-button-text p-button-success p-button-sm"
           disabled={!itemName.trim()}
         />
         <Button

@@ -641,7 +641,7 @@ const RecipeEdit: React.FC = () => {
             <Button
               type="submit"
               label="Update Recipe"
-              className="p-button-success px-6 py-2"
+              className="p-button-success p-button-outlined px-6 py-2"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}
             />

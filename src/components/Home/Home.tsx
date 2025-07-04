@@ -131,8 +131,9 @@ const Home: React.FC = () => {
               label="Create Recipe"
               icon="pi pi-plus"
               size="large"
-              onClick={() => navigate('/recipes/new')}
-              className="bg-orange-600 hover:bg-orange-700"
+              className="p-button-outlined p-button-success px-6 py-3"
+              className="p-button-outlined"
+              style={{ borderColor: '#3b82f6', color: '#3b82f6' }}
             />
           )}
         </div>

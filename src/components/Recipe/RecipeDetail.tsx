@@ -242,7 +242,7 @@ const RecipeDetail: React.FC = () => {
               <Button
                 label={isCookingMode ? 'Stop Cooking Mode' : 'Start Cooking Mode'}
                 icon={isCookingMode ? 'pi pi-stop' : 'pi pi-play'}
-                className={`px-4 py-2 ${isCookingMode ? 'p-button-danger' : 'p-button-success'}`}
+                className={`px-4 py-2 ${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
                 onClick={() => setIsCookingMode(!isCookingMode)}
               />
             </div>

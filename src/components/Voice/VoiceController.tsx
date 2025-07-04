@@ -98,7 +98,7 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
           <Button
             label={isListening ? 'Stop Listening' : 'Start Listening'}
             icon={isListening ? 'pi pi-stop' : 'pi pi-microphone'}
-            className={`px-6 py-3 font-medium ${isListening ? 'p-button-danger' : 'p-button-success'}`}
+            className={`px-6 py-3 font-medium ${isListening ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
             onClick={isListening ? stopListening : startListening}
           />
         </div>
