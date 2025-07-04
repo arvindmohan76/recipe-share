@@ -33,10 +33,20 @@ export async function generateRecipeSummary(recipe: any): Promise<string | null>
           Cooking Time: ${recipe.cookingTime || recipe.cooking_time || 'Not specified'} minutes
           Dietary Tags: ${recipe.dietaryTags?.join(', ') || recipe.dietary_tags?.join(', ') || 'None'}
           
-          Make it irresistible and focus on the sensory experience - how it looks, smells, tastes, and feels. Use vivid, appetizing language that makes readers want to cook this immediately.`
+          Ingredients: ${recipe.ingredients?.map((ing: any) => `${ing.amount} ${ing.unit} ${ing.name}`).join(', ') || 'Not specified'}
+          
+          Cooking Steps: ${recipe.steps?.map((step: any, index: number) => `${index + 1}. ${step.instruction || step}`).join(' ') || 'Not specified'}
+          
+          Write a compelling, mouth-watering description that focuses on:
+          - The sensory experience (how it looks, smells, tastes, feels)
+          - The cooking process and techniques
+          - The final result and satisfaction
+          - Use vivid, appetizing language that makes readers want to cook this immediately
+          - Keep it between 100-150 words
+          - Make it sound absolutely delicious and irresistible`
         }
       ],
-      max_tokens: 200,
+      max_tokens: 250,
       temperature: 0.8
     });
 
