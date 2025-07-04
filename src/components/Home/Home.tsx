@@ -122,14 +122,14 @@ const Home: React.FC = () => {
           <Button
             label="Explore Recipes"
             icon="pi pi-search"
-            className="p-button-lg bg-white text-blue-600 hover:bg-blue-50 border-blue-200"
+            className="p-button-lg p-button-outlined"
             onClick={() => navigate('/recipes')}
           />
           {user && (
             <Button
               label="Create Recipe"
               icon="pi pi-plus"
-              className="p-button-lg p-button-success p-button-outlined"
+              className="p-button-lg p-button-success"
               onClick={() => navigate('/recipes/new')}
             />
           )}
@@ -252,7 +252,7 @@ const Home: React.FC = () => {
               <Button
                 label="Sign Up Now"
                 icon="pi pi-user-plus"
-                className="p-button-lg"
+                className="p-button-lg p-button-success"
                 onClick={() => navigate('/auth?mode=signup')}
               />
               <Button
