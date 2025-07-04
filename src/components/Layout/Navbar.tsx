@@ -36,9 +36,14 @@ const Navbar: React.FC = () => {
       command: () => navigate('/saved-recipes'),
     },
     {
-      label: 'Meal Planner',
-      icon: 'pi pi-calendar',
-      command: () => navigate('/meal-planner'),
+      label: 'Collections',
+      icon: 'pi pi-book',
+      command: () => navigate('/collections'),
+    },
+    {
+      label: 'Shopping Lists',
+      icon: 'pi pi-shopping-cart',
+      command: () => navigate('/shopping-lists'),
     },
   ];
 
