@@ -100,46 +100,47 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           {/* Logo/Brand */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <i className="pi pi-apple text-2xl text-orange-500"></i>
             <span className="text-xl font-bold text-gray-800">RecipeHub</span>
           </div>
           
           {/* Center Navigation */}
-          <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
+            <div className="flex items-center gap-4">
               {items.map((item, index) => (
                 <button
                   key={index}
                   onClick={item.command}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 whitespace-nowrap"
                 >
                   <i className={item.icon}></i>
-                  <span className="font-medium">{item.label}</span>
+                  <span className="font-medium text-sm">{item.label}</span>
                 </button>
               ))}
             </div>
           </div>
           
           {/* Right Side Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {user ? (
               <>
                 <Button
                   label="Create"
                   icon="pi pi-plus"
-                  className="p-button-success"
+                  className="p-button-success p-button-sm"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Avatar
                   icon="pi pi-user"
                   className="bg-blue-500 text-white cursor-pointer"
+                  size="normal"
                   onClick={() => navigate('/privacy-settings')}
                 />
                 <Button
                   label="Logout"
                   icon="pi pi-sign-out"
-                  className="p-button-text"
+                  className="p-button-text p-button-sm"
                   onClick={handleSignOut}
                 />
               </>
@@ -148,13 +149,13 @@ const Navbar: React.FC = () => {
                 <Button
                   label="Login"
                   icon="pi pi-sign-in"
-                  className="p-button-text"
+                  className="p-button-text p-button-sm"
                   onClick={() => navigate('/auth')}
                 />
                 <Button
                   label="Register"
                   icon="pi pi-user-plus"
-                  className="p-button-outlined"
+                  className="p-button-outlined p-button-sm"
                   onClick={() => navigate('/auth?mode=signup')}
                 />
               </>
@@ -162,10 +163,10 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="lg:hidden ml-2">
             <Button
               icon="pi pi-bars"
-              className="p-button-text"
+              className="p-button-text p-button-sm"
               onClick={() => {/* Add mobile menu toggle */}}
             />
           </div>

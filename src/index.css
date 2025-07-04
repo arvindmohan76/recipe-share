@@ -204,11 +204,13 @@
 
 /* Small button improvements */
 .p-button-sm {
-  @apply px-2 py-1 text-sm;
+  @apply px-2 py-1.5 text-sm;
   font-weight: 400 !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: auto;
+  max-width: 120px;
 }
 
 /* Large button improvements */
@@ -227,7 +229,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
+  max-width: 80px;
+}
+
+/* Small button label improvements */
+.p-button-sm .p-button-label {
+  font-weight: 400 !important;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
 }
 
 /* Icon button improvements */
@@ -241,4 +253,32 @@
 
 .p-button-lg .p-button-icon {
   font-size: 1.125rem;
+}
+
+/* Navbar specific improvements */
+.navbar-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.navbar-actions {
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.navbar-actions .p-button {
+  min-width: auto;
+  max-width: 100px;
+}
+
+.navbar-actions .p-button-sm {
+  min-width: auto;
+  max-width: 80px;
+}
+
+/* Avatar sizing */
+.p-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
 }
