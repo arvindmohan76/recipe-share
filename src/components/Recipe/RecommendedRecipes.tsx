@@ -209,7 +209,8 @@ const RecommendedRecipes: React.FC = () => {
             <i className="pi pi-lightbulb text-6xl text-gray-300"></i>
             <h3 className="text-xl font-semibold text-gray-600">No Recommendations Yet</h3>
             <p className="text-gray-500">
-              Start searching for recipes and saving your favorites to get personalized recommendations.
+              Start searching for recipes and saving your favorites to get personalized recommendations. 
+              You need some search history or saved recipes for the system to generate recommendations.
             </p>
             <div className="flex justify-center gap-4">
               <Button
@@ -225,6 +226,9 @@ const RecommendedRecipes: React.FC = () => {
                 loading={generating}
                 className="p-button-outlined"
               />
+            </div>
+            <div className="text-sm text-gray-400 mt-4">
+              <p>💡 Tip: Search for recipes, save some favorites, then generate recommendations!</p>
             </div>
           </div>
         </Card>
