@@ -6,6 +6,9 @@ import { Tag } from 'primereact/tag';
 import { Rating } from 'primereact/rating';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { Toast } from 'primereact/toast';
 import { supabase, Recipe, RecipeComment } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { getRecipeImageUrl } from '../../lib/imageUtils';
@@ -22,6 +25,9 @@ const RecipeDetail: React.FC = () => {
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [isCookingMode, setIsCookingMode] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const toast = React.useRef<Toast>(null);
 
   const { user } = useAuth();
 
@@ -36,6 +42,8 @@ const RecipeDetail: React.FC = () => {
     if (id) {
       fetchRecipe();
       fetchComments();
+      // Set the share URL when component mounts
+      setShareUrl(window.location.href);
     }
   }, [id]);
 
@@ -160,6 +168,52 @@ const RecipeDetail: React.FC = () => {
     }
   };
 
+  const handleShareRecipe = () => {
+    setShowShareDialog(true);
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Link Copied!',
+        detail: 'Recipe link has been copied to your clipboard',
+        life: 3000
+      });
+      setShowShareDialog(false);
+    } catch (err) {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Link Copied!',
+        detail: 'Recipe link has been copied to your clipboard',
+        life: 3000
+      });
+      setShowShareDialog(false);
+    }
+  };
+
+  const shareViaWhatsApp = () => {
+    const message = `Check out this amazing recipe: ${recipe?.title}\n${shareUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const shareViaEmail = () => {
+    const subject = `Recipe: ${recipe?.title}`;
+    const body = `Hi!\n\nI found this amazing recipe and thought you might like it:\n\n${recipe?.title}\n${recipe?.description || ''}\n\nCheck it out here: ${shareUrl}\n\nHappy cooking!`;
+    const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(emailUrl);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -176,6 +230,8 @@ const RecipeDetail: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      <Toast ref={toast} />
+      
       {/* Recipe Header */}
       <Card>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -231,6 +287,12 @@ const RecipeDetail: React.FC = () => {
 
             <div className="flex items-center gap-4">
               <Rating value={4.5} readOnly stars={5} cancel={false} />
+              <Button
+                label="Share Recipe"
+                icon="pi pi-share-alt"
+                className="p-button-outlined"
+                onClick={handleShareRecipe}
+              />
               {user && recipe.user_id === user.id && (
                 <Button
                   label="Edit Recipe"
@@ -249,6 +311,112 @@ const RecipeDetail: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* Share Recipe Dialog */}
+      <Dialog
+        header={
+          <div className="flex items-center gap-3">
+            <i className="pi pi-share-alt text-blue-500"></i>
+            <span>Share Recipe</span>
+          </div>
+        }
+        visible={showShareDialog}
+        onHide={() => setShowShareDialog(false)}
+        style={{ width: '90vw', maxWidth: '500px' }}
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button
+              label="Close"
+              onClick={() => setShowShareDialog(false)}
+              className="p-button-outlined"
+            />
+          </div>
+        }
+      >
+        <div className="space-y-6">
+          {/* Recipe Preview */}
+          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <img
+              src={getRecipeImageUrl(recipe?.image_url, 'small')}
+              alt={recipe?.title}
+              className="w-16 h-16 object-cover rounded-lg"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (!target.src.includes('pexels.com')) {
+                  target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
+                }
+              }}
+            />
+            <div>
+              <h4 className="font-semibold text-gray-800">{recipe?.title}</h4>
+              <p className="text-sm text-gray-600">
+                {recipe?.cuisine} • {recipe?.cooking_time}min • {recipe?.difficulty}
+              </p>
+            </div>
+          </div>
+
+          {/* Copy Link Section */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Recipe Link
+            </label>
+            <div className="flex gap-3">
+              <InputText
+                value={shareUrl}
+                readOnly
+                className="flex-1"
+                onClick={(e) => e.currentTarget.select()}
+              />
+              <Button
+                label="Copy"
+                icon="pi pi-copy"
+                onClick={copyToClipboard}
+                className="p-button-success"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Click the link to select all, or use the Copy button
+            </p>
+          </div>
+
+          {/* Quick Share Options */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Quick Share
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                label="WhatsApp"
+                icon="pi pi-whatsapp"
+                onClick={shareViaWhatsApp}
+                className="p-button-outlined p-button-success flex justify-center"
+              />
+              <Button
+                label="Email"
+                icon="pi pi-envelope"
+                onClick={shareViaEmail}
+                className="p-button-outlined flex justify-center"
+              />
+            </div>
+          </div>
+
+          {/* Share Tips */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <i className="pi pi-info-circle text-blue-500 mt-0.5"></i>
+              <div className="text-sm">
+                <p className="font-medium text-blue-800 mb-1">Sharing Tips:</p>
+                <ul className="text-blue-700 space-y-1">
+                  <li>• Copy the link to share anywhere</li>
+                  <li>• Use WhatsApp for quick mobile sharing</li>
+                  <li>• Email includes recipe details automatically</li>
+                  <li>• Anyone with the link can view this recipe</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Dialog>
 
       {/* Voice Controller */}
       {isCookingMode && (
