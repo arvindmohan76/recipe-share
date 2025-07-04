@@ -205,16 +205,43 @@
 }
 
 /* Navbar specific button overrides for better contrast */
-.p-menubar .p-button-success {
-  @apply bg-emerald-600 hover:bg-emerald-700 border-emerald-600 text-white !important;
+/* Navbar specific improvements */
+.navbar-button {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  min-width: auto !important;
+  width: auto !important;
+  flex-shrink: 0;
 }
 
-.p-menubar .p-button-text {
-  @apply text-gray-600 hover:text-gray-800 hover:bg-gray-100 !important;
+/* Force proper colors for Create Recipe button */
+.p-button-success {
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
 }
 
-.p-menubar .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-700 !important;
+.p-button-success:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.p-button-success:focus {
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Sidebar improvements */
+.p-sidebar {
+  z-index: 1000;
+}
+
+.p-sidebar .p-sidebar-content {
+  padding: 0;
 }
 
 /* Small button improvements */
