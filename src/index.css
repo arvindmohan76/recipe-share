@@ -132,7 +132,15 @@
 }
 
 .p-button-danger {
-  @apply bg-red-500 hover:bg-red-600 border-red-500;
+  @apply bg-red-50 hover:bg-red-100 border-red-200 text-red-700;
+}
+
+.p-button-danger.p-button-outlined {
+  @apply bg-transparent hover:bg-red-50 border-red-300 text-red-600;
+}
+
+.p-button-danger:not(.p-button-outlined):not(.p-button-text) {
+  @apply bg-red-500 hover:bg-red-600 border-red-500 text-white;
 }
 
 .p-button-info {
@@ -141,4 +149,22 @@
 
 .p-button-warning {
   @apply bg-yellow-500 hover:bg-yellow-600 border-yellow-500;
+}
+
+/* Subtle delete button styles */
+.p-button-text.p-button-danger {
+  @apply text-gray-500 hover:text-red-600 hover:bg-red-50;
+}
+
+.p-button-sm.p-button-danger {
+  @apply text-gray-400 hover:text-red-500 hover:bg-red-50;
+}
+
+/* Secondary button improvements */
+.p-button-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700;
+}
+
+.p-button-outlined {
+  @apply bg-transparent hover:bg-gray-50;
 }

@@ -521,7 +521,7 @@ const RecipeForm: React.FC = () => {
                     type="button"
                     icon="pi pi-trash"
                     onClick={() => removeStep(index)}
-                    className="p-button-danger p-button-sm"
+                    className="p-button-text p-button-danger p-button-sm"
                     disabled={steps.length === 1}
                   />
                 </div>

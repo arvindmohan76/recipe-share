@@ -293,7 +293,7 @@ const PrivacySettings: React.FC = () => {
             <Button
               label="Clear History"
               onClick={handleClearSearchHistory}
-              className="p-button-danger"
+              className="p-button-outlined p-button-danger"
             />
           </div>
         }
