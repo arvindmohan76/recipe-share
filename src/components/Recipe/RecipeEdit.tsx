@@ -335,7 +335,7 @@ const RecipeEdit: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
                 Recipe Title *
@@ -345,7 +345,7 @@ const RecipeEdit: React.FC = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="w-full p-3 border border-gray-300 rounded-md"
+                className="w-full"
                 placeholder="Enter recipe title"
               />
             </div>
@@ -359,7 +359,7 @@ const RecipeEdit: React.FC = () => {
                 options={cuisineOptions}
                 onChange={(e) => setCuisine(e.value)}
                 placeholder="Select cuisine"
-                className="w-full border border-gray-300 rounded-md"
+                className="w-full"
                 filter
                 filterBy="label"
                 showClear
@@ -368,7 +368,7 @@ const RecipeEdit: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
               Recipe Image
             </label>
             {currentImageUrl && (
@@ -395,11 +395,11 @@ const RecipeEdit: React.FC = () => {
               onSelect={(e) => setImageFile(e.files[0])}
               onClear={() => setImageFile(null)}
               chooseLabel="Choose New Image"
-              className="border border-gray-300 rounded-md"
+              className="w-full"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <label htmlFor="prepTime" className="block text-sm font-medium text-gray-700 mb-2">
                 Prep Time (min)
@@ -408,7 +408,7 @@ const RecipeEdit: React.FC = () => {
                 id="prepTime"
                 value={prepTime}
                 onValueChange={(e) => setPrepTime(e.value || 0)}
-                className="w-full border border-gray-300 rounded-md"
+                className="w-full"
                 min={0}
               />
             </div>
@@ -421,7 +421,7 @@ const RecipeEdit: React.FC = () => {
                 id="cookingTime"
                 value={cookingTime}
                 onValueChange={(e) => setCookingTime(e.value || 0)}
-                className="w-full border border-gray-300 rounded-md"
+                className="w-full"
                 min={0}
               />
             </div>
@@ -434,7 +434,7 @@ const RecipeEdit: React.FC = () => {
                 id="servings"
                 value={servings}
                 onValueChange={(e) => setServings(e.value || 1)}
-                className="w-full border border-gray-300 rounded-md"
+                className="w-full"
                 min={1}
               />
             </div>
@@ -448,7 +448,7 @@ const RecipeEdit: React.FC = () => {
                 options={difficultyOptions}
                 onChange={(e) => setDifficulty(e.value)}
                 placeholder="Select difficulty"
-                className="w-full border border-gray-300 rounded-md"
+                className="w-full"
               />
             </div>
           </div>
@@ -462,7 +462,7 @@ const RecipeEdit: React.FC = () => {
               options={dietaryOptions}
               onChange={(e) => setDietaryTags(e.value)}
               placeholder="Select dietary tags"
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full"
               filter
               filterBy="label"
             />
@@ -470,7 +470,7 @@ const RecipeEdit: React.FC = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-0">
                 Ingredients *
               </label>
               <Button
@@ -482,26 +482,26 @@ const RecipeEdit: React.FC = () => {
               />
             </div>
             {ingredients.map((ingredient, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
                 <InputText
                   value={ingredient.name}
                   onChange={(e) => updateIngredient(index, 'name', e.target.value)}
                   placeholder="Ingredient name"
-                  className="md:col-span-2 p-3 border border-gray-300 rounded-md"
+                  className="md:col-span-2"
                 />
                 <InputText
                   value={ingredient.amount}
                   onChange={(e) => updateIngredient(index, 'amount', e.target.value)}
                   placeholder="Amount"
-                  className="p-3 border border-gray-300 rounded-md"
+                  className=""
                 />
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <Dropdown
                     value={ingredient.unit}
                     options={unitOptions}
                     onChange={(e) => updateIngredient(index, 'unit', e.value)}
                     placeholder="Unit"
-                    className="flex-1 border border-gray-300 rounded-md"
+                    className="flex-1"
                     filter
                     filterBy="label"
                   />
@@ -519,7 +519,7 @@ const RecipeEdit: React.FC = () => {
 
           {/* AI Description Section - Positioned after ingredients for better UX */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-3">
               Recipe Description {isOpenAIAvailable && <span className="text-purple-600">(AI-Enhanced)</span>}
             </label>
             <div className="space-y-3">
@@ -543,7 +543,7 @@ const RecipeEdit: React.FC = () => {
                   }
                 }}
                 rows={3}
-                className="w-full p-3 border border-gray-300 rounded-md"
+                className="w-full"
                 placeholder={
                   isOpenAIAvailable 
                     ? "Update your recipe details above to regenerate an appetizing 50-word description..."
@@ -590,7 +590,7 @@ const RecipeEdit: React.FC = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-0">
                 Instructions *
               </label>
               <Button
@@ -602,7 +602,7 @@ const RecipeEdit: React.FC = () => {
               />
             </div>
             {steps.map((step, index) => (
-              <div key={index} className="mb-4 p-4 border border-gray-200 rounded-lg">
+              <div key={index} className="mb-6 p-5 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="flex justify-between items-center mb-3">
                   <span className="font-medium text-gray-700">Step {step.step}</span>
                   <Button
@@ -618,30 +618,30 @@ const RecipeEdit: React.FC = () => {
                   onChange={(e) => updateStep(index, 'instruction', e.target.value)}
                   placeholder="Step instruction"
                   rows={2}
-                  className="w-full mb-3 p-3 border border-gray-300 rounded-md"
+                  className="w-full mb-3"
                 />
                 <InputTextarea
                   value={step.tips || ''}
                   onChange={(e) => updateStep(index, 'tips', e.target.value)}
                   placeholder="Optional cooking tips"
                   rows={1}
-                  className="w-full p-3 border border-gray-300 rounded-md"
+                  className="w-full"
                 />
               </div>
             ))}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
             <Button
               type="button"
               label="Cancel"
-              className="p-button-secondary px-4 py-2 mr-3"
+              className="p-button-secondary"
               onClick={() => navigate(`/recipes/${id}`)}
             />
             <Button
               type="submit"
               label="Update Recipe"
-              className="p-button-success p-button-outlined px-6 py-2"
+              className="p-button-success p-button-outlined"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}
             />
@@ -650,7 +650,7 @@ const RecipeEdit: React.FC = () => {
 
         {/* AI Description Help */}
         {isOpenAIAvailable && (
-          <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+          <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <i className="pi pi-sparkles text-white text-sm"></i>
