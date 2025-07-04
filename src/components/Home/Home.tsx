@@ -112,24 +112,24 @@ const Home: React.FC = () => {
   };
 
   const heroSection = (
-    <div className="bg-gradient-to-r from-orange-400 to-red-500 text-white p-8 rounded-lg mb-8">
+    <div className="bg-gradient-to-r from-orange-400 to-red-500 text-white p-6 rounded-lg mb-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl font-bold mb-4">Welcome to RecipeHub</h1>
-        <p className="text-xl mb-6">
-          Discover amazing recipes from around the world. Find your next favorite dish and start cooking today.
+        <h1 className="text-4xl font-bold mb-3">Welcome to RecipeHub</h1>
+        <p className="text-lg mb-5">
+          Discover amazing recipes from around the world and start cooking today.
         </p>
         <div className="button-container justify-center">
           <Button
             label="Explore Recipes"
             icon="pi pi-search"
-            className="p-button-lg p-button-success"
+            className="p-button-success"
             onClick={() => navigate('/recipes')}
           />
           {user && (
             <Button
               label="Create Recipe"
               icon="pi pi-plus"
-              className="p-button-lg p-button-success"
+              className="p-button-success"
               onClick={() => navigate('/recipes/new')}
             />
           )}
