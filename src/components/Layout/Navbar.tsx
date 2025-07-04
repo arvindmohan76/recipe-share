@@ -97,8 +97,8 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="bg-white shadow-lg">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between py-4">
           {/* Logo/Brand */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <i className="pi pi-apple text-2xl text-orange-500"></i>
@@ -106,13 +106,13 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Center Navigation */}
-          <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center gap-4">
+          <div className="hidden lg:flex items-center justify-center flex-1 mx-8 overflow-hidden">
+            <div className="flex items-center gap-6">
               {items.map((item, index) => (
                 <button
                   key={index}
                   onClick={item.command}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 whitespace-nowrap"
+                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 whitespace-nowrap flex-shrink-0"
                 >
                   <i className={item.icon}></i>
                   <span className="font-medium text-sm">{item.label}</span>
@@ -122,13 +122,18 @@ const Navbar: React.FC = () => {
           </div>
           
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-3 flex-shrink-0">
             {user ? (
               <>
                 <Button
-                  label="Create"
+                  label="Create Recipe"
                   icon="pi pi-plus"
-                  className="p-button-success p-button-sm"
+                  className="p-button-success p-button-sm hidden sm:flex"
+                  onClick={() => navigate('/recipes/new')}
+                />
+                <Button
+                  icon="pi pi-plus"
+                  className="p-button-success p-button-sm sm:hidden"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Avatar
@@ -138,32 +143,42 @@ const Navbar: React.FC = () => {
                   onClick={() => navigate('/privacy-settings')}
                 />
                 <Button
-                  label="Logout"
+                  label="Sign Out"
                   icon="pi pi-sign-out"
-                  className="p-button-text p-button-sm"
+                  className="p-button-text p-button-sm hidden sm:flex"
+                  onClick={handleSignOut}
+                />
+                <Button
+                  icon="pi pi-sign-out"
+                  className="p-button-text p-button-sm sm:hidden"
                   onClick={handleSignOut}
                 />
               </>
             ) : (
               <>
                 <Button
-                  label="Login"
+                  label="Sign In"
                   icon="pi pi-sign-in"
-                  className="p-button-text p-button-sm"
+                  className="p-button-text p-button-sm hidden sm:flex"
                   onClick={() => navigate('/auth')}
                 />
                 <Button
-                  label="Register"
+                  label="Sign Up"
                   icon="pi pi-user-plus"
-                  className="p-button-outlined p-button-sm"
+                  className="p-button-outlined p-button-sm hidden sm:flex"
                   onClick={() => navigate('/auth?mode=signup')}
+                />
+                <Button
+                  icon="pi pi-sign-in"
+                  className="p-button-text p-button-sm sm:hidden"
+                  onClick={() => navigate('/auth')}
                 />
               </>
             )}
           </div>
           
           {/* Mobile Menu Button */}
-          <div className="lg:hidden ml-2">
+          <div className="lg:hidden ml-3">
             <Button
               icon="pi pi-bars"
               className="p-button-text p-button-sm"

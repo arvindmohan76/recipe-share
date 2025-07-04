@@ -96,9 +96,9 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
         
         <div className="flex justify-center gap-4 mb-4">
           <Button
-            label={isListening ? 'Stop' : 'Listen'}
+            label={isListening ? 'Stop Listening' : 'Start Listening'}
             icon={isListening ? 'pi pi-stop' : 'pi pi-microphone'}
-            className={`px-6 py-3 font-medium ${isListening ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
+            className={`p-button-lg ${isListening ? 'p-button-danger' : 'p-button-success'}`}
             onClick={isListening ? stopListening : startListening}
           />
         </div>

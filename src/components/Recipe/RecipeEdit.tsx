@@ -635,13 +635,13 @@ const RecipeEdit: React.FC = () => {
             <Button
               type="button"
               label="Cancel"
-              className="p-button-outlined"
+              className="p-button-outlined flex-shrink-0"
               onClick={() => navigate(`/recipes/${id}`)}
             />
             <Button
               type="submit"
-              label="Update"
-              className="p-button-success"
+              label="Update Recipe"
+              className="p-button-success flex-shrink-0"
               disabled={!title || ingredients.length === 0 || steps.length === 0}
               loading={loading}
             />

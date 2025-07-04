@@ -285,30 +285,30 @@ const RecipeDetail: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 mb-4">
+            <div className="recipe-actions mb-4">
               <Rating value={4.5} readOnly stars={5} cancel={false} />
               <Button
                 label="Share"
                 icon="pi pi-share-alt"
-                className="p-button-outlined"
+                className="p-button-outlined flex-shrink-0"
                 onClick={handleShareRecipe}
               />
               {user && recipe.user_id === user.id && (
                 <Button
                   label="Edit"
                   icon="pi pi-pencil"
-                  className="p-button-outlined"
+                  className="p-button-outlined flex-shrink-0"
                   onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
                 />
               )}
             </div>
             
             {/* Cooking Mode Button - Separate Row */}
-            <div>
+            <div className="mt-4">
               <Button
-                label={isCookingMode ? 'Stop Cooking' : 'Start Cooking'}
+                label={isCookingMode ? 'Stop Cooking Mode' : 'Start Cooking Mode'}
                 icon={isCookingMode ? 'pi pi-stop' : 'pi pi-play'}
-                className={`w-full ${isCookingMode ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-success'}`}
+                className={`w-full ${isCookingMode ? 'p-button-danger' : 'p-button-success'}`}
                 onClick={() => setIsCookingMode(!isCookingMode)}
               />
             </div>
@@ -328,7 +328,7 @@ const RecipeDetail: React.FC = () => {
         onHide={() => setShowShareDialog(false)}
         style={{ width: '90vw', maxWidth: '500px' }}
         footer={
-          <div className="flex justify-end gap-3">
+          <div className="button-container justify-end">
             <Button
               label="Close"
               onClick={() => setShowShareDialog(false)}
@@ -388,18 +388,18 @@ const RecipeDetail: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Quick Share
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="button-container">
               <Button
                 label="WhatsApp"
                 icon="pi pi-whatsapp"
                 onClick={shareViaWhatsApp}
-                className="p-button-outlined p-button-success flex justify-center"
+                className="p-button-outlined p-button-success"
               />
               <Button
                 label="Email"
                 icon="pi pi-envelope"
                 onClick={shareViaEmail}
-                className="p-button-outlined flex justify-center"
+                className="p-button-outlined"
               />
             </div>
           </div>
@@ -494,12 +494,15 @@ const RecipeDetail: React.FC = () => {
               rows={4}
               className="w-full mb-4"
             />
-            <Button
-              label="Add Comment"
-              className="p-button-success"
-              disabled={!newComment.trim()}
-              onClick={handleAddComment}
-            />
+            <div className="button-container">
+              <Button
+                label="Add Comment"
+                icon="pi pi-comment"
+                className="p-button-success"
+                disabled={!newComment.trim()}
+                onClick={handleAddComment}
+              />
+            </div>
           </div>
         )}
 

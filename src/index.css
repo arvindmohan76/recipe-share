@@ -22,13 +22,15 @@
 
 /* Button spacing and styling improvements */
 .p-button {
-  @apply font-normal transition-all duration-200 mx-1 px-3 py-2;
+  @apply font-normal transition-all duration-200 mx-1 px-4 py-2;
   font-weight: 400 !important;
   letter-spacing: 0.025em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: fit-content;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  min-width: auto !important;
+  width: auto !important;
+  flex-shrink: 0;
 }
 
 .p-button:hover {
@@ -204,42 +206,48 @@
 
 /* Small button improvements */
 .p-button-sm {
-  @apply px-2 py-1.5 text-sm;
+  @apply px-3 py-1.5 text-sm;
   font-weight: 400 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: auto;
-  max-width: 120px;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  min-width: auto !important;
+  width: auto !important;
+  flex-shrink: 0;
 }
 
 /* Large button improvements */
 .p-button-lg {
-  @apply px-4 py-2.5 text-base;
+  @apply px-6 py-3 text-base;
   font-weight: 400 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  min-width: auto !important;
+  width: auto !important;
+  flex-shrink: 0;
 }
 
 /* Button label improvements */
 .p-button .p-button-label {
   font-weight: 400 !important;
   line-height: 1.5;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80px;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: none !important;
+  width: auto !important;
 }
 
 /* Small button label improvements */
 .p-button-sm .p-button-label {
   font-weight: 400 !important;
   line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 60px;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: none !important;
+  width: auto !important;
 }
 
 /* Icon button improvements */
@@ -256,24 +264,13 @@
 }
 
 /* Navbar specific improvements */
-.navbar-container {
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.navbar-actions {
-  min-width: 0;
-  flex-shrink: 1;
-}
-
-.navbar-actions .p-button {
-  min-width: auto;
-  max-width: 100px;
-}
-
-.navbar-actions .p-button-sm {
-  min-width: auto;
-  max-width: 80px;
+.p-menubar .p-button {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  min-width: auto !important;
+  width: auto !important;
+  flex-shrink: 0;
 }
 
 /* Avatar sizing */
@@ -281,4 +278,53 @@
   width: 2.5rem;
   height: 2.5rem;
   flex-shrink: 0;
+}
+
+/* Specific button container fixes */
+.button-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.button-container .p-button {
+  flex-shrink: 0;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+/* Recipe detail action buttons */
+.recipe-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.recipe-actions .p-button {
+  flex-shrink: 0;
+  min-width: auto !important;
+  width: auto !important;
+}
+
+/* Full width button override */
+.p-button.w-full {
+  width: 100% !important;
+  flex-shrink: 1;
+}
+
+/* Responsive button adjustments */
+@media (max-width: 640px) {
+  .p-button {
+    @apply px-3 py-2 text-sm;
+  }
+  
+  .p-button-sm {
+    @apply px-2 py-1.5 text-xs;
+  }
+  
+  .p-button-lg {
+    @apply px-4 py-2.5 text-base;
+  }
 }

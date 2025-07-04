@@ -118,16 +118,16 @@ const Home: React.FC = () => {
         <p className="text-xl mb-6">
           Discover amazing recipes with AI-generated descriptions that make every dish irresistible. Plan your meals and cook with confidence using our intelligent cooking assistant.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="button-container justify-center">
           <Button
-            label="Explore"
+            label="Explore Recipes"
             icon="pi pi-search"
-            className="p-button-lg bg-white text-blue-600 hover:bg-blue-50 border-blue-200 mr-3"
+            className="p-button-lg bg-white text-blue-600 hover:bg-blue-50 border-blue-200"
             onClick={() => navigate('/recipes')}
           />
           {user && (
             <Button
-              label="Create"
+              label="Create Recipe"
               icon="pi pi-plus"
               className="p-button-lg p-button-success p-button-outlined"
               onClick={() => navigate('/recipes/new')}
@@ -248,36 +248,32 @@ const Home: React.FC = () => {
             Join thousands of home cooks sharing their favorite recipes and discovering new ones.
           </p>
           {!user ? (
-            <div className="flex justify-center gap-4">
+            <div className="button-container justify-center">
               <Button
                 label="Sign Up Now"
                 icon="pi pi-user-plus"
-                size="large"
+                className="p-button-lg"
                 onClick={() => navigate('/auth?mode=signup')}
-                className="bg-blue-500 hover:bg-blue-600"
               />
               <Button
                 label="Browse Recipes"
                 icon="pi pi-search"
-                size="large"
+                className="p-button-lg p-button-outlined"
                 onClick={() => navigate('/recipes')}
-                className="p-button-outlined"
               />
             </div>
           ) : (
-            <div className="flex justify-center gap-4">
+            <div className="button-container justify-center">
               <Button
                 label="Share Your Recipe"
                 icon="pi pi-plus"
-                size="large"
-                className="bg-green-500 hover:bg-green-600 px-6 py-3"
+                className="p-button-lg p-button-success"
                 onClick={() => navigate('/recipes/new')}
               />
               <Button
                 label="View My Bookmarks"
                 icon="pi pi-heart"
-                size="large"
-                className="p-button-outlined"
+                className="p-button-lg p-button-outlined"
                 onClick={() => navigate('/saved-recipes')}
               />
             </div>
