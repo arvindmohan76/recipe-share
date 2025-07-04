@@ -27,33 +27,36 @@ export async function generateRecipeSummary(recipe: any): Promise<string | null>
           role: 'user',
           content: `Write a compelling, appetizing summary for this recipe: "${recipe.title}". 
           
-          Description: ${recipe.description || 'No description provided'}
           Cuisine: ${recipe.cuisine || 'Not specified'}
           Difficulty: ${recipe.difficulty || 'Not specified'}
           Cooking Time: ${recipe.cookingTime || recipe.cooking_time || 'Not specified'} minutes
           Dietary Tags: ${recipe.dietaryTags?.join(', ') || recipe.dietary_tags?.join(', ') || 'None'}
           
-          Ingredients: ${recipe.ingredients?.map((ing: any) => `${ing.amount} ${ing.unit} ${ing.name}`).join(', ') || 'Not specified'}
+          Key Ingredients: ${recipe.ingredients?.map((ing: any) => {
+            const amount = ing.amount?.trim() || '';
+            const unit = ing.unit?.trim() || '';
+            const name = ing.name?.trim() || '';
+            return `${amount} ${unit} ${name}`.trim();
+          }).filter(Boolean).join(', ') || 'Not specified'}
           
           Cooking Steps: ${recipe.steps?.length > 0 ? recipe.steps.map((step: any, index: number) => `${index + 1}. ${step.instruction || step}`).join(' ') : 'Steps will be added later'}
           
-          Write a compelling, mouth-watering description that focuses on:
-          - Rich sensory details: how it looks, smells, tastes, and feels
-          - The cooking aromas and sounds that fill the kitchen
-          - Texture contrasts and flavor combinations
-          - The satisfaction and comfort the dish provides
+          IMPORTANT: Write a compelling, mouth-watering description in EXACTLY 50 words or less that focuses on:
+          - Rich sensory details based on the specific ingredients listed above
+          - How the key ingredients combine to create amazing flavors
+          - Texture contrasts and flavor combinations from these specific ingredients
           - Use vivid, appetizing language that makes readers crave this dish
-          - Focus on what makes this recipe special and irresistible
-          - Keep it between 80-120 words for easy reading
-          - Write in an engaging, enthusiastic tone that celebrates the food
+          - Focus on what makes this specific combination of ingredients irresistible
+          - Write in an engaging, enthusiastic tone
+          - MUST be 50 words or less - this is critical for UX
           
-          Example style: "Golden, crispy edges give way to a tender, melting center as aromatic herbs dance with rich, savory flavors. Each bite delivers a symphony of textures..."
+          Example style (but adapt to the actual ingredients): "Golden, crispy edges give way to tender centers as aromatic garlic and herbs dance with rich, savory flavors..."
           
-          Make this recipe sound absolutely irresistible!`
+          Make this recipe sound absolutely irresistible using the specific ingredients provided! Remember: 50 words maximum.`
         }
       ],
-      max_tokens: 200,
-      temperature: 0.9
+      max_tokens: 80, // Reduced to ensure 50-word limit
+      temperature: 0.8 // Slightly reduced for more focused output
     });
 
     return response.choices[0]?.message?.content || null;

@@ -118,11 +118,13 @@ const RecipeForm: React.FC = () => {
 
   // Auto-generate description when user has added enough content
   useEffect(() => {
+    // Check if we have meaningful ingredients (at least one with a name)
+    const hasValidIngredients = ingredients.some(ing => ing.name.trim().length > 0);
+    
     const shouldAutoGenerate = 
       isOpenAIAvailable && 
       title.trim() && 
-      ingredients.length > 0 && 
-      ingredients.some(ing => ing.name.trim()) &&
+      hasValidIngredients &&
       !description.trim() && 
       !hasGeneratedDescription &&
       !generatingDescription;
@@ -131,22 +133,32 @@ const RecipeForm: React.FC = () => {
       // Add a small delay to avoid generating on every keystroke
       const timer = setTimeout(() => {
         generateAIDescription();
-      }, 2000);
+      }, 1500); // Reduced delay for better responsiveness
 
       return () => clearTimeout(timer);
     }
-  }, [title, ingredients, isOpenAIAvailable, description, hasGeneratedDescription, generatingDescription]);
+  }, [title, ingredients, isOpenAIAvailable, description, hasGeneratedDescription, generatingDescription, steps, cuisine, difficulty, cookingTime, dietaryTags]);
 
   const generateAIDescription = async () => {
-    if (!isOpenAIAvailable || !title || ingredients.length === 0) {
+    // Validate we have enough content for AI generation
+    const hasValidIngredients = ingredients.some(ing => ing.name.trim().length > 0);
+    
+    if (!isOpenAIAvailable || !title.trim() || !hasValidIngredients) {
+      console.log('AI generation skipped - missing required data:', {
+        hasOpenAI: isOpenAIAvailable,
+        hasTitle: !!title.trim(),
+        hasValidIngredients
+      });
       return;
     }
 
+    console.log('Generating AI description with ingredients:', ingredients.filter(ing => ing.name.trim()));
+    
     setGeneratingDescription(true);
     try {
       const recipe = {
         title,
-        ingredients,
+        ingredients: ingredients.filter(ing => ing.name.trim()), // Only include ingredients with names
         steps,
         cuisine,
         difficulty,
@@ -154,10 +166,13 @@ const RecipeForm: React.FC = () => {
         dietaryTags
       };
 
+      console.log('Recipe data for AI:', recipe);
+      
       const aiDescription = await generateRecipeSummary(recipe);
       if (aiDescription) {
         setDescription(aiDescription);
         setHasGeneratedDescription(true);
+        console.log('AI description generated successfully:', aiDescription);
       } else {
         setError('Failed to generate AI description. Please try again.');
       }
@@ -431,20 +446,20 @@ const RecipeForm: React.FC = () => {
                     setHasGeneratedDescription(true); // Prevent auto-generation if user types
                   }
                 }}
-                rows={4}
+                rows={3}
                 className="w-full p-3 border border-gray-300 rounded-md"
                 placeholder={
                   isOpenAIAvailable 
-                    ? "Add your recipe title and ingredients above, and we'll create an appetizing description automatically..."
+                    ? "Add your recipe title and ingredients above, and we'll create a mouth-watering 50-word description automatically..."
                     : "Describe your recipe - what makes it special, how it tastes, and why people will love it..."
                 }
               />
               
               <div className="flex justify-between items-center">
-                {isOpenAIAvailable && title && ingredients.length > 0 && (
+                {isOpenAIAvailable && title && ingredients.some(ing => ing.name.trim()) && (
                   <Button
                     type="button"
-                    label={hasGeneratedDescription ? "Regenerate Description" : "Generate AI Description"}
+                    label={hasGeneratedDescription ? "Regenerate (50 words)" : "Generate AI Description"}
                     icon="pi pi-sparkles"
                     onClick={() => {
                       setHasGeneratedDescription(false);
@@ -461,8 +476,8 @@ const RecipeForm: React.FC = () => {
                 )}
                 
                 {description && (
-                  <span className="text-xs text-gray-500">
-                    {description.length} characters
+                  <span className={`text-xs ${description.split(' ').length > 50 ? 'text-orange-600' : 'text-gray-500'}`}>
+                    {description.split(' ').length} words {description.split(' ').length > 50 ? '(over 50-word limit)' : ''}
                   </span>
                 )}
               </div>
@@ -470,15 +485,15 @@ const RecipeForm: React.FC = () => {
               {!isOpenAIAvailable && (
                 <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                   <p className="text-xs text-gray-600">
-                    💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated descriptions that make your recipes irresistible
+                    💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated 50-word descriptions that make your recipes irresistible
                   </p>
                 </div>
               )}
               
-              {isOpenAIAvailable && !title && (
+              {isOpenAIAvailable && (!title || !ingredients.some(ing => ing.name.trim())) && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-xs text-blue-700">
-                    ✨ <strong>AI Ready:</strong> Add your recipe title and ingredients to automatically generate a mouth-watering description
+                    ✨ <strong>AI Ready:</strong> Add your recipe title and ingredients to automatically generate a mouth-watering 50-word description
                   </p>
                 </div>
               )}
@@ -555,13 +570,14 @@ const RecipeForm: React.FC = () => {
               <div>
                 <h4 className="font-medium text-purple-800 mb-2">🍳 AI Culinary Assistant</h4>
                 <p className="text-sm text-purple-700 mb-2">
-                  Our AI chef automatically creates appetizing descriptions that highlight the flavors, textures, and cooking experience. 
+                  Our AI chef automatically creates appetizing 50-word descriptions that highlight the flavors, textures, and cooking experience from your specific ingredients. 
                   Just add your recipe title and ingredients, and watch the magic happen!
                 </p>
                 <div className="text-xs text-purple-600 space-y-1">
-                  <p>• <strong>Auto-generation:</strong> Descriptions appear automatically as you add ingredients</p>
-                  <p>• <strong>Sensory focus:</strong> Emphasizes taste, aroma, and texture</p>
+                  <p>• <strong>Auto-generation:</strong> 50-word descriptions appear automatically as you add ingredients</p>
+                  <p>• <strong>Ingredient-focused:</strong> Uses your specific ingredients to create sensory descriptions</p>
                   <p>• <strong>Fully editable:</strong> Customize the generated text to match your style</p>
+                  <p>• <strong>Perfect length:</strong> Optimized 50-word limit for quick, engaging reads</p>
                 </div>
               </div>
             </div>

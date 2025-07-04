@@ -200,11 +200,13 @@ const RecipeEdit: React.FC = () => {
 
   // Auto-generate description when user has added enough content (only if no description exists)
   useEffect(() => {
+    // Check if we have meaningful ingredients (at least one with a name)
+    const hasValidIngredients = ingredients.some(ing => ing.name.trim().length > 0);
+    
     const shouldAutoGenerate = 
       isOpenAIAvailable && 
       title.trim() && 
-      ingredients.length > 0 && 
-      ingredients.some(ing => ing.name.trim()) &&
+      hasValidIngredients &&
       !description.trim() && 
       !hasGeneratedDescription &&
       !generatingDescription &&
@@ -213,22 +215,32 @@ const RecipeEdit: React.FC = () => {
     if (shouldAutoGenerate) {
       const timer = setTimeout(() => {
         generateAIDescription();
-      }, 2000);
+      }, 1500); // Reduced delay for better responsiveness
 
       return () => clearTimeout(timer);
     }
-  }, [title, ingredients, isOpenAIAvailable, description, hasGeneratedDescription, generatingDescription, fetchLoading]);
+  }, [title, ingredients, isOpenAIAvailable, description, hasGeneratedDescription, generatingDescription, fetchLoading, steps, cuisine, difficulty, cookingTime, dietaryTags]);
 
   const generateAIDescription = async () => {
-    if (!isOpenAIAvailable || !title || ingredients.length === 0) {
+    // Validate we have enough content for AI generation
+    const hasValidIngredients = ingredients.some(ing => ing.name.trim().length > 0);
+    
+    if (!isOpenAIAvailable || !title.trim() || !hasValidIngredients) {
+      console.log('AI generation skipped - missing required data:', {
+        hasOpenAI: isOpenAIAvailable,
+        hasTitle: !!title.trim(),
+        hasValidIngredients
+      });
       return;
     }
 
+    console.log('Generating AI description with ingredients:', ingredients.filter(ing => ing.name.trim()));
+    
     setGeneratingDescription(true);
     try {
       const recipe = {
         title,
-        ingredients,
+        ingredients: ingredients.filter(ing => ing.name.trim()), // Only include ingredients with names
         steps,
         cuisine,
         difficulty,
@@ -236,10 +248,13 @@ const RecipeEdit: React.FC = () => {
         dietaryTags
       };
 
+      console.log('Recipe data for AI:', recipe);
+      
       const aiDescription = await generateRecipeSummary(recipe);
       if (aiDescription) {
         setDescription(aiDescription);
         setHasGeneratedDescription(true);
+        console.log('AI description generated successfully:', aiDescription);
       } else {
         setError('Failed to generate AI description. Please try again.');
       }
@@ -527,20 +542,20 @@ const RecipeEdit: React.FC = () => {
                     setHasGeneratedDescription(true);
                   }
                 }}
-                rows={4}
+                rows={3}
                 className="w-full p-3 border border-gray-300 rounded-md"
                 placeholder={
                   isOpenAIAvailable 
-                    ? "Update your recipe details above to regenerate an appetizing description..."
+                    ? "Update your recipe details above to regenerate an appetizing 50-word description..."
                     : "Describe your recipe - what makes it special, how it tastes, and why people will love it..."
                 }
               />
               
               <div className="flex justify-between items-center">
-                {isOpenAIAvailable && title && ingredients.length > 0 && (
+                {isOpenAIAvailable && title && ingredients.some(ing => ing.name.trim()) && (
                   <Button
                     type="button"
-                    label="Regenerate AI Description"
+                    label="Regenerate (50 words)"
                     icon="pi pi-sparkles"
                     onClick={() => {
                       setHasGeneratedDescription(false);
@@ -557,8 +572,8 @@ const RecipeEdit: React.FC = () => {
                 )}
                 
                 {description && (
-                  <span className="text-xs text-gray-500">
-                    {description.length} characters
+                  <span className={`text-xs ${description.split(' ').length > 50 ? 'text-orange-600' : 'text-gray-500'}`}>
+                    {description.split(' ').length} words {description.split(' ').length > 50 ? '(over 50-word limit)' : ''}
                   </span>
                 )}
               </div>
@@ -566,7 +581,7 @@ const RecipeEdit: React.FC = () => {
               {!isOpenAIAvailable && (
                 <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                   <p className="text-xs text-gray-600">
-                    💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated descriptions
+                    💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated 50-word descriptions
                   </p>
                 </div>
               )}
@@ -643,13 +658,14 @@ const RecipeEdit: React.FC = () => {
               <div>
                 <h4 className="font-medium text-purple-800 mb-2">🍳 AI Culinary Assistant</h4>
                 <p className="text-sm text-purple-700 mb-2">
-                  Our AI chef creates appetizing descriptions that make your recipes irresistible. 
+                  Our AI chef creates appetizing 50-word descriptions that make your recipes irresistible using your specific ingredients. 
                   The description automatically updates when you modify ingredients or recipe details.
                 </p>
                 <div className="text-xs text-purple-600 space-y-1">
-                  <p>• <strong>Smart updates:</strong> Regenerates when you change key recipe elements</p>
-                  <p>• <strong>Sensory language:</strong> Focuses on taste, aroma, and cooking experience</p>
+                  <p>• <strong>Smart updates:</strong> Regenerates when you change ingredients or recipe elements</p>
+                  <p>• <strong>Ingredient-focused:</strong> Uses your specific ingredients for sensory descriptions</p>
                   <p>• <strong>Your control:</strong> Edit and customize the generated text as needed</p>
+                  <p>• <strong>Perfect length:</strong> Optimized 50-word limit for quick, engaging reads</p>
                 </div>
               </div>
             </div>
