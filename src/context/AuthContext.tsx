@@ -80,6 +80,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           skill_level: 'beginner',
         },
       ]);
+
+      // Create default privacy settings (allow tracking by default)
+      await supabase.from('user_privacy_settings').insert([
+        {
+          user_id: data.user.id,
+          allow_search_history: true,
+          allow_personalized_recommendations: true,
+          allow_analytics: false,
+          data_retention_days: 365,
+        },
+      ]);
     }
 
     return { error };
