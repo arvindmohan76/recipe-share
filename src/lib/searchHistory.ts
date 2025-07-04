@@ -223,14 +223,18 @@ export const clearSearchHistory = async (userId: string): Promise<boolean> => {
  */
 export const generateRecommendations = async (userId: string): Promise<boolean> => {
   try {
+    console.log('Generating recommendations for user:', userId);
+    
     const { error } = await supabase
       .rpc('generate_search_based_recommendations', { target_user_id: userId });
 
     if (error) {
       console.error('Error generating recommendations:', error);
+      console.error('Error details:', error.message, error.details, error.hint);
       return false;
     }
 
+    console.log('Recommendations generated successfully');
     return true;
   } catch (err) {
     console.error('Failed to generate recommendations:', err);
