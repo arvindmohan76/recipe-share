@@ -54,9 +54,9 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow-lg sticky top-0 z-50">
+    <div className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo/Brand */}
           <div 
             className="flex items-center gap-2 flex-shrink-0 cursor-pointer"

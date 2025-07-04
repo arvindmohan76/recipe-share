@@ -112,10 +112,10 @@ const Home: React.FC = () => {
   };
 
   const heroSection = (
-    <div className="bg-gradient-to-r from-orange-400 to-red-500 text-white p-6 rounded-lg mb-6">
+    <div className="bg-gradient-to-r from-orange-400 to-red-500 text-white p-5 rounded-lg mb-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-3">Welcome to RecipeHub</h1>
-        <p className="text-lg mb-5">
+        <h1 className="text-3xl md:text-4xl font-bold mb-3">Welcome to RecipeHub</h1>
+        <p className="text-base md:text-lg mb-4">
           Discover amazing recipes from around the world and start cooking today.
         </p>
         <div className="button-container justify-center">
