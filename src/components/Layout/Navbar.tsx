@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
           <Button
             label="Create Recipe"
             icon="pi pi-plus"
-            className="p-button-success p-button-outlined mr-2"
+            className="p-button-success mr-2"
             onClick={() => navigate('/recipes/new')}
           />
           <Avatar
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
           <Button
             label="Sign Out"
             icon="pi pi-sign-out"
-            className="p-button-text"
+            className="p-button-text text-gray-600 hover:text-gray-800"
             onClick={handleSignOut}
           />
         </>
@@ -81,13 +81,13 @@ const Navbar: React.FC = () => {
           <Button
             label="Sign In"
             icon="pi pi-sign-in"
-            className="p-button-text mr-2"
+            className="p-button-text text-gray-600 hover:text-gray-800 mr-2"
             onClick={() => navigate('/auth')}
           />
           <Button
             label="Sign Up"
             icon="pi pi-user-plus"
-            className="p-button-outlined"
+            className="p-button-outlined text-gray-700 border-gray-300 hover:bg-gray-50"
             onClick={() => navigate('/auth?mode=signup')}
           />
         </>
@@ -128,12 +128,12 @@ const Navbar: React.FC = () => {
                 <Button
                   label="Create Recipe"
                   icon="pi pi-plus"
-                  className="p-button-success p-button-sm hidden sm:flex"
+                  className="p-button-success p-button-sm hidden sm:flex text-white"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Button
                   icon="pi pi-plus"
-                  className="p-button-success p-button-sm sm:hidden"
+                  className="p-button-success p-button-sm sm:hidden text-white"
                   onClick={() => navigate('/recipes/new')}
                 />
                 <Avatar
@@ -145,12 +145,12 @@ const Navbar: React.FC = () => {
                 <Button
                   label="Sign Out"
                   icon="pi pi-sign-out"
-                  className="p-button-text p-button-sm hidden sm:flex"
+                  className="p-button-text p-button-sm hidden sm:flex text-gray-600 hover:text-gray-800"
                   onClick={handleSignOut}
                 />
                 <Button
                   icon="pi pi-sign-out"
-                  className="p-button-text p-button-sm sm:hidden"
+                  className="p-button-text p-button-sm sm:hidden text-gray-600 hover:text-gray-800"
                   onClick={handleSignOut}
                 />
               </>
@@ -159,18 +159,18 @@ const Navbar: React.FC = () => {
                 <Button
                   label="Sign In"
                   icon="pi pi-sign-in"
-                  className="p-button-text p-button-sm hidden sm:flex"
+                  className="p-button-text p-button-sm hidden sm:flex text-gray-600 hover:text-gray-800"
                   onClick={() => navigate('/auth')}
                 />
                 <Button
                   label="Sign Up"
                   icon="pi pi-user-plus"
-                  className="p-button-outlined p-button-sm hidden sm:flex"
+                  className="p-button-outlined p-button-sm hidden sm:flex text-gray-700 border-gray-300 hover:bg-gray-50"
                   onClick={() => navigate('/auth?mode=signup')}
                 />
                 <Button
                   icon="pi pi-sign-in"
-                  className="p-button-text p-button-sm sm:hidden"
+                  className="p-button-text p-button-sm sm:hidden text-gray-600 hover:text-gray-800"
                   onClick={() => navigate('/auth')}
                 />
               </>

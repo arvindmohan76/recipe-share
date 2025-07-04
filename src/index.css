@@ -136,72 +136,85 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-emerald-600 hover:bg-emerald-700 border-emerald-600 text-white;
+  @apply bg-emerald-600 hover:bg-emerald-700 border-emerald-600 text-white !important;
   font-weight: 400 !important;
 }
 
 .p-button-success.p-button-outlined {
-  @apply bg-transparent hover:bg-emerald-50 border-emerald-600 text-emerald-600;
+  @apply bg-transparent hover:bg-emerald-50 border-emerald-600 text-emerald-600 !important;
   font-weight: 400 !important;
 }
 
 /* Subtle success button styles */
 .p-button-text.p-button-success {
-  @apply text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-3 py-2;
+  @apply text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 .p-button-sm.p-button-success {
-  @apply text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 text-sm;
+  @apply text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 text-sm !important;
   font-weight: 400 !important;
 }
 
 .p-button-danger {
-  @apply bg-rose-600 hover:bg-rose-700 border-rose-600 text-white;
+  @apply bg-rose-600 hover:bg-rose-700 border-rose-600 text-white !important;
   font-weight: 400 !important;
 }
 
 .p-button-danger.p-button-outlined {
-  @apply bg-transparent hover:bg-rose-50 border-rose-600 text-rose-600;
+  @apply bg-transparent hover:bg-rose-50 border-rose-600 text-rose-600 !important;
   font-weight: 400 !important;
 }
 
 .p-button-info {
-  @apply bg-blue-500 hover:bg-blue-600 border-blue-500;
+  @apply bg-blue-500 hover:bg-blue-600 border-blue-500 text-white !important;
   font-weight: 400 !important;
 }
 
 .p-button-warning {
-  @apply bg-amber-500 hover:bg-amber-600 border-amber-500;
+  @apply bg-amber-500 hover:bg-amber-600 border-amber-500 text-white !important;
   font-weight: 400 !important;
 }
 
 /* Subtle delete button styles */
 .p-button-text.p-button-danger {
-  @apply text-gray-500 hover:text-rose-600 hover:bg-rose-50 px-3 py-2;
+  @apply text-gray-500 hover:text-rose-600 hover:bg-rose-50 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 .p-button-sm.p-button-danger {
-  @apply text-gray-400 hover:text-rose-500 hover:bg-rose-50 px-3 py-1.5 text-sm;
+  @apply text-gray-400 hover:text-rose-500 hover:bg-rose-50 px-3 py-1.5 text-sm !important;
   font-weight: 400 !important;
 }
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 border-gray-300 text-gray-700 px-3 py-2;
+  @apply bg-gray-200 hover:bg-gray-300 border-gray-300 text-gray-700 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-600 px-3 py-2;
+  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-600 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 /* Primary button improvements */
 .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info):not(.p-button-secondary) {
-  @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-3 py-2;
+  @apply bg-blue-600 hover:bg-blue-700 border-blue-600 text-white px-3 py-2 !important;
   font-weight: 400 !important;
+}
+
+/* Navbar specific button overrides for better contrast */
+.p-menubar .p-button-success {
+  @apply bg-emerald-600 hover:bg-emerald-700 border-emerald-600 text-white !important;
+}
+
+.p-menubar .p-button-text {
+  @apply text-gray-600 hover:text-gray-800 hover:bg-gray-100 !important;
+}
+
+.p-menubar .p-button-outlined {
+  @apply bg-transparent hover:bg-gray-50 border-gray-300 text-gray-700 !important;
 }
 
 /* Small button improvements */
