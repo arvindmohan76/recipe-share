@@ -107,7 +107,7 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
         
         switch (event.error) {
           case 'no-speech':
-            setError('No speech detected. Please ensure your microphone is connected and unmuted, speak clearly, and try again.');
+            setError('No speech was detected. Please check that your microphone is connected and unmuted, speak clearly and at a normal volume, and try again in a quieter environment.');
             break;
           case 'audio-capture':
             setError('Microphone not accessible. Please check your microphone connection.');
@@ -189,15 +189,21 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
     try {
       setError('');
       setTranscript('');
-      setInterimTranscript('');
+      setInterimTranscript('');  
       finalTranscriptRef.current = '';
       
-     // Add a small delay after permission is granted before starting recognition
-     // This helps browsers properly initialize the audio context
-     setTimeout(() => {
-      console.log('Starting speech recognition...');
-      recognitionRef.current.start();
-     }, 300);
+      // Add a small delay after permission is granted before starting recognition
+      // This helps browsers properly initialize the audio context
+      setTimeout(() => {
+        try {
+          console.log('Starting speech recognition...');
+          recognitionRef.current.start();
+        } catch (err) {
+          console.error('Error in delayed start of recognition:', err);
+          setError('Failed to start speech recognition. Please refresh the page and try again.');
+          setIsListening(false);
+        }
+      }, 500); // Increased delay for better stability
     } catch (error) {
       console.error('Error starting speech recognition:', error);
       setError('Failed to start speech recognition. Please try again.');
@@ -335,18 +341,19 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
           {/* Instructions */}
           <div className="text-xs text-gray-600 space-y-1">
             <p>💡 <strong>Tips for better recognition:</strong></p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Click "Start Recording" and wait for the red indicator</li>
-              <li>Speak clearly and at a normal pace</li>
-              <li>Ensure you're in a quiet environment</li>
-              <li>Allow microphone access when prompted</li>
-              <li>The text will be added when recording stops</li>
+            <ul className="list-disc list-inside space-y-1 ml-4 dark:text-gray-400">
+              <li>Click "{buttonLabel}" and wait for the red indicator</li>
+              <li>Speak clearly and at a normal volume</li>
+              <li>Ensure you're in a quiet environment with minimal background noise</li>
+              <li>Hold the microphone close to your mouth if using an external mic</li>
+              <li>If no speech is detected, try speaking louder or check if your microphone is muted</li>
+              <li>The text will be added automatically when recording stops</li>
             </ul>
           </div>
 
           {/* Browser compatibility info */}
-          <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
-            <strong>Browser Support:</strong> Works best in Chrome and Edge. Limited support in Firefox and Safari.
+          <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-2 rounded">
+            <strong>Browser Support:</strong> Works best in Chrome and Edge. Limited support in Firefox and Safari. Make sure you're using HTTPS or localhost.
           </div>
         </div>
       </Card>
