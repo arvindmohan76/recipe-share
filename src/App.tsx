@@ -1,7 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PrimeReact from 'primereact/api';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Layout from './components/Layout/Layout';
@@ -25,12 +23,6 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 function App() {
-  useEffect(() => {
-    PrimeReact.ripple = true;
-    PrimeReact.autoZIndex = true;
-    PrimeReact.hideOverlaysOnDocumentScrolling = true;
-  }, []);
-
   return (
     <ThemeProvider>
       <AuthProvider>
