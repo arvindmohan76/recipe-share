@@ -88,9 +88,9 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
   }
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700">
       <div className="text-center">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">
+        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">
           🎤 Voice Cooking Assistant
         </h3>
         
@@ -103,11 +103,11 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
           />
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-4 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">Available Commands:</h4>
-              <ul className="space-y-2 text-gray-600">
+              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Available Commands:</h4>
+              <ul className="space-y-2 text-gray-600 dark:text-gray-400">
                 <li>• "Next step"</li>
                 <li>• "Previous step"</li>
                 <li>• "Read ingredients"</li>
@@ -117,7 +117,7 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">Status:</h4>
+              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Status:</h4>
               <div className="flex items-center gap-2 mb-2">
                 <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`}></div>
                 <span className="text-gray-600">
@@ -130,7 +130,7 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
                 </div>
               )}
               {lastCommand && (
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Last command: "{lastCommand}"
                 </div>
               )}
@@ -138,7 +138,7 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
           </div>
         </div>
 
-        <div className="text-sm text-gray-500 text-center space-y-1">
+        <div className="text-sm text-gray-500 dark:text-gray-400 text-center space-y-1">
           <p>Click "Start Listening" and speak clearly. The assistant will respond to your voice commands.</p>
           <p className="text-xs">🔊 Voice responses are enabled - you'll hear spoken feedback for your commands.</p>
         </div>

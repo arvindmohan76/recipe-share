@@ -356,7 +356,7 @@ const RecipeEdit: React.FC = () => {
   return (
     <div>
       <Card>
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Recipe</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Edit Recipe</h1>
 
         {error && (
           <Message severity="error" text={error} className="mb-4 w-full" />
@@ -365,7 +365,7 @@ const RecipeEdit: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Recipe Title *
               </label>
               <InputText
@@ -379,7 +379,7 @@ const RecipeEdit: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Cuisine
               </label>
               <Dropdown
@@ -396,7 +396,7 @@ const RecipeEdit: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Recipe Image
             </label>
             {currentImageUrl && (
@@ -684,7 +684,7 @@ const RecipeEdit: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
+          <div className="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
             <Button
               type="button"
               label="Cancel"

@@ -232,17 +232,17 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
 
   return (
     <div className={`voice-to-text ${className}`}>
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700">
         <div className="space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <i className="pi pi-microphone text-blue-600 text-xl"></i>
-              <h4 className="font-semibold text-gray-800">Voice Input</h4>
+              <i className="pi pi-microphone text-blue-600 dark:text-blue-400 text-xl"></i>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-100">Voice Input</h4>
             </div>
             <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-gray-300'}`}></div>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
                 {isListening ? 'Listening...' : 'Ready'}
               </span>
             </div>
@@ -250,10 +250,10 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
 
           {/* Permission Status */}
           {!permissionGranted && !error && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
               <div className="flex items-center gap-2">
-                <i className="pi pi-exclamation-triangle text-yellow-600"></i>
-                <span className="text-sm text-yellow-800">
+                <i className="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-400"></i>
+                <span className="text-sm text-yellow-800 dark:text-yellow-200">
                   Microphone permission required for voice input
                 </span>
               </div>
@@ -291,12 +291,12 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
 
           {/* Transcript Display */}
           {displayText && (
-            <div className="bg-white p-4 rounded-lg border border-gray-200 min-h-[80px]">
-              <div className="text-sm text-gray-600 mb-2">Recognized Text:</div>
-              <div className="text-gray-800">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[80px]">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Recognized Text:</div>
+              <div className="text-gray-800 dark:text-gray-200">
                 <span className="font-medium">{transcript}</span>
                 {interimTranscript && (
-                  <span className="text-gray-500 italic"> {interimTranscript}</span>
+                  <span className="text-gray-500 dark:text-gray-400 italic"> {interimTranscript}</span>
                 )}
               </div>
             </div>
@@ -304,19 +304,19 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
 
           {/* Placeholder when no text */}
           {!displayText && !isListening && (
-            <div className="bg-white p-4 rounded-lg border border-gray-200 min-h-[80px] flex items-center justify-center">
-              <p className="text-gray-500 text-center">{placeholder}</p>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[80px] flex items-center justify-center">
+              <p className="text-gray-500 dark:text-gray-400 text-center">{placeholder}</p>
             </div>
           )}
 
           {/* Listening indicator */}
           {isListening && !displayText && (
-            <div className="bg-white p-4 rounded-lg border border-gray-200 min-h-[80px] flex items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[80px] flex items-center justify-center">
               <div className="text-center">
                 <div className="flex justify-center mb-2">
                   <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
                 </div>
-                <p className="text-gray-600">Listening... Please speak now</p>
+                <p className="text-gray-600 dark:text-gray-400">Listening... Please speak now</p>
               </div>
             </div>
           )}

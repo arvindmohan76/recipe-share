@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white shadow-lg sticky top-0 z-50">
+    <div className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 transition-colors duration-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
             onClick={() => navigate('/')}
           >
             <i className="pi pi-apple text-2xl text-orange-500"></i>
-            <span className="text-xl font-bold text-gray-800">RecipeHub</span>
+            <span className="text-xl font-bold text-gray-800 dark:text-gray-100">RecipeHub</span>
           </div>
           
           {/* Desktop Navigation - Hidden on mobile/tablet */}
@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
                 <button
                   key={index}
                   onClick={item.command}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 text-sm font-medium"
+                  className="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 text-sm font-medium"
                 >
                   <i className={`${item.icon} text-sm`}></i>
                   <span>{item.label}</span>
@@ -203,11 +203,12 @@ const Navbar: React.FC = () => {
         onHide={() => setSidebarVisible(false)}
         position="right"
         style={{ width: '300px' }}
+        className="dark:bg-gray-800"
       >
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-200">
+        <div className="p-4 dark:bg-gray-800">
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <i className="pi pi-apple text-2xl text-orange-500"></i>
-            <span className="text-xl font-bold text-gray-800">RecipeHub</span>
+            <span className="text-xl font-bold text-gray-800 dark:text-gray-100">RecipeHub</span>
           </div>
           
           <div className="space-y-2">
@@ -236,7 +237,7 @@ const Navbar: React.FC = () => {
           </div>
           
           {user && (
-            <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => handleNavClick(() => {
                   navigate('/privacy-settings');
