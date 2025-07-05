@@ -17,6 +17,7 @@ import PrivacySettings from './components/Privacy/PrivacySettings';
 import RecipeListWithHistory from './components/Recipe/RecipeListWithHistory';
 import ShoppingListManager from './components/ShoppingList/ShoppingListManager';
 import RecipeCollections from './components/Collections/RecipeCollections';
+import UserProfile from './components/User/UserProfile';
 
 // Import PrimeReact CSS
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -46,6 +47,7 @@ function App() {
               <Route path="/privacy-settings" element={<PrivacySettings />} />
               <Route path="/shopping-lists" element={<ShoppingListManager />} />
               <Route path="/collections" element={<RecipeCollections />} />
+              <Route path="/profile" element={<UserProfile />} />
             </Routes>
           </Layout>
         </Router>

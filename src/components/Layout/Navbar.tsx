@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
       label: 'My Profile',
       icon: 'pi pi-user',
       command: (event: MenuItemCommandEvent) => {
-        // Placeholder for future profile page
+        navigate('/profile');
         profileMenuRef.current?.hide(event.originalEvent);
       }
     },
