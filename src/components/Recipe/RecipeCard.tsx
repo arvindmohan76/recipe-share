@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Rating } from 'primereact/rating';
 import { Recipe } from '../../lib/supabase';
+import { calculateDynamicRating, formatEngagementStats, getRatingColor } from '../../lib/ratingUtils';
 import { getRecipeImageUrl } from '../../lib/imageUtils';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,9 +12,17 @@ interface RecipeCardProps {
   recipe: Recipe;
   onSave?: (recipeId: string) => void;
   isSaved?: boolean;
+  bookmarkCount?: number;
+  commentCount?: number;
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ 
+  recipe, 
+  onSave, 
+  isSaved, 
+  bookmarkCount = 0,
+  commentCount = 0 
+}) => {
   const navigate = useNavigate();
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -23,6 +32,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
       target.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
     }
   };
+
+  // Calculate dynamic rating based on engagement
+  const dynamicRating = calculateDynamicRating({
+    view_count: recipe.view_count,
+    bookmark_count: bookmarkCount,
+    comment_count: commentCount
+  });
+
+  const engagementStats = formatEngagementStats({
+    view_count: recipe.view_count,
+    bookmark_count: bookmarkCount,
+    comment_count: commentCount
+  });
 
   const header = (
     <div className="relative">
@@ -119,8 +141,22 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSave, isSaved }) => {
 
         {/* Footer - Always at bottom */}
         <div className="flex justify-between items-center gap-2 mt-auto pt-2 border-t border-gray-100">
-          <div className="flex items-center gap-2">
-            <Rating value={4.5} readOnly stars={5} cancel={false} className="text-sm" />
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Rating 
+                value={dynamicRating} 
+                readOnly 
+                stars={5} 
+                cancel={false} 
+                className="text-sm" 
+              />
+              <span className={`text-xs font-medium ${getRatingColor(dynamicRating)}`}>
+                {dynamicRating.toFixed(1)}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500">
+              {engagementStats}
+            </div>
           </div>
           <Button
             label="View Recipe"
