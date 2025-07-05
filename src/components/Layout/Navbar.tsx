@@ -147,18 +147,15 @@ const Navbar: React.FC = () => {
                   <Avatar
                     icon="pi pi-user"
                     className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 transition-colors w-10 h-10"
-                    size="normal"
                     onClick={(e) => {
                       e.preventDefault();
-                      setIsProfileMenuVisible(!isProfileMenuVisible);
+                      profileMenuRef.current?.toggle(e);
                     }}
                   />
                   <Menu
                     ref={profileMenuRef}
                     model={profileMenuItems}
                     popup
-                    visible={isProfileMenuVisible}
-                    onHide={() => setIsProfileMenuVisible(false)}
                     className="profile-menu"
                   />
                 </div>
