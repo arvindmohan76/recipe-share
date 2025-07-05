@@ -9,6 +9,7 @@ import RecipeCard from './RecipeCard';
 
 const SavedRecipes: React.FC = () => {
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
+  const [recipeEngagement, setRecipeEngagement] = useState<Map<string, any>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [savedRecipeIds, setSavedRecipeIds] = useState<Set<string>>(new Set());
@@ -23,6 +24,12 @@ const SavedRecipes: React.FC = () => {
       navigate('/auth');
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (savedRecipes.length > 0) {
+      fetchRecipeEngagement();
+    }
+  }, [savedRecipes]);
 
   const fetchSavedRecipes = async () => {
     if (!user) return;
@@ -48,6 +55,54 @@ const SavedRecipes: React.FC = () => {
       setError('Failed to fetch saved recipes');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchRecipeEngagement = async () => {
+    try {
+      const recipeIds = savedRecipes.map(r => r.id);
+      
+      if (recipeIds.length === 0) return;
+
+      // Fetch bookmark counts
+      const { data: bookmarkData, error: bookmarkError } = await supabase
+        .from('saved_recipes')
+        .select('recipe_id')
+        .in('recipe_id', recipeIds);
+
+      // Fetch comment counts
+      const { data: commentData, error: commentError } = await supabase
+        .from('recipe_comments')
+        .select('recipe_id')
+        .in('recipe_id', recipeIds);
+
+      if (!bookmarkError && !commentError) {
+        const engagementMap = new Map();
+        
+        // Count bookmarks per recipe
+        const bookmarkCounts = bookmarkData?.reduce((acc, item) => {
+          acc[item.recipe_id] = (acc[item.recipe_id] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>) || {};
+
+        // Count comments per recipe
+        const commentCounts = commentData?.reduce((acc, item) => {
+          acc[item.recipe_id] = (acc[item.recipe_id] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>) || {};
+
+        // Combine engagement data
+        savedRecipes.forEach(recipe => {
+          engagementMap.set(recipe.id, {
+            bookmarkCount: bookmarkCounts[recipe.id] || 0,
+            commentCount: commentCounts[recipe.id] || 0
+          });
+        });
+
+        setRecipeEngagement(engagementMap);
+      }
+    } catch (err) {
+      console.error('Failed to fetch recipe engagement:', err);
     }
   };
 
@@ -135,11 +190,18 @@ const SavedRecipes: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {savedRecipes.map((recipe) => (
             <div key={recipe.id} className="h-full">
-              <RecipeCard
-                recipe={recipe}
-                onSave={handleUnsaveRecipe}
-                isSaved={savedRecipeIds.has(recipe.id)}
-              />
+              {(() => {
+                const engagement = recipeEngagement.get(recipe.id) || { bookmarkCount: 0, commentCount: 0 };
+                return (
+                  <RecipeCard
+                    recipe={recipe}
+                    onSave={handleUnsaveRecipe}
+                    isSaved={savedRecipeIds.has(recipe.id)}
+                    bookmarkCount={engagement.bookmarkCount}
+                    commentCount={engagement.commentCount}
+                  />
+                );
+              })()}
             </div>
           ))}
         </div>
