@@ -426,15 +426,26 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:border-emerald-600 shadow-sm hover:shadow-md !important;
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: white !important;
   font-weight: 400 !important;
   transition: all 0.2s ease !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.p-button-success:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .p-button-success .p-button-icon {
   color: white !important;
   font-size: 1rem !important;
   margin-right: 0.5rem !important;
+  opacity: 1 !important;
 }
 
 .p-button-success .p-button-label {
@@ -443,8 +454,20 @@
 }
 
 .p-button-success.p-button-outlined {
-  @apply bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border-emerald-500 text-emerald-600 dark:text-emerald-400 !important;
+  background-color: transparent !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
   font-weight: 400 !important;
+}
+
+.p-button-success.p-button-outlined:hover {
+  background-color: #f0fdf4 !important;
+  border-color: #10b981 !important;
+  color: #059669 !important;
+}
+
+.p-button-success.p-button-outlined .p-button-icon {
+  color: #10b981 !important;
 }
 
 /* Subtle success button styles */
@@ -459,13 +482,34 @@
 }
 
 .p-button-danger {
-  @apply bg-rose-500 hover:bg-rose-600 border-rose-500 text-white dark:bg-rose-600 dark:hover:bg-rose-700 dark:border-rose-600 !important;
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: white !important;
   font-weight: 400 !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-button-danger:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
 }
 
 .p-button-danger.p-button-outlined {
-  @apply bg-transparent hover:bg-rose-50 dark:hover:bg-rose-900/20 border-rose-500 text-rose-600 dark:text-rose-400 !important;
+  background-color: transparent !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
   font-weight: 400 !important;
+}
+
+.p-button-danger.p-button-outlined:hover {
+  background-color: #fef2f2 !important;
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+}
+
+.p-button-danger .p-button-icon {
+  color: white !important;
 }
 
 .p-button-info {
@@ -476,6 +520,11 @@
 .p-button-warning {
   @apply bg-amber-400 hover:bg-amber-500 border-amber-400 text-white !important;
   font-weight: 400 !important;
+}
+
+.p-button-info .p-button-icon,
+.p-button-warning .p-button-icon {
+  color: white !important;
 }
 
 /* Subtle delete button styles */
@@ -489,24 +538,6 @@
   font-weight: 400 !important;
 }
 
-/* Ensure white icons on danger buttons */
-.p-button-danger .p-button-icon {
-  color: white !important;
-}
-
-.p-button-danger:hover .p-button-icon {
-  color: white !important;
-}
-
-/* Ensure white icons on success buttons */
-.p-button-success .p-button-icon {
-  color: white !important;
-}
-
-.p-button-success:hover .p-button-icon {
-  color: white !important;
-}
-
 /* Ensure white icons on all solid buttons */
 .p-button:not(.p-button-outlined):not(.p-button-text) .p-button-icon {
   color: white !important;
@@ -514,13 +545,34 @@
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 px-3 py-2 !important;
+  background-color: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+  color: #4b5563 !important;
   font-weight: 400 !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-button-secondary:hover {
+  background-color: #e5e7eb !important;
+  border-color: #d1d5db !important;
+  color: #374151 !important;
+}
+
+.p-button-secondary .p-button-icon {
+  color: #4b5563 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 px-3 py-2 !important;
+  background-color: transparent !important;
+  border-color: #d1d5db !important;
+  color: #6b7280 !important;
   font-weight: 400 !important;
+}
+
+.p-button-outlined:hover {
+  background-color: #f9fafb !important;
+  border-color: #d1d5db !important;
+  color: #374151 !important;
 }
 
 /* Primary button improvements */
@@ -530,6 +582,42 @@
 }
 
 /* Navbar specific button overrides for better contrast */
+
+/* Dark mode button adjustments */
+.dark .p-button-success {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.dark .p-button-success:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  color: white !important;
+}
+
+.dark .p-button-secondary {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #d1d5db !important;
+}
+
+.dark .p-button-secondary:hover {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .p-button-outlined {
+  border-color: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+.dark .p-button-outlined:hover {
+  background-color: #374151 !important;
+  color: #d1d5db !important;
+}
+
 /* Navbar specific improvements */
 .navbar-button {
   white-space: nowrap !important;
