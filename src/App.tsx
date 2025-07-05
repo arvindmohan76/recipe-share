@@ -28,6 +28,7 @@ function App() {
   useEffect(() => {
     PrimeReact.ripple = true;
     PrimeReact.autoZIndex = true;
+    PrimeReact.hideOverlaysOnDocumentScrolling = true;
   }, []);
 
   return (
