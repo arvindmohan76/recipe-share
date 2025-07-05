@@ -18,7 +18,7 @@ export async function generateAIRecommendations(
   availableRecipes: any[]
 ): Promise<any[]> {
   if (!openai) {
-    return [];
+    throw new Error('OpenAI API is not available. Please check your API key configuration.');
   }
 
   try {
@@ -95,22 +95,33 @@ export async function generateAIRecommendations(
     
     try {
       const parsedResponse = JSON.parse(responseText);
-      const recommendations = parsedResponse.recommendations || [];
+      const recommendations = parsedResponse.recommendations || parsedResponse || [];
+      
+      // Ensure we have an array
+      if (!Array.isArray(recommendations)) {
+        console.warn('AI response is not an array:', recommendations);
+        return [];
+      }
       
       // Validate and format recommendations
-      return recommendations.map((rec: any) => ({
+      const validRecommendations = recommendations.filter((rec: any) => 
+        rec && rec.recipe_id && availableRecipes.some(r => r.id === rec.recipe_id)
+      ).map((rec: any) => ({
         recipe_id: rec.recipe_id,
         confidence_score: Math.min(0.9, Math.max(0.1, rec.confidence_score)),
-        reasoning: rec.reasoning,
-        recommendation_type: rec.recommendation_type
+        reasoning: rec.reasoning || 'Recommended based on your preferences',
+        recommendation_type: rec.recommendation_type || 'ai_personalized'
       }));
+      
+      return validRecommendations;
     } catch (parseError) {
       console.error('Error parsing AI recommendations:', parseError);
+      console.error('Raw response:', responseText);
       return [];
     }
   } catch (error) {
     console.error('Error generating AI recommendations:', error);
-    return [];
+    throw error;
   }
 }
 

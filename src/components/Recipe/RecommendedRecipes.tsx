@@ -206,6 +206,11 @@ const RecommendedRecipes: React.FC = () => {
     setAiError('');
     
     try {
+      // Check if OpenAI is available
+      if (!import.meta.env.VITE_OPENAI_API_KEY) {
+        throw new Error('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables.');
+      }
+      
       // Fetch user's search history
       const { data: searchHistory, error: searchError } = await supabase
         .from('user_search_history')
@@ -256,7 +261,8 @@ const RecommendedRecipes: React.FC = () => {
       );
       
       if (aiRecommendations.length === 0) {
-        throw new Error('Could not generate AI recommendations');
+        setAiError('No AI recommendations could be generated. This might be due to limited user data or API limitations. Try browsing and saving more recipes first.');
+        return;
       }
       
       // Clear existing recommendations
@@ -286,7 +292,13 @@ const RecommendedRecipes: React.FC = () => {
       
     } catch (err: any) {
       console.error('Error generating AI recommendations:', err);
-      setAiError(err.message || 'Failed to generate AI recommendations');
+      if (err.message?.includes('API key')) {
+        setAiError('OpenAI API key is not configured. Please check your environment variables and restart the development server.');
+      } else if (err.message?.includes('No available recipes')) {
+        setAiError('No recipes available for recommendations. Please add some public recipes first.');
+      } else {
+        setAiError(err.message || 'Failed to generate AI recommendations. Please try again later.');
+      }
     } finally {
       setGeneratingAI(false);
     }
