@@ -12,14 +12,12 @@ const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const navigate = useNavigate();
-  const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false); 
   const profileMenuRef = React.useRef<Menu>(null);
 
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
-    setIsProfileMenuVisible(false);
   };
 
   const navigationItems = [
@@ -146,7 +144,7 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <Avatar
                     icon="pi pi-user"
-                    className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 transition-colors w-10 h-10"
+                    className="bg-blue-500 dark:bg-blue-600 text-white cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors w-10 h-10"
                     onClick={(e) => {
                       e.preventDefault();
                       profileMenuRef.current?.toggle(e);
@@ -156,7 +154,7 @@ const Navbar: React.FC = () => {
                     ref={profileMenuRef}
                     model={profileMenuItems}
                     popup
-                    className="profile-menu"
+                    className="profile-menu dark:bg-gray-800"
                   />
                 </div>
               </>

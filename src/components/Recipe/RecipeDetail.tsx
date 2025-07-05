@@ -33,6 +33,7 @@ const RecipeDetail: React.FC = () => {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [moreOptionsItems, setMoreOptionsItems] = useState<MenuItem[]>([]);
   const toast = React.useRef<Toast>(null);
   const moreOptionsMenu = React.useRef<Menu>(null);
 
@@ -51,9 +52,66 @@ const RecipeDetail: React.FC = () => {
       fetchComments();
       checkIfSaved();
       // Set the share URL when component mounts
+      updateMoreOptionsItems();
       setShareUrl(window.location.href);
     }
   }, [id]);
+
+  useEffect(() => {
+    updateMoreOptionsItems();
+  }, [isSaved, user, recipe]);
+
+  const updateMoreOptionsItems = () => {
+    if (!recipe) return;
+    
+    const items: MenuItem[] = [
+      {
+        label: isSaved ? 'Remove Bookmark' : 'Add Bookmark',
+        icon: isSaved ? 'pi pi-heart-fill' : 'pi pi-heart',
+        command: handleSaveRecipe
+      },
+      {
+        label: 'Add to Shopping List',
+        icon: 'pi pi-shopping-cart',
+        command: handleAddToShoppingList
+      },
+      {
+        label: 'Add to Collection',
+        icon: 'pi pi-folder-plus',
+        command: handleAddToCollection
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Print Recipe',
+        icon: 'pi pi-print',
+        command: handlePrintRecipe
+      },
+      {
+        label: 'Share Recipe',
+        icon: 'pi pi-share-alt',
+        command: handleShareRecipe
+      }
+    ];
+    
+    // Add delete option only for recipe owner
+    if (user && recipe && recipe.user_id === user.id) {
+      items.push(
+        {
+          separator: true
+        },
+        {
+          label: 'Delete Recipe',
+          icon: 'pi pi-trash',
+          command: handleDeleteRecipe,
+          className: 'text-red-600'
+        }
+      );
+    }
+    
+    setMoreOptionsItems(items);
+  };
 
   const fetchRecipe = async () => {
     try {
@@ -274,49 +332,6 @@ const RecipeDetail: React.FC = () => {
     });
   };
 
-  const moreOptionsItems: MenuItem[] = [
-    {
-      label: isSaved ? 'Remove Bookmark' : 'Add Bookmark',
-      icon: isSaved ? 'pi pi-heart-fill' : 'pi pi-heart',
-      command: handleSaveRecipe
-    },
-    {
-      label: 'Add to Shopping List',
-      icon: 'pi pi-shopping-cart',
-      command: handleAddToShoppingList
-    },
-    {
-      label: 'Add to Collection',
-      icon: 'pi pi-folder-plus',
-      command: handleAddToCollection
-    },
-    {
-      separator: true
-    },
-    {
-      label: 'Print Recipe',
-      icon: 'pi pi-print',
-      command: handlePrintRecipe
-    },
-    {
-      label: 'Share Recipe',
-      icon: 'pi pi-share-alt',
-      command: handleShareRecipe
-    },
-    // Add delete option only for recipe owner
-    ...(user && recipe && recipe.user_id === user.id ? [
-      {
-        separator: true
-      },
-      {
-        label: 'Delete Recipe',
-        icon: 'pi pi-trash',
-        command: handleDeleteRecipe,
-        className: 'text-red-600'
-      }
-    ] : [])
-  ];
-
   // Owner-specific menu items (for the main action buttons)
   const ownerMenuItems: MenuItem[] = [
     {
@@ -457,7 +472,7 @@ const RecipeDetail: React.FC = () => {
             <div className="relative">
               <img
                 src={getRecipeImageUrl(recipe.image_url, 'large')}
-                alt={recipe.title}
+                alt={recipe.title || 'Recipe image'}
                 className="w-full h-80 object-cover rounded-lg"
                 onError={handleImageError}
                 loading="lazy"
@@ -480,7 +495,7 @@ const RecipeDetail: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col justify-between">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{recipe.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{recipe.title}</h1>
             {recipe.description && (
               <div className="mb-6 p-5 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-l-4 border-orange-400 dark:border-orange-500 rounded-r-lg">
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic text-lg">
@@ -523,7 +538,7 @@ const RecipeDetail: React.FC = () => {
             <div className="recipe-actions mb-4">
               <Button
                 label={isSaved ? 'Bookmarked' : 'Bookmark'}
-                icon={isSaved ? 'pi pi-heart-fill' : 'pi pi-heart'}
+                icon={isSaved ? 'pi pi-heart-fill' : 'pi pi-heart'} 
                 className={`flex-shrink-0 ${isSaved ? 'p-button-success' : 'p-button-outlined'}`}
                 onClick={handleSaveRecipe}
               />

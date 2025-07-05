@@ -15,7 +15,7 @@
 
 /* Dark mode styles for PrimeReact components */
 .dark .p-card {
-  @apply bg-gray-800 border-gray-700 text-gray-100;
+  @apply bg-gray-800 border-gray-700 text-gray-100 shadow-gray-900/30;
 }
 
 .dark .p-card .p-card-body {
@@ -108,10 +108,39 @@
 
 .dark .p-menu {
   @apply bg-gray-800 border-gray-700;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 .dark .p-menuitem-link {
   @apply text-gray-100 hover:bg-gray-700;
+}
+
+.dark .p-menu .p-menuitem-text {
+  @apply text-gray-100;
+}
+
+.dark .p-menu .p-menuitem-icon {
+  @apply text-gray-400;
+}
+
+.dark .p-menu .p-menuitem.p-highlight {
+  @apply bg-blue-900/30;
+}
+
+.dark .p-menu .p-menuitem.p-highlight .p-menuitem-text {
+  @apply text-blue-300;
+}
+
+.dark .p-menu .p-menuitem.p-highlight .p-menuitem-icon {
+  @apply text-blue-400;
+}
+
+.dark .p-menu .p-submenu-header {
+  @apply bg-gray-800 text-gray-300 border-gray-700;
+}
+
+.dark .p-menu .p-separator {
+  @apply border-gray-700;
 }
 
 .dark .p-rating .p-rating-icon {
@@ -174,6 +203,18 @@
   @apply bg-gray-800 border-gray-700;
 }
 
+.dark .p-toast .p-toast-message-content {
+  @apply text-gray-100;
+}
+
+.dark .p-toast .p-toast-message-content .p-toast-detail {
+  @apply text-gray-300;
+}
+
+.dark .p-toast .p-toast-icon-close {
+  @apply text-gray-400 hover:text-gray-200;
+}
+
 .dark .p-confirmdialog {
   @apply bg-gray-800 border-gray-700;
 }
@@ -184,6 +225,27 @@
 
 .dark .p-confirmdialog .p-dialog-content {
   @apply bg-gray-800 text-gray-100;
+}
+
+/* Profile menu specific dark mode styles */
+.dark .profile-menu {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .profile-menu .p-menuitem-link {
+  @apply text-gray-200 hover:bg-gray-700;
+}
+
+.dark .profile-menu .p-menuitem-icon {
+  @apply text-gray-400;
+}
+
+.dark .profile-menu .p-menuitem-text {
+  @apply text-gray-200;
+}
+
+.dark .profile-menu .p-separator {
+  @apply border-gray-700;
 }
 
 /* Custom styles for better visual hierarchy */

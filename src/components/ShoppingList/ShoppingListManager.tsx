@@ -88,7 +88,7 @@ const ShoppingListManager: React.FC = () => {
   };
 
   const createShoppingListWithIngredients = async (name: string, ingredients: any[], recipeIds: string[] = []) => {
-    if (!user || !newListName.trim()) return;
+    if (!user || !name.trim()) return;
 
     try {
       const { error } = await supabase
