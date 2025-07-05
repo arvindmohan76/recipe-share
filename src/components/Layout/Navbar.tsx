@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
       icon: 'pi pi-cog',
       command: () => {
         navigate('/privacy-settings');
-        setIsProfileMenuVisible(false);
+        profileMenuRef.current?.hide();
       }
     },
     {
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
       icon: 'pi pi-user',
       command: () => {
         // Placeholder for future profile page
-        setIsProfileMenuVisible(false);
+        profileMenuRef.current?.hide();
       }
     },
     {
