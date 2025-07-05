@@ -364,13 +364,30 @@ const RecipeDetail: React.FC = () => {
       <Card className="overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <img
-              src={getRecipeImageUrl(recipe.image_url, 'large')}
-              alt={recipe.title}
-              className="w-full h-80 object-cover rounded-lg"
-              onError={handleImageError}
-              loading="lazy"
-            />
+            <div className="relative">
+              <img
+                src={getRecipeImageUrl(recipe.image_url, 'large')}
+                alt={recipe.title}
+                className="w-full h-80 object-cover rounded-lg"
+                onError={handleImageError}
+                loading="lazy"
+              />
+              {user && (
+                <div className="absolute top-3 right-3">
+                  <Button
+                    icon={isSaved ? 'pi pi-heart-fill' : 'pi pi-heart'}
+                    className={`p-button-rounded p-button-text transition-all duration-200 ${
+                      isSaved 
+                        ? 'text-red-500 hover:text-red-600 bg-white/90 hover:bg-white shadow-md' 
+                        : 'text-white hover:text-red-400 bg-black/30 hover:bg-black/50'
+                    }`}
+                    onClick={handleSaveRecipe}
+                    tooltip={isSaved ? 'Remove from bookmarks' : 'Add to bookmarks'}
+                    tooltipOptions={{ position: 'left' }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex flex-col justify-between">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{recipe.title}</h1>
