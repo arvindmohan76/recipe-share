@@ -153,7 +153,9 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
   const requestMicrophonePermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
+      // Keep track of the stream to properly clean it up later
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop()); // Stop the stream immediately
       setPermissionGranted(true);
       setError('');
       return true;
@@ -190,8 +192,12 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
       setInterimTranscript('');
       finalTranscriptRef.current = '';
       
+     // Add a small delay after permission is granted before starting recognition
+     // This helps browsers properly initialize the audio context
+     setTimeout(() => {
       console.log('Starting speech recognition...');
       recognitionRef.current.start();
+     }, 300);
     } catch (error) {
       console.error('Error starting speech recognition:', error);
       setError('Failed to start speech recognition. Please try again.');
