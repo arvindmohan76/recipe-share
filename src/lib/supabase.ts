@@ -3,7 +3,40 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce'
+  }
+});
+
+// Handle auth state changes and clear invalid tokens
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'TOKEN_REFRESHED') {
+    console.log('Token refreshed successfully');
+  } else if (event === 'SIGNED_OUT') {
+    // Clear any stale data from local storage
+    localStorage.removeItem('supabase.auth.token');
+  }
+});
+
+// Add error handling for token refresh failures
+const originalRequest = supabase.auth.getSession;
+supabase.auth.getSession = async function() {
+  try {
+    return await originalRequest.call(this);
+  } catch (error: any) {
+    if (error?.message?.includes('refresh_token_not_found') || 
+        error?.message?.includes('Invalid Refresh Token')) {
+      // Clear invalid session and sign out
+      await supabase.auth.signOut();
+      console.warn('Invalid refresh token detected, user signed out');
+    }
+    throw error;
+  }
+};
 
 // Helper function to get current user
 export const getCurrentUser = async () => {
