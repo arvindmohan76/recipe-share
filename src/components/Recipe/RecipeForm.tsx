@@ -272,7 +272,7 @@ const RecipeForm: React.FC = () => {
   return (
     <div>
       <Card>
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Recipe</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Create New Recipe</h1>
 
         {error && (
           <Message severity="error" text={error} className="mb-4 w-full" />
@@ -281,7 +281,7 @@ const RecipeForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Recipe Title *
               </label>
               <InputText
@@ -295,7 +295,7 @@ const RecipeForm: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Cuisine
               </label>
               <Dropdown
@@ -312,7 +312,7 @@ const RecipeForm: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Recipe Image
             </label>
             <FileUpload
@@ -333,7 +333,7 @@ const RecipeForm: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
-              <label htmlFor="prepTime" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="prepTime" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Prep Time (min)
               </label>
               <InputNumber
@@ -346,7 +346,7 @@ const RecipeForm: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="cookingTime" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="cookingTime" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Cooking Time (min)
               </label>
               <InputNumber
@@ -386,7 +386,7 @@ const RecipeForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="dietary-tags" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="dietary-tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Dietary Tags
             </label>
             <MultiSelect
@@ -402,7 +402,7 @@ const RecipeForm: React.FC = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-0">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                 Ingredients *
               </label>
               <Button
@@ -451,7 +451,7 @@ const RecipeForm: React.FC = () => {
 
           {/* AI Description Section - Positioned after ingredients for better UX */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-3">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Recipe Description {isOpenAIAvailable && <span className="text-purple-600">(AI-Enhanced)</span>}
             </label>
             <div className="space-y-3">
@@ -511,16 +511,16 @@ const RecipeForm: React.FC = () => {
               </div>
               
               {!isOpenAIAvailable && (
-                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                  <p className="text-xs text-gray-600">
+                <div className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
                     💡 <strong>Pro tip:</strong> Configure OpenAI API key to enable AI-generated 50-word descriptions that make your recipes irresistible
                   </p>
                 </div>
               )}
               
               {isOpenAIAvailable && (!title || !ingredients.some(ing => ing.name.trim())) && (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-xs text-blue-700">
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+                  <p className="text-xs text-blue-700 dark:text-blue-300">
                     ✨ <strong>AI Ready:</strong> Add your recipe title and ingredients to automatically generate a mouth-watering 50-word description
                   </p>
                 </div>
@@ -530,7 +530,7 @@ const RecipeForm: React.FC = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-0">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                 Instructions *
               </label>
               <Button
@@ -542,10 +542,10 @@ const RecipeForm: React.FC = () => {
               />
             </div>
             {steps.map((step, index) => (
-              <div key={index} className="mb-6 p-5 bg-gray-50 border border-gray-200 rounded-lg">
+              <div key={index} className="mb-6 p-5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-700">Step {step.step}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Step {step.step}</span>
                     <Button
                       type="button"
                       icon="pi pi-microphone"
@@ -596,7 +596,7 @@ const RecipeForm: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
+          <div className="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
             <Button
               type="button"
               label="Cancel"
