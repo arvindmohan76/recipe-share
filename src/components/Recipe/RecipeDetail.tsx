@@ -10,6 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { supabase, Recipe, RecipeComment } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
@@ -31,6 +32,7 @@ const RecipeDetail: React.FC = () => {
   const [shareUrl, setShareUrl] = useState('');
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const toast = React.useRef<Toast>(null);
   const moreOptionsMenu = React.useRef<Menu>(null);
 
@@ -215,6 +217,63 @@ const RecipeDetail: React.FC = () => {
     setShowShareDialog(true);
   };
 
+  const handleDeleteRecipe = () => {
+    confirmDialog({
+      message: `Are you sure you want to delete "${recipe?.title}"? This action cannot be undone.`,
+      header: 'Delete Recipe',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClassName: 'p-button-danger',
+      accept: async () => {
+        if (!user || !recipe || recipe.user_id !== user.id) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'You can only delete your own recipes',
+            life: 3000
+          });
+          return;
+        }
+
+        setIsDeleting(true);
+        try {
+          // Delete the recipe from database
+          const { error } = await supabase
+            .from('recipes')
+            .delete()
+            .eq('id', recipe.id)
+            .eq('user_id', user.id); // Extra security check
+
+          if (error) {
+            throw error;
+          }
+
+          toast.current?.show({
+            severity: 'success',
+            summary: 'Recipe Deleted',
+            detail: 'Your recipe has been successfully deleted',
+            life: 3000
+          });
+
+          // Navigate back to recipes list after a short delay
+          setTimeout(() => {
+            navigate('/recipes');
+          }, 1500);
+
+        } catch (err) {
+          console.error('Error deleting recipe:', err);
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Delete Failed',
+            detail: 'Failed to delete recipe. Please try again.',
+            life: 3000
+          });
+        } finally {
+          setIsDeleting(false);
+        }
+      }
+    });
+  };
+
   const moreOptionsItems: MenuItem[] = [
     {
       label: isSaved ? 'Remove Bookmark' : 'Add Bookmark',
@@ -243,6 +302,36 @@ const RecipeDetail: React.FC = () => {
       label: 'Share Recipe',
       icon: 'pi pi-share-alt',
       command: handleShareRecipe
+    },
+    // Add delete option only for recipe owner
+    ...(user && recipe && recipe.user_id === user.id ? [
+      {
+        separator: true
+      },
+      {
+        label: 'Delete Recipe',
+        icon: 'pi pi-trash',
+        command: handleDeleteRecipe,
+        className: 'text-red-600'
+      }
+    ] : [])
+  ];
+
+  // Owner-specific menu items (for the main action buttons)
+  const ownerMenuItems: MenuItem[] = [
+    {
+      label: 'Edit Recipe',
+      icon: 'pi pi-pencil',
+      command: () => navigate(`/recipes/${recipe?.id}/edit`)
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Delete Recipe',
+      icon: 'pi pi-trash',
+      command: handleDeleteRecipe,
+      className: 'text-red-600'
     }
   ];
 
@@ -359,6 +448,7 @@ const RecipeDetail: React.FC = () => {
   return (
     <div className="space-y-8">
       <Toast ref={toast} />
+      <ConfirmDialog />
       
       {/* Recipe Header */}
       <Card className="overflow-hidden">
@@ -445,12 +535,21 @@ const RecipeDetail: React.FC = () => {
               />
               <Rating value={4.5} readOnly stars={5} cancel={false} />
               {user && recipe.user_id === user.id && (
-                <Button
-                  label="Edit"
-                  icon="pi pi-pencil"
-                  className="p-button-outlined flex-shrink-0"
-                  onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
-                />
+                <>
+                  <Button
+                    label="Edit Recipe"
+                    icon="pi pi-pencil"
+                    className="p-button-outlined flex-shrink-0"
+                    onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
+                  />
+                  <Button
+                    label="Delete Recipe"
+                    icon="pi pi-trash"
+                    className="p-button-outlined p-button-danger flex-shrink-0"
+                    onClick={handleDeleteRecipe}
+                    loading={isDeleting}
+                  />
+                </>
               )}
             </div>
 
