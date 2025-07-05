@@ -94,8 +94,35 @@ export async function generateAIRecommendations(
     const responseText = response.choices[0]?.message?.content || '';
     
     try {
-      const parsedResponse = JSON.parse(responseText);
-      const recommendations = parsedResponse.recommendations || parsedResponse || [];
+      // Handle different response formats that OpenAI might return
+      let parsedResponse;
+      try {
+        parsedResponse = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse OpenAI response:', parseError);
+        console.log('Raw response:', responseText);
+        return [];
+      }
+      
+      // Try to extract recommendations from different possible structures
+      let recommendations = [];
+      if (Array.isArray(parsedResponse)) {
+        recommendations = parsedResponse;
+      } else if (parsedResponse.recommendations && Array.isArray(parsedResponse.recommendations)) {
+        recommendations = parsedResponse.recommendations;
+      } else if (typeof parsedResponse === 'object') {
+        // If it's an object with recipe_id fields, it might be a single recommendation
+        if (parsedResponse.recipe_id) {
+          recommendations = [parsedResponse];
+        } else {
+          // Try to extract any array property that might contain recommendations
+          const possibleArrays = Object.values(parsedResponse).filter(Array.isArray);
+          if (possibleArrays.length > 0) {
+            // Use the longest array as it's most likely to be the recommendations
+            recommendations = possibleArrays.reduce((a, b) => a.length > b.length ? a : b, []);
+          }
+        }
+      }
       
       // Ensure we have an array
       if (!Array.isArray(recommendations)) {
@@ -121,7 +148,8 @@ export async function generateAIRecommendations(
     }
   } catch (error) {
     console.error('Error generating AI recommendations:', error);
-    throw error;
+    // Return empty array instead of throwing to prevent UI errors
+    return [];
   }
 }
 

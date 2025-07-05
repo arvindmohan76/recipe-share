@@ -238,7 +238,77 @@ const RecommendedRecipes: React.FC = () => {
         .from('recipes')
         .select('*')
         .eq('is_public', true)
-        .not('id', 'in', `(${savedRecipesList.map((r: any) => r.id).join(',')})`)
+        .limit(50);
+      
+      if (availableError) throw availableError;
+      
+      // Filter out recipes the user has already saved
+      const savedIds = new Set(savedRecipesList.map((r: any) => r.id));
+      const filteredAvailableRecipes = availableRecipes.filter(recipe => 
+        !savedIds.has(recipe.id)
+      );
+      
+      if (!filteredAvailableRecipes || filteredAvailableRecipes.length === 0) {
+        throw new Error('No available recipes to recommend');
+      }
+      
+      // Prepare user preferences for AI
+      const userPreferences = {
+        searchHistory,
+        savedRecipes: savedRecipesList,
+        viewedRecipes: [] // Could add view history if tracked
+      };
+      
+      // Generate AI recommendations
+      const aiRecommendations = await generateAIRecommendations(
+        userPreferences,
+        filteredAvailableRecipes
+      );
+      
+      if (!aiRecommendations || aiRecommendations.length === 0) {
+        setAiError('No AI recommendations could be generated. This might be due to limited user data or API limitations. Try browsing and saving more recipes first.');
+        return;
+      }
+      
+      // Clear existing recommendations
+      await supabase
+        .from('recipe_recommendations')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('recommendation_type', 'in', '(ai_personalized,ai_dietary,ai_cuisine)');
+      
+      // Insert AI recommendations into database
+      const recommendationsToInsert = aiRecommendations.map(rec => ({
+        user_id: user.id,
+        recipe_id: rec.recipe_id,
+        recommendation_type: rec.recommendation_type,
+        confidence_score: rec.confidence_score,
+        reasoning: rec.reasoning,
+        created_at: new Date().toISOString()
+      }));
+      
+      const { error: insertError } = await supabase
+        .from('recipe_recommendations')
+        .insert(recommendationsToInsert);
+      
+      if (insertError) throw insertError;
+      
+      // Reload recommendations
+      await loadRecommendations();
+      
+    } catch (err: any) {
+      console.error('Error generating AI recommendations:', err);
+      if (err.message?.includes('API key')) {
+        setAiError('OpenAI API key is not configured. Please check your environment variables and restart the development server.');
+      } else if (err.message?.includes('No available recipes')) {
+        setAiError('No recipes available for recommendations. Please add some public recipes first.');
+      } else {
+        setAiError(err.message || 'Could not generate AI recommendations');
+      }
+    } finally {
+      setGeneratingAI(false);
+    }
+  };
         .limit(50);
       
       if (availableError) throw availableError;
