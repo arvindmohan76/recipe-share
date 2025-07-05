@@ -13,6 +13,7 @@ import { supabase } from '../../lib/supabase';
 import { uploadRecipeImage } from '../../lib/imageUtils';
 import { useAuth } from '../../context/AuthContext';
 import { generateRecipeSummary, isOpenAIAvailable } from '../../lib/openai';
+import VoiceToText from '../Voice/VoiceToText';
 
 interface Ingredient {
   name: string;
@@ -45,6 +46,7 @@ const RecipeEdit: React.FC = () => {
   const [fetchLoading, setFetchLoading] = useState(true);
   const [generatingDescription, setGeneratingDescription] = useState(false);
   const [hasGeneratedDescription, setHasGeneratedDescription] = useState(false);
+  const [showVoiceInput, setShowVoiceInput] = useState<number | null>(null);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -211,6 +213,17 @@ const RecipeEdit: React.FC = () => {
     const newSteps = [...steps];
     newSteps[index] = { ...newSteps[index], [field]: value };
     setSteps(newSteps);
+  };
+
+  const handleVoiceText = (stepIndex: number, voiceText: string) => {
+    const newSteps = [...steps];
+    // Append voice text to existing instruction or replace if empty
+    const currentInstruction = newSteps[stepIndex].instruction;
+    newSteps[stepIndex].instruction = currentInstruction 
+      ? `${currentInstruction} ${voiceText}` 
+      : voiceText;
+    setSteps(newSteps);
+    setShowVoiceInput(null); // Hide voice input after receiving text
   };
 
   // Auto-generate description when user has added enough content (only if no description exists)
@@ -619,19 +632,44 @@ const RecipeEdit: React.FC = () => {
             {steps.map((step, index) => (
               <div key={index} className="mb-6 p-5 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="font-medium text-gray-700">Step {step.step}</span>
-                  <Button
-                    type="button"
-                    icon="pi pi-trash"
-                    onClick={() => removeStep(index)}
-                    className="p-button-text p-button-danger p-button-sm"
-                    disabled={steps.length === 1}
-                  />
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-gray-700">Step {step.step}</span>
+                    <Button
+                      type="button"
+                      icon="pi pi-microphone"
+                      onClick={() => setShowVoiceInput(showVoiceInput === index ? null : index)}
+                      className={`p-button-text p-button-sm ${showVoiceInput === index ? 'p-button-success' : ''}`}
+                      tooltip="Add instruction using voice"
+                      tooltipOptions={{ position: 'top' }}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      icon="pi pi-trash"
+                      onClick={() => removeStep(index)}
+                      className="p-button-text p-button-danger p-button-sm"
+                      disabled={steps.length === 1}
+                    />
+                  </div>
                 </div>
+                
+                {/* Voice Input Component */}
+                {showVoiceInput === index && (
+                  <div className="mb-4">
+                    <VoiceToText
+                      onTextReceived={(text) => handleVoiceText(index, text)}
+                      placeholder="Speak your cooking instruction clearly..."
+                      buttonLabel="Record Step"
+                      className="mb-3"
+                    />
+                  </div>
+                )}
+                
                 <InputTextarea
                   value={step.instruction}
                   onChange={(e) => updateStep(index, 'instruction', e.target.value)}
-                  placeholder="Step instruction"
+                  placeholder="Step instruction (type or use voice input above)"
                   rows={2}
                   className="w-full mb-3"
                 />
@@ -665,7 +703,7 @@ const RecipeEdit: React.FC = () => {
 
         {/* AI Description Help */}
         {isOpenAIAvailable && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+          <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <i className="pi pi-sparkles text-white text-sm"></i>
@@ -686,6 +724,27 @@ const RecipeEdit: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Voice Input Help */}
+        <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+          <div className="flex items-start space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <i className="pi pi-microphone text-white text-sm"></i>
+            </div>
+            <div>
+              <h4 className="font-medium text-blue-800 mb-2">🎤 Voice-to-Text Instructions</h4>
+              <p className="text-sm text-blue-700 mb-2">
+                Speed up recipe editing by speaking your cooking instructions! Click the microphone icon next to any step to start voice input.
+              </p>
+              <div className="text-xs text-blue-600 space-y-1">
+                <p>• <strong>Natural speech:</strong> Speak as if explaining to a friend</p>
+                <p>• <strong>Clear pronunciation:</strong> Speak clearly for better accuracy</p>
+                <p>• <strong>Quiet environment:</strong> Reduce background noise for best results</p>
+                <p>• <strong>Edit after:</strong> Voice text can be edited and refined manually</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </Card>
     </div>
   );
