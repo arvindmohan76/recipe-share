@@ -471,28 +471,29 @@
 }
 
 .p-checkbox .p-checkbox-box {
-  @apply border-2 border-gray-400 rounded bg-white;
+  @apply border-2 border-gray-500 rounded bg-white shadow-sm;
   width: 20px !important;
   height: 20px !important;
   transition: all 0.2s ease !important;
 }
 
 .p-checkbox .p-checkbox-box:hover {
-  @apply border-blue-500 bg-blue-50;
+  @apply border-blue-500 bg-blue-50 shadow-md;
 }
 
 .p-checkbox .p-checkbox-box.p-highlight {
-  @apply bg-blue-500 border-blue-500;
+  @apply bg-blue-500 border-blue-500 shadow-md;
 }
 
 .p-checkbox .p-checkbox-box.p-highlight:hover {
-  @apply bg-blue-600 border-blue-600;
+  @apply bg-blue-600 border-blue-600 shadow-lg;
 }
 
 .p-checkbox .p-checkbox-box .p-checkbox-icon {
   color: white !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: bold !important;
+  line-height: 1 !important;
 }
 
 .p-checkbox .p-checkbox-box:focus {
@@ -503,23 +504,34 @@
 /* Shopping list specific checkbox styling */
 .shopping-list-item .p-checkbox {
   margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .shopping-list-item .p-checkbox .p-checkbox-box {
-  @apply border-2 border-gray-500 bg-white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  @apply border-2 border-gray-600 bg-white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  width: 22px !important;
+  height: 22px !important;
 }
 
 .shopping-list-item .p-checkbox .p-checkbox-box:hover {
-  @apply border-green-500 bg-green-50;
+  @apply border-green-500 bg-green-50 shadow-lg;
+  transform: scale(1.05);
 }
 
 .shopping-list-item .p-checkbox .p-checkbox-box.p-highlight {
-  @apply bg-green-500 border-green-500;
+  @apply bg-green-500 border-green-500 shadow-lg;
+  transform: scale(1.02);
 }
 
 .shopping-list-item .p-checkbox .p-checkbox-box.p-highlight:hover {
-  @apply bg-green-600 border-green-600;
+  @apply bg-green-600 border-green-600 shadow-xl;
+  transform: scale(1.05);
+}
+
+.shopping-list-item .p-checkbox .p-checkbox-box .p-checkbox-icon {
+  font-size: 16px !important;
+  font-weight: 900 !important;
 }
 
 /* Recipe Card Improvements for Equal Heights */

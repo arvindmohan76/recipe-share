@@ -191,18 +191,18 @@ const ShoppingListManager: React.FC = () => {
 
         <div className="space-y-2">
           {list.ingredients.map((item, index) => (
-            <div key={index} className="shopping-list-item flex items-center gap-3 p-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
+            <div key={index} className="shopping-list-item flex items-center gap-4 p-4 border-2 border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-all duration-200 hover:shadow-md">
               <Checkbox
                 checked={item.checked}
                 onChange={() => toggleItemChecked(list, index)}
-                className="flex-shrink-0"
+                className="flex-shrink-0 transform transition-transform duration-200"
               />
-              <span className={`flex-1 ${item.checked ? 'line-through text-gray-500' : ''}`}>
+              <span className={`flex-1 font-medium transition-all duration-200 ${item.checked ? 'line-through text-gray-500' : 'text-gray-800'}`}>
                 {item.amount} {item.unit} {item.name}
               </span>
               <Button
                 icon="pi pi-times"
-                className="p-button-text p-button-sm p-button-danger"
+                className="p-button-text p-button-sm p-button-danger flex-shrink-0"
                 onClick={() => removeItemFromList(list, index)}
               />
             </div>

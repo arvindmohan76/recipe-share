@@ -274,7 +274,7 @@ const RecipeList: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Discover Recipes</h1>
         <div className="text-sm text-gray-600">
