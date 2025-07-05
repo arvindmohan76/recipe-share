@@ -21,8 +21,10 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
   const [interimTranscript, setInterimTranscript] = useState('');
+  const [permissionGranted, setPermissionGranted] = useState(false);
   
   const recognitionRef = useRef<any>(null);
+  const finalTranscriptRef = useRef('');
 
   useEffect(() => {
     // Check if Web Speech API is supported
@@ -30,97 +32,182 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
     
     if (SpeechRecognition) {
       setIsSupported(true);
+      console.log('Speech Recognition API is supported');
+      
+      // Check if we're on HTTPS or localhost (required for microphone access)
+      const isSecureContext = window.isSecureContext || window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+      if (!isSecureContext) {
+        setError('Voice input requires HTTPS or localhost for security reasons.');
+        return;
+      }
+
       const recognition = new SpeechRecognition();
       
-      recognition.continuous = true;
+      // Configure recognition settings
+      recognition.continuous = false; // Changed to false for better control
       recognition.interimResults = true;
       recognition.lang = 'en-US';
       recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
+        console.log('Speech recognition started');
         setIsListening(true);
         setError('');
+        setPermissionGranted(true);
+        finalTranscriptRef.current = '';
         setTranscript('');
         setInterimTranscript('');
       };
 
       recognition.onresult = (event: any) => {
-        let finalTranscript = '';
+        console.log('Speech recognition result received', event);
+        let finalText = '';
         let interimText = '';
 
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i];
+          const transcript = result[0].transcript;
+          
           if (result.isFinal) {
-            finalTranscript += result[0].transcript;
+            finalText += transcript;
+            console.log('Final transcript:', transcript);
           } else {
-            interimText += result[0].transcript;
+            interimText += transcript;
+            console.log('Interim transcript:', transcript);
           }
         }
 
-        if (finalTranscript) {
-          setTranscript(prev => prev + finalTranscript);
-          setInterimTranscript('');
-        } else {
-          setInterimTranscript(interimText);
+        if (finalText) {
+          finalTranscriptRef.current += finalText;
+          setTranscript(finalTranscriptRef.current);
         }
+        
+        setInterimTranscript(interimText);
       };
 
       recognition.onend = () => {
+        console.log('Speech recognition ended');
         setIsListening(false);
         setInterimTranscript('');
         
         // Send the final transcript to parent component
-        if (transcript.trim()) {
-          onTextReceived(transcript.trim());
+        const finalText = finalTranscriptRef.current.trim();
+        if (finalText) {
+          console.log('Sending final transcript to parent:', finalText);
+          onTextReceived(finalText);
           setTranscript('');
+          finalTranscriptRef.current = '';
         }
       };
 
       recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        console.error('Speech recognition error:', event.error, event);
         setIsListening(false);
         setInterimTranscript('');
         
         switch (event.error) {
           case 'no-speech':
-            setError('No speech detected. Please try again.');
+            setError('No speech detected. Please try speaking again.');
             break;
           case 'audio-capture':
-            setError('Microphone not accessible. Please check permissions.');
+            setError('Microphone not accessible. Please check your microphone connection.');
             break;
           case 'not-allowed':
-            setError('Microphone permission denied. Please allow microphone access.');
+            setError('Microphone permission denied. Please allow microphone access and try again.');
+            setPermissionGranted(false);
             break;
           case 'network':
-            setError('Network error. Please check your connection.');
+            setError('Network error occurred. Please check your internet connection.');
+            break;
+          case 'service-not-allowed':
+            setError('Speech recognition service not allowed. Please try again.');
+            break;
+          case 'bad-grammar':
+            setError('Speech recognition grammar error. Please try again.');
+            break;
+          case 'language-not-supported':
+            setError('Language not supported. Please try again.');
             break;
           default:
-            setError('Speech recognition error. Please try again.');
+            setError(`Speech recognition error: ${event.error}. Please try again.`);
         }
       };
 
       recognitionRef.current = recognition;
+    } else {
+      console.log('Speech Recognition API not supported');
+      setIsSupported(false);
     }
 
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
+      if (recognitionRef.current && isListening) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          console.log('Error stopping recognition:', e);
+        }
       }
     };
-  }, [transcript, onTextReceived]);
+  }, [onTextReceived]);
 
-  const startListening = () => {
-    if (recognitionRef.current && !isListening) {
+  const requestMicrophonePermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
+      setPermissionGranted(true);
+      setError('');
+      return true;
+    } catch (err) {
+      console.error('Microphone permission error:', err);
+      setError('Microphone permission denied. Please allow microphone access in your browser settings.');
+      setPermissionGranted(false);
+      return false;
+    }
+  };
+
+  const startListening = async () => {
+    if (!recognitionRef.current) {
+      setError('Speech recognition not available.');
+      return;
+    }
+
+    if (isListening) {
+      console.log('Already listening, ignoring start request');
+      return;
+    }
+
+    // Request microphone permission first
+    if (!permissionGranted) {
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        return;
+      }
+    }
+
+    try {
       setError('');
       setTranscript('');
       setInterimTranscript('');
+      finalTranscriptRef.current = '';
+      
+      console.log('Starting speech recognition...');
       recognitionRef.current.start();
+    } catch (error) {
+      console.error('Error starting speech recognition:', error);
+      setError('Failed to start speech recognition. Please try again.');
+      setIsListening(false);
     }
   };
 
   const stopListening = () => {
     if (recognitionRef.current && isListening) {
-      recognitionRef.current.stop();
+      try {
+        console.log('Stopping speech recognition...');
+        recognitionRef.current.stop();
+      } catch (error) {
+        console.error('Error stopping speech recognition:', error);
+        setIsListening(false);
+      }
     }
   };
 
@@ -128,13 +215,14 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
     setTranscript('');
     setInterimTranscript('');
     setError('');
+    finalTranscriptRef.current = '';
   };
 
   if (!isSupported) {
     return (
       <Message 
-        severity="info" 
-        text="Voice recognition is not supported in this browser. Try Chrome or Edge for voice features." 
+        severity="warn" 
+        text="Voice recognition is not supported in this browser. Please use Chrome, Edge, or Safari for voice features." 
         className="w-full"
       />
     );
@@ -160,6 +248,18 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
             </div>
           </div>
 
+          {/* Permission Status */}
+          {!permissionGranted && !error && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <div className="flex items-center gap-2">
+                <i className="pi pi-exclamation-triangle text-yellow-600"></i>
+                <span className="text-sm text-yellow-800">
+                  Microphone permission required for voice input
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* Controls */}
           <div className="flex items-center gap-3">
             <Button
@@ -167,6 +267,7 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
               icon={isListening ? 'pi pi-stop' : 'pi pi-microphone'}
               className={`${isListening ? 'p-button-danger' : 'p-button-success'}`}
               onClick={isListening ? stopListening : startListening}
+              disabled={!isSupported}
             />
             
             {(transcript || interimTranscript) && (
@@ -175,6 +276,15 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
                 icon="pi pi-times"
                 className="p-button-outlined p-button-secondary"
                 onClick={clearTranscript}
+              />
+            )}
+
+            {!permissionGranted && !isListening && (
+              <Button
+                label="Grant Permission"
+                icon="pi pi-shield"
+                className="p-button-outlined p-button-info"
+                onClick={requestMicrophonePermission}
               />
             )}
           </div>
@@ -186,7 +296,7 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
               <div className="text-gray-800">
                 <span className="font-medium">{transcript}</span>
                 {interimTranscript && (
-                  <span className="text-gray-500 italic">{interimTranscript}</span>
+                  <span className="text-gray-500 italic"> {interimTranscript}</span>
                 )}
               </div>
             </div>
@@ -199,6 +309,18 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
             </div>
           )}
 
+          {/* Listening indicator */}
+          {isListening && !displayText && (
+            <div className="bg-white p-4 rounded-lg border border-gray-200 min-h-[80px] flex items-center justify-center">
+              <div className="text-center">
+                <div className="flex justify-center mb-2">
+                  <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+                </div>
+                <p className="text-gray-600">Listening... Please speak now</p>
+              </div>
+            </div>
+          )}
+
           {/* Error Display */}
           {error && (
             <Message severity="error" text={error} className="w-full" />
@@ -208,11 +330,17 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
           <div className="text-xs text-gray-600 space-y-1">
             <p>💡 <strong>Tips for better recognition:</strong></p>
             <ul className="list-disc list-inside space-y-1 ml-4">
+              <li>Click "Start Recording" and wait for the red indicator</li>
               <li>Speak clearly and at a normal pace</li>
               <li>Ensure you're in a quiet environment</li>
               <li>Allow microphone access when prompted</li>
-              <li>The text will be added when you stop recording</li>
+              <li>The text will be added when recording stops</li>
             </ul>
+          </div>
+
+          {/* Browser compatibility info */}
+          <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
+            <strong>Browser Support:</strong> Works best in Chrome and Edge. Limited support in Firefox and Safari.
           </div>
         </div>
       </Card>
