@@ -13,9 +13,182 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark mode styles for PrimeReact components */
+.dark .p-card {
+  @apply bg-gray-800 border-gray-700 text-gray-100;
+}
+
+.dark .p-card .p-card-body {
+  @apply text-gray-100;
+}
+
+.dark .p-card .p-card-content {
+  @apply text-gray-100;
+}
+
+.dark .p-inputtext {
+  @apply bg-gray-700 border-gray-600 text-gray-100;
+}
+
+.dark .p-inputtext:focus {
+  @apply border-blue-400 ring-blue-200;
+}
+
+.dark .p-inputtextarea {
+  @apply bg-gray-700 border-gray-600 text-gray-100;
+}
+
+.dark .p-inputtextarea:focus {
+  @apply border-blue-400 ring-blue-200;
+}
+
+.dark .p-dropdown {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-dropdown .p-dropdown-label {
+  @apply text-gray-100;
+}
+
+.dark .p-dropdown-panel {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-dropdown-item {
+  @apply text-gray-100 hover:bg-gray-600;
+}
+
+.dark .p-multiselect {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-multiselect .p-multiselect-label {
+  @apply text-gray-100;
+}
+
+.dark .p-multiselect-panel {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-multiselect-item {
+  @apply text-gray-100 hover:bg-gray-600;
+}
+
+.dark .p-button {
+  @apply border-gray-600;
+}
+
+.dark .p-button-outlined {
+  @apply border-gray-500 text-gray-300 hover:bg-gray-700;
+}
+
+.dark .p-button-text {
+  @apply text-gray-300 hover:bg-gray-700;
+}
+
+.dark .p-message {
+  @apply bg-gray-700 border-gray-600 text-gray-100;
+}
+
+.dark .p-dialog {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .p-dialog .p-dialog-header {
+  @apply bg-gray-800 border-gray-700 text-gray-100;
+}
+
+.dark .p-dialog .p-dialog-content {
+  @apply bg-gray-800 text-gray-100;
+}
+
+.dark .p-sidebar {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .p-menu {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .p-menuitem-link {
+  @apply text-gray-100 hover:bg-gray-700;
+}
+
+.dark .p-rating .p-rating-icon {
+  @apply text-gray-400;
+}
+
+.dark .p-rating .p-rating-icon.p-rating-icon-active {
+  @apply text-yellow-400;
+}
+
+.dark .p-tag {
+  @apply bg-gray-700 text-gray-200;
+}
+
+.dark .p-fileupload {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-fileupload .p-fileupload-buttonbar {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-checkbox .p-checkbox-box {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-checkbox .p-checkbox-box.p-highlight {
+  @apply bg-blue-600 border-blue-600;
+}
+
+.dark .p-slider {
+  @apply bg-gray-600;
+}
+
+.dark .p-slider .p-slider-range {
+  @apply bg-blue-500;
+}
+
+.dark .p-slider .p-slider-handle {
+  @apply bg-white border-blue-500;
+}
+
+.dark .p-autocomplete {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-autocomplete .p-autocomplete-input {
+  @apply bg-gray-700 text-gray-100;
+}
+
+.dark .p-autocomplete-panel {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .p-autocomplete-item {
+  @apply text-gray-100 hover:bg-gray-600;
+}
+
+.dark .p-toast .p-toast-message {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .p-confirmdialog {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .p-confirmdialog .p-dialog-header {
+  @apply bg-gray-800 border-gray-700 text-gray-100;
+}
+
+.dark .p-confirmdialog .p-dialog-content {
+  @apply bg-gray-800 text-gray-100;
+}
+
 /* Custom styles for better visual hierarchy */
 .custom-carousel .p-carousel-content {
-  @apply bg-white rounded-lg shadow-sm;
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm;
 }
 
 .custom-carousel .p-carousel-indicators .p-carousel-indicator {
@@ -28,7 +201,7 @@
 
 /* PrimeReact overrides for better integration */
 .p-card {
-  @apply shadow-md hover:shadow-lg transition-shadow duration-200;
+  @apply shadow-md hover:shadow-lg transition-shadow duration-200 dark:shadow-gray-900/50;
 }
 
 /* Button spacing and styling improvements */
@@ -54,27 +227,27 @@
 
 /* Input field styling */
 .p-inputtext {
-  @apply border border-gray-200 rounded-md p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-100 dark:focus:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-inputtextarea {
-  @apply border border-gray-200 rounded-md p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-100 dark:focus:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-dropdown {
-  @apply border border-gray-200 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 dark:focus-within:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-multiselect {
-  @apply border border-gray-200 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 dark:focus-within:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-inputnumber {
-  @apply border border-gray-200 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 dark:focus-within:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-fileupload {
-  @apply border border-gray-200 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 transition-all duration-200;
+  @apply border border-gray-200 dark:border-gray-600 rounded-md focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 dark:focus-within:ring-blue-400/20 transition-all duration-200;
 }
 
 .p-button-outlined {
@@ -82,7 +255,7 @@
 }
 
 .p-menubar {
-  @apply bg-white border-b border-gray-200;
+  @apply bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700;
 }
 
 .p-menubar .p-menubar-start {
@@ -95,7 +268,7 @@
 .p-dropdown:focus-within,
 .p-multiselect:focus-within,
 .p-inputnumber:focus-within {
-  @apply ring-2 ring-blue-200 ring-opacity-50 border-blue-500 outline-none;
+  @apply ring-2 ring-blue-200 dark:ring-blue-400/20 ring-opacity-50 border-blue-500 outline-none;
 }
 
 /* Card spacing improvements */
@@ -113,15 +286,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-gray-400 dark:bg-gray-500;
 }
 
 /* Responsive design utilities */
@@ -147,12 +320,12 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white !important;
+  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:border-emerald-600 !important;
   font-weight: 400 !important;
 }
 
 .p-button-success.p-button-outlined {
-  @apply bg-transparent hover:bg-emerald-50 border-emerald-500 text-emerald-600 !important;
+  @apply bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border-emerald-500 text-emerald-600 dark:text-emerald-400 !important;
   font-weight: 400 !important;
 }
 
@@ -168,12 +341,12 @@
 }
 
 .p-button-danger {
-  @apply bg-rose-500 hover:bg-rose-600 border-rose-500 text-white !important;
+  @apply bg-rose-500 hover:bg-rose-600 border-rose-500 text-white dark:bg-rose-600 dark:hover:bg-rose-700 dark:border-rose-600 !important;
   font-weight: 400 !important;
 }
 
 .p-button-danger.p-button-outlined {
-  @apply bg-transparent hover:bg-rose-50 border-rose-500 text-rose-600 !important;
+  @apply bg-transparent hover:bg-rose-50 dark:hover:bg-rose-900/20 border-rose-500 text-rose-600 dark:text-rose-400 !important;
   font-weight: 400 !important;
 }
 
@@ -223,18 +396,18 @@
 
 /* Secondary button improvements */
 .p-button-secondary {
-  @apply bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-600 px-3 py-2 !important;
+  @apply bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 .p-button-outlined {
-  @apply bg-transparent hover:bg-gray-50 border-gray-200 text-gray-500 px-3 py-2 !important;
+  @apply bg-transparent hover:bg-gray-50 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 
 /* Primary button improvements */
 .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-success):not(.p-button-danger):not(.p-button-warning):not(.p-button-info):not(.p-button-secondary) {
-  @apply bg-blue-500 hover:bg-blue-600 border-blue-500 text-white px-3 py-2 !important;
+  @apply bg-blue-500 hover:bg-blue-600 border-blue-500 text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:border-blue-600 px-3 py-2 !important;
   font-weight: 400 !important;
 }
 

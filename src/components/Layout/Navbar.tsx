@@ -5,10 +5,12 @@ import { Sidebar } from 'primereact/sidebar';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const navigate = useNavigate();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
@@ -116,6 +118,15 @@ const Navbar: React.FC = () => {
           
           {/* Right Side Actions */}
           <div className="flex items-center gap-3">
+            {/* Dark Mode Toggle */}
+            <Button
+              icon={isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}
+              className="p-button-text p-button-rounded"
+              onClick={toggleDarkMode}
+              tooltip={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              tooltipOptions={{ position: 'bottom' }}
+            />
+            
             {user ? (
               <>
                 {/* Create Recipe Button */}
@@ -200,11 +211,23 @@ const Navbar: React.FC = () => {
           </div>
           
           <div className="space-y-2">
+            {/* Dark Mode Toggle for Mobile */}
+            <button
+              onClick={() => {
+                toggleDarkMode();
+                setSidebarVisible(false);
+              }}
+              className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+            >
+              <i className={`${isDarkMode ? 'pi pi-sun' : 'pi pi-moon'} text-lg`}></i>
+              <span className="font-medium">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+            </button>
+            
             {navigationItems.map((item, index) => (
               <button
                 key={index}
                 onClick={() => handleNavClick(item.command)}
-                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
               >
                 <i className={`${item.icon} text-lg`}></i>
                 <span className="font-medium">{item.label}</span>
@@ -218,14 +241,14 @@ const Navbar: React.FC = () => {
                 onClick={() => handleNavClick(() => {
                   navigate('/privacy-settings');
                 })}
-                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
               >
                 <i className="pi pi-cog text-lg"></i>
                 <span className="font-medium">Settings</span>
               </button>
               <button
                 onClick={() => handleNavClick(handleSignOut)}
-                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                className="flex items-center gap-3 w-full px-4 py-3 text-left text-gray-700 dark:text-gray-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
               >
                 <i className="pi pi-sign-out text-lg"></i>
                 <span className="font-medium">Sign Out</span>

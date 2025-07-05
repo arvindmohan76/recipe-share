@@ -168,7 +168,7 @@ const Home: React.FC = () => {
   };
 
   const heroSection = (
-    <div className="bg-gradient-to-r from-orange-400 to-red-500 text-white p-5 rounded-lg mb-6">
+    <div className="bg-gradient-to-r from-orange-400 to-red-500 dark:from-orange-500 dark:to-red-600 text-white p-5 rounded-lg mb-6">
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-3xl md:text-4xl font-bold mb-3">Welcome to RecipeHub</h1>
         <p className="text-base md:text-lg mb-4">
@@ -226,7 +226,7 @@ const Home: React.FC = () => {
       {/* Featured Recipes */}
       <section>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Featured Recipes</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Featured Recipes</h2>
           <div className="text-sm text-gray-600">
             Showing {featuredRecipes.length} recipes
           </div>
@@ -272,7 +272,7 @@ const Home: React.FC = () => {
       {/* Trending Recipes */}
       {trendingRecipes.length > 0 && (
         <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Trending Now</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Trending Now</h2>
           <Carousel
             value={trendingRecipes}
             numVisible={3}
@@ -297,7 +297,7 @@ const Home: React.FC = () => {
 
       {/* Recipe Categories - More recipe-focused */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Browse by Category</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Browse by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {[
             { name: 'Italian', emoji: '🍝', color: 'bg-red-100 text-red-700' },
@@ -310,7 +310,7 @@ const Home: React.FC = () => {
             <button
               key={category.name}
               onClick={() => navigate(`/recipes?cuisine=${category.name}`)}
-              className={`${category.color} p-4 rounded-lg text-center hover:shadow-md transition-all duration-200 hover:scale-105`}
+              className={`${category.color} dark:bg-opacity-80 p-4 rounded-lg text-center hover:shadow-md transition-all duration-200 hover:scale-105`}
             >
               <div className="text-2xl mb-2">{category.emoji}</div>
               <div className="font-medium text-sm">{category.name}</div>
@@ -319,12 +319,12 @@ const Home: React.FC = () => {
         </div>
       </section>
       {/* Call to Action */}
-      <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200">
+      <Card className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-2 border-orange-200 dark:border-orange-700">
         <div className="text-center p-6">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
             Ready to Start Cooking?
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             Join thousands of home cooks sharing their favorite recipes and discovering new ones.
           </p>
           {!user ? (
@@ -363,10 +363,10 @@ const Home: React.FC = () => {
 
       {/* Subtle Features Footer - Much more subtle */}
       <div className="text-center py-8 border-t border-gray-200">
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
           Enhanced with smart features to make cooking easier
         </p>
-        <div className="flex justify-center items-center gap-8 text-xs text-gray-400">
+        <div className="flex justify-center items-center gap-8 text-xs text-gray-400 dark:text-gray-500">
           <span className="flex items-center gap-1">
             <i className="pi pi-microphone"></i>
             Voice commands
