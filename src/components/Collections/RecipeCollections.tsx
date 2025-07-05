@@ -392,7 +392,7 @@ const RecipeCollections: React.FC = () => {
               className="p-button-secondary"
             />
             <Button
-              label={editingCollection ? 'Update' : 'Create'}
+              label="Save"
               onClick={handleSubmit}
               disabled={!collectionName.trim()}
               className="p-button-success p-button-outlined"
