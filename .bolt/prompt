@@ -1,5 +1,7 @@
-For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production.
+For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production. I need a consistent look on all pages that are created. Consistency in container layouts, Button sizes and colors. Keep primary buttons and secondary buttons consistent across all pages.
 
 By default, this template supports JSX syntax with Tailwind CSS classes, React hooks, PrimeReact for components and Lucide React for icons. Do not install other packages for UI themes, icons, etc unless absolutely necessary or I request them.
 
 Use icons from lucide-react for logos.
+
+Profile button to have the menu style which has all user related settings including logout.
