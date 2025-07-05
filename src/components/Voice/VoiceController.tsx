@@ -59,7 +59,11 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
       };
 
       recognitionInstance.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        if (event.error === 'aborted') {
+          console.info('Speech recognition was aborted (this is normal when stopping)');
+        } else {
+          console.error('Speech recognition error:', event.error);
+        }
         setIsListening(false);
       };
 
