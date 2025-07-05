@@ -11,13 +11,13 @@ const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+  const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
   const profileMenuRef = React.useRef<Menu>(null);
 
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
-    setProfileMenuVisible(false);
+    setIsProfileMenuVisible(false);
   };
 
   const navigationItems = [
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
       icon: 'pi pi-cog',
       command: () => {
         navigate('/privacy-settings');
-        setProfileMenuVisible(false);
+        setIsProfileMenuVisible(false);
       }
     },
     {
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
       icon: 'pi pi-user',
       command: () => {
         // Placeholder for future profile page
-        setProfileMenuVisible(false);
+        setIsProfileMenuVisible(false);
       }
     },
     {
@@ -139,13 +139,15 @@ const Navbar: React.FC = () => {
                     size="normal"
                     onClick={(e) => {
                       e.preventDefault();
-                      profileMenuRef.current?.toggle(e);
+                      setIsProfileMenuVisible(!isProfileMenuVisible);
                     }}
                   />
                   <Menu
                     ref={profileMenuRef}
                     model={profileMenuItems}
                     popup
+                    visible={isProfileMenuVisible}
+                    onHide={() => setIsProfileMenuVisible(false)}
                     className="profile-menu"
                   />
                 </div>
