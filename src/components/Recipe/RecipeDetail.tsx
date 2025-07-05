@@ -105,10 +105,9 @@ const RecipeDetail: React.FC = () => {
         .from('saved_recipes')
         .select('id')
         .eq('user_id', user.id)
-        .eq('recipe_id', id)
-        .single();
+        .eq('recipe_id', id);
 
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         setIsSaved(true);
       }
     } catch (err) {
