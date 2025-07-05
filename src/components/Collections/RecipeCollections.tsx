@@ -346,7 +346,7 @@ const RecipeCollections: React.FC = () => {
           label="New"
           icon="pi pi-plus"
           onClick={openCreateDialog}
-          className="p-button-success"
+          className="p-button-success p-button-outlined"
         />
       </div>
 
