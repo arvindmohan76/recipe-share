@@ -212,6 +212,10 @@ const RecipeDetail: React.FC = () => {
     window.print();
   };
 
+  const handleShareRecipe = () => {
+    setShowShareDialog(true);
+  };
+
   const moreOptionsItems: MenuItem[] = [
     {
       label: isSaved ? 'Remove Bookmark' : 'Add Bookmark',
@@ -295,10 +299,6 @@ const RecipeDetail: React.FC = () => {
         speechSynthesis.speak(utterance);
       }
     }
-  };
-
-  const handleShareRecipe = () => {
-    setShowShareDialog(true);
   };
 
   const copyToClipboard = async () => {
