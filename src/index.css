@@ -760,35 +760,74 @@
   height: 20px !important;
 }
 
-.p-checkbox .p-checkbox-box {
+.p-checkbox .p-checkbox-box,
+.p-checkbox-custom .p-checkbox-box {
   @apply border-2 border-gray-500 rounded bg-white shadow-sm;
   width: 20px !important;
   height: 20px !important;
   transition: all 0.2s ease !important;
+  background-color: white !important;
+  border-color: #6b7280 !important;
 }
 
-.p-checkbox .p-checkbox-box:hover {
+.p-checkbox .p-checkbox-box:hover,
+.p-checkbox-custom .p-checkbox-box:hover {
   @apply border-blue-500 bg-blue-50 shadow-md;
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
 }
 
-.p-checkbox .p-checkbox-box.p-highlight {
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox-custom .p-checkbox-box.p-highlight {
   @apply bg-blue-500 border-blue-500 shadow-md;
+  background-color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
 }
 
-.p-checkbox .p-checkbox-box.p-highlight:hover {
+.p-checkbox .p-checkbox-box.p-highlight:hover,
+.p-checkbox-custom .p-checkbox-box.p-highlight:hover {
   @apply bg-blue-600 border-blue-600 shadow-lg;
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
 }
 
-.p-checkbox .p-checkbox-box .p-checkbox-icon {
+.p-checkbox .p-checkbox-box .p-checkbox-icon,
+.p-checkbox-custom .p-checkbox-box .p-checkbox-icon {
   color: white !important;
   font-size: 14px !important;
   font-weight: bold !important;
   line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.p-checkbox .p-checkbox-box:focus {
+.p-checkbox .p-checkbox-box:focus,
+.p-checkbox-custom .p-checkbox-box:focus {
   @apply ring-2 ring-blue-200 ring-opacity-50 border-blue-500 outline-none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Dark mode checkbox styles */
+.dark .p-checkbox .p-checkbox-box,
+.dark .p-checkbox-custom .p-checkbox-box {
+  @apply bg-gray-700 border-gray-600;
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .p-checkbox .p-checkbox-box:hover,
+.dark .p-checkbox-custom .p-checkbox-box:hover {
+  @apply border-blue-400 bg-blue-900/20;
+  border-color: #60a5fa !important;
+  background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark .p-checkbox .p-checkbox-box.p-highlight,
+.dark .p-checkbox-custom .p-checkbox-box.p-highlight {
+  @apply bg-blue-600 border-blue-600;
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
 }
 
 /* Shopping list specific checkbox styling */
@@ -797,29 +836,42 @@
   flex-shrink: 0;
 }
 
-.shopping-list-item .p-checkbox .p-checkbox-box {
+.shopping-list-item .p-checkbox .p-checkbox-box,
+.shopping-list-item .p-checkbox-custom .p-checkbox-box {
   @apply border-2 border-gray-600 bg-white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   width: 22px !important;
   height: 22px !important;
+  background-color: white !important;
+  border-color: #4b5563 !important;
 }
 
-.shopping-list-item .p-checkbox .p-checkbox-box:hover {
+.shopping-list-item .p-checkbox .p-checkbox-box:hover,
+.shopping-list-item .p-checkbox-custom .p-checkbox-box:hover {
   @apply border-green-500 bg-green-50 shadow-lg;
   transform: scale(1.05);
+  border-color: #10b981 !important;
+  background-color: #f0fdf4 !important;
 }
 
-.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight {
+.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight,
+.shopping-list-item .p-checkbox-custom .p-checkbox-box.p-highlight {
   @apply bg-green-500 border-green-500 shadow-lg;
   transform: scale(1.02);
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
 }
 
-.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight:hover {
+.shopping-list-item .p-checkbox .p-checkbox-box.p-highlight:hover,
+.shopping-list-item .p-checkbox-custom .p-checkbox-box.p-highlight:hover {
   @apply bg-green-600 border-green-600 shadow-xl;
   transform: scale(1.05);
+  background-color: #059669 !important;
+  border-color: #059669 !important;
 }
 
-.shopping-list-item .p-checkbox .p-checkbox-box .p-checkbox-icon {
+.shopping-list-item .p-checkbox .p-checkbox-box .p-checkbox-icon,
+.shopping-list-item .p-checkbox-custom .p-checkbox-box .p-checkbox-icon {
   font-size: 16px !important;
   font-weight: 900 !important;
 }
