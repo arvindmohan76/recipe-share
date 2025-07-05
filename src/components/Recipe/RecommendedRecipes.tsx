@@ -15,6 +15,7 @@ import { supabase } from '../../lib/supabase';
 
 const RecommendedRecipes: React.FC = () => {
   const [recommendations, setRecommendations] = useState<RecipeRecommendation[]>([]);
+  const [recipeEngagement, setRecipeEngagement] = useState<Map<string, any>>(new Map());
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
@@ -29,6 +30,12 @@ const RecommendedRecipes: React.FC = () => {
       fetchSavedRecipes();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (recommendations.length > 0) {
+      fetchRecipeEngagement();
+    }
+  }, [recommendations]);
 
   const loadRecommendations = async () => {
     if (!user) return;
@@ -56,6 +63,54 @@ const RecommendedRecipes: React.FC = () => {
       setError('Failed to load recommendations');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchRecipeEngagement = async () => {
+    try {
+      const recipeIds = recommendations.map(r => r.recipe_id);
+      
+      if (recipeIds.length === 0) return;
+
+      // Fetch bookmark counts
+      const { data: bookmarkData, error: bookmarkError } = await supabase
+        .from('saved_recipes')
+        .select('recipe_id')
+        .in('recipe_id', recipeIds);
+
+      // Fetch comment counts
+      const { data: commentData, error: commentError } = await supabase
+        .from('recipe_comments')
+        .select('recipe_id')
+        .in('recipe_id', recipeIds);
+
+      if (!bookmarkError && !commentError) {
+        const engagementMap = new Map();
+        
+        // Count bookmarks per recipe
+        const bookmarkCounts = bookmarkData?.reduce((acc, item) => {
+          acc[item.recipe_id] = (acc[item.recipe_id] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>) || {};
+
+        // Count comments per recipe
+        const commentCounts = commentData?.reduce((acc, item) => {
+          acc[item.recipe_id] = (acc[item.recipe_id] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>) || {};
+
+        // Combine engagement data
+        recommendations.forEach(rec => {
+          engagementMap.set(rec.recipe_id, {
+            bookmarkCount: bookmarkCounts[rec.recipe_id] || 0,
+            commentCount: commentCounts[rec.recipe_id] || 0
+          });
+        });
+
+        setRecipeEngagement(engagementMap);
+      }
+    } catch (err) {
+      console.error('Failed to fetch recipe engagement:', err);
     }
   };
 
@@ -354,13 +409,20 @@ const RecommendedRecipes: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {recs.map((recommendation) => (
                   <div key={recommendation.id} className="relative">
-                    <div className="h-full">
-                      <RecipeCard
-                        recipe={recommendation.recipe}
-                        onSave={handleSaveRecipe}
-                        isSaved={savedRecipes.has(recommendation.recipe_id)}
-                      />
-                    </div>
+                    {(() => {
+                      const engagement = recipeEngagement.get(recommendation.recipe_id) || { bookmarkCount: 0, commentCount: 0 };
+                      return (
+                        <div className="h-full">
+                          <RecipeCard
+                            recipe={recommendation.recipe}
+                            onSave={handleSaveRecipe}
+                            isSaved={savedRecipes.has(recommendation.recipe_id)}
+                            bookmarkCount={engagement.bookmarkCount}
+                            commentCount={engagement.commentCount}
+                          />
+                        </div>
+                      );
+                    })()}
                     
                     {/* Confidence indicator */}
                     <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
