@@ -279,12 +279,13 @@ const RecipeCollections: React.FC = () => {
           </div>
           <div className="flex gap-2">
             <Button
-              label="Create Collection"
+              
               icon="pi pi-pencil"
               className="p-button-text p-button-sm"
               onClick={() => openEditDialog(collection)}
             />
             <Button
+              label="Create Collection"
               icon="pi pi-trash"
               className="p-button-text p-button-sm p-button-danger"
               onClick={() => deleteCollection(collection.id)}
