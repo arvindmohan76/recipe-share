@@ -52,13 +52,13 @@ const AuthForm: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             {isSignUp ? 'Create your account' : 'Welcome back!'}
           </p>
         </div>
@@ -69,7 +69,7 @@ const AuthForm: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Email
             </label>
             <InputText
@@ -85,7 +85,7 @@ const AuthForm: React.FC = () => {
 
           {isSignUp && (
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Username
               </label>
               <InputText
@@ -100,7 +100,7 @@ const AuthForm: React.FC = () => {
           )}
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Password
             </label>
             <Password
@@ -123,12 +123,12 @@ const AuthForm: React.FC = () => {
         </form>
 
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
             <button
               type="button"
               onClick={() => navigate(isSignUp ? '/auth' : '/auth?mode=signup')}
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 dark:text-blue-400 hover:underline"
             >
               {isSignUp ? 'Sign In' : 'Sign Up'}
             </button>

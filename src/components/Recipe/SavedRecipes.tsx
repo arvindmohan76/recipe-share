@@ -157,8 +157,8 @@ const SavedRecipes: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">My Bookmarked Recipes</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">My Bookmarked Recipes</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             {savedRecipes.length} recipe{savedRecipes.length !== 1 ? 's' : ''} saved
           </p>
         </div>
@@ -174,8 +174,8 @@ const SavedRecipes: React.FC = () => {
         <Card className="text-center p-8">
           <div className="space-y-4">
             <i className="pi pi-heart text-6xl text-gray-300"></i>
-            <h3 className="text-xl font-semibold text-gray-600">No Saved Recipes Yet</h3>
-            <p className="text-gray-500">
+            <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400">No Saved Recipes Yet</h3>
+            <p className="text-gray-500 dark:text-gray-400">
               Start exploring recipes and bookmark your favorites to see them here.
             </p>
             <Button

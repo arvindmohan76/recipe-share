@@ -263,17 +263,17 @@ const RecipeCollections: React.FC = () => {
         <div className="flex justify-between items-start mb-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-xl font-bold text-gray-800">{collection.name}</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{collection.name}</h3>
               {collection.is_public && (
-                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full">
                   Public
                 </span>
               )}
             </div>
             {collection.description && (
-              <p className="text-gray-600 mb-2">{collection.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-2">{collection.description}</p>
             )}
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {collection.recipes?.length || 0} recipes
             </p>
           </div>
@@ -304,9 +304,9 @@ const RecipeCollections: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 bg-gray-50 rounded-lg">
+          <div className="text-center py-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <i className="pi pi-book text-4xl text-gray-300 mb-3"></i>
-            <p className="text-gray-500">No recipes in this collection yet</p>
+            <p className="text-gray-500 dark:text-gray-400">No recipes in this collection yet</p>
             <Button
               label="Add"
               icon="pi pi-plus"
@@ -337,8 +337,8 @@ const RecipeCollections: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Recipe Collections</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Recipe Collections</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Organize your favorite recipes into curated collections
           </p>
         </div>
@@ -358,8 +358,8 @@ const RecipeCollections: React.FC = () => {
         <Card className="text-center p-8">
           <div className="space-y-4">
             <i className="pi pi-book text-6xl text-gray-300"></i>
-            <h3 className="text-xl font-semibold text-gray-600">No Collections Yet</h3>
-            <p className="text-gray-500">
+           <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400">No Collections Yet</h3>
+           <p className="text-gray-500 dark:text-gray-400">
               Create your first recipe collection to organize your favorite recipes by theme, cuisine, or occasion.
             </p>
             <Button
@@ -402,7 +402,7 @@ const RecipeCollections: React.FC = () => {
       >
         <div className="space-y-4">
           <div>
-            <label htmlFor="collection-name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="collection-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Collection Name *
             </label>
             <InputText
@@ -415,7 +415,7 @@ const RecipeCollections: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="collection-description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="collection-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Description
             </label>
             <InputTextarea
@@ -434,13 +434,13 @@ const RecipeCollections: React.FC = () => {
               checked={isPublic}
               onChange={(e) => setIsPublic(e.checked || false)}
             />
-            <label htmlFor="is-public" className="text-sm font-medium text-gray-700">
+            <label htmlFor="is-public" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Make this collection public (others can view it)
             </label>
           </div>
 
           <div>
-            <label htmlFor="recipes" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="recipes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Select Recipes
             </label>
             <MultiSelect
@@ -457,7 +457,7 @@ const RecipeCollections: React.FC = () => {
               maxSelectedLabels={3}
               selectedItemsLabel="{0} recipes selected"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {selectedRecipes.length} recipe{selectedRecipes.length !== 1 ? 's' : ''} selected
             </p>
           </div>

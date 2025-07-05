@@ -185,19 +185,19 @@ const ShoppingListManager: React.FC = () => {
       <Card className="mb-4">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-xl font-bold text-gray-800">{list.name}</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{list.name}</h3>
             <div className="flex items-center gap-4 mt-2">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
                 {completedItems}/{totalItems} items completed
               </span>
-              <div className="w-32 bg-gray-200 rounded-full h-2">
+              <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div 
-                  className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                  className="bg-green-500 dark:bg-green-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
               {list.is_completed && (
-                <span className="text-green-600 text-sm font-medium">✓ Complete</span>
+                <span className="text-green-600 dark:text-green-400 text-sm font-medium">✓ Complete</span>
               )}
             </div>
           </div>
@@ -217,7 +217,7 @@ const ShoppingListManager: React.FC = () => {
 
         <div className="space-y-2">
           {list.ingredients.map((item, index) => (
-            <div key={index} className="shopping-list-item flex items-center gap-4 p-4 border-2 border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-all duration-200 hover:shadow-md">
+            <div key={index} className="shopping-list-item flex items-center gap-4 p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 hover:shadow-md">
               <Checkbox
                 checked={item.checked}
                 onChange={() => toggleItemChecked(list, index)}
@@ -235,7 +235,7 @@ const ShoppingListManager: React.FC = () => {
           ))}
           
           {list.ingredients.length === 0 && (
-            <p className="text-gray-500 text-center py-4">No items in this list</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-4">No items in this list</p>
           )}
         </div>
 
@@ -266,8 +266,8 @@ const ShoppingListManager: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Shopping Lists</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Shopping Lists</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Organize your grocery shopping and meal planning
           </p>
         </div>
@@ -287,8 +287,8 @@ const ShoppingListManager: React.FC = () => {
         <Card className="text-center p-8">
           <div className="space-y-4">
             <i className="pi pi-shopping-cart text-6xl text-gray-300"></i>
-            <h3 className="text-xl font-semibold text-gray-600">No Shopping Lists Yet</h3>
-            <p className="text-gray-500">
+           <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400">No Shopping Lists Yet</h3>
+           <p className="text-gray-500 dark:text-gray-400">
               Create your first shopping list to organize your grocery shopping and meal planning.
             </p>
             <Button
@@ -330,7 +330,7 @@ const ShoppingListManager: React.FC = () => {
       >
         <div className="space-y-4">
           <div>
-            <label htmlFor="list-name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="list-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               List Name
             </label>
             <InputText

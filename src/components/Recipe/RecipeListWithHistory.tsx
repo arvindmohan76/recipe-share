@@ -327,7 +327,7 @@ const RecipeListWithHistory: React.FC = () => {
     <div className="space-y-4 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Search Recipes
           </label>
           {user && allowsTracking ? (
@@ -359,7 +359,7 @@ const RecipeListWithHistory: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="ingredient-search" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="ingredient-search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Search by Ingredient
           </label>
           <InputText
@@ -379,7 +379,7 @@ const RecipeListWithHistory: React.FC = () => {
       </div>
 
       {user && (
-        <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
           <Checkbox
             inputId="bookmarked-only"
             checked={showBookmarkedOnly}
@@ -390,7 +390,7 @@ const RecipeListWithHistory: React.FC = () => {
           </label>
           {!allowsTracking && (
             <div className="ml-auto">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
                 Search tracking disabled in privacy settings
               </span>
             </div>
@@ -433,7 +433,7 @@ const RecipeListWithHistory: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="cuisines" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="cuisines" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Cuisines
           </label>
           <MultiSelect
@@ -448,7 +448,7 @@ const RecipeListWithHistory: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="dietary" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="dietary" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Dietary Tags
           </label>
           <MultiSelect
@@ -463,7 +463,7 @@ const RecipeListWithHistory: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Difficulty
           </label>
           <Dropdown
@@ -476,7 +476,7 @@ const RecipeListWithHistory: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="time" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Max Cooking Time: {maxCookingTime} minutes
         </label>
         <Slider
@@ -507,8 +507,8 @@ const RecipeListWithHistory: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Discover Recipes</h1>
-        <div className="text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Discover Recipes</h1>
+        <div className="text-sm text-gray-600 dark:text-gray-400">
           {filteredRecipes.length} recipes found
         </div>
       </div>
@@ -516,7 +516,7 @@ const RecipeListWithHistory: React.FC = () => {
       <Card>
         {header}
         {filteredRecipes.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             No recipes found matching your criteria.
           </div>
         ) : (

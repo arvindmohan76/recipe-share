@@ -146,7 +146,7 @@ const PrivacySettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">Privacy Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Privacy Settings</h1>
         <Button
           label="Save"
           icon="pi pi-save"
@@ -167,7 +167,7 @@ const PrivacySettings: React.FC = () => {
 
       {/* Search History Settings */}
       <Card>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Search History</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Search History</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Checkbox
@@ -179,7 +179,7 @@ const PrivacySettings: React.FC = () => {
               Allow search history tracking
             </label>
           </div>
-          <p className="text-sm text-gray-600 ml-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400 ml-6">
             When enabled, we'll save your search queries to provide better search suggestions and personalized recommendations.
             You currently have {searchHistoryCount} search entries.
           </p>
@@ -200,7 +200,7 @@ const PrivacySettings: React.FC = () => {
                   className="w-32"
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 Search history older than this will be automatically deleted (30-1095 days)
               </p>
             </div>
@@ -210,8 +210,8 @@ const PrivacySettings: React.FC = () => {
 
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-medium text-gray-700">Clear Search History</h4>
-              <p className="text-sm text-gray-600">
+              <h4 className="font-medium text-gray-700 dark:text-gray-300">Clear Search History</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Permanently delete all your search history data
               </p>
             </div>
@@ -228,7 +228,7 @@ const PrivacySettings: React.FC = () => {
 
       {/* Recommendations Settings */}
       <Card>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Personalized Recommendations</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Personalized Recommendations</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Checkbox
@@ -240,7 +240,7 @@ const PrivacySettings: React.FC = () => {
               Enable personalized recipe recommendations
             </label>
           </div>
-          <p className="text-sm text-gray-600 ml-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400 ml-6">
             When enabled, we'll analyze your search history, saved recipes, and preferences to suggest recipes you might like.
           </p>
         </div>
@@ -248,7 +248,7 @@ const PrivacySettings: React.FC = () => {
 
       {/* Analytics Settings */}
       <Card>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Analytics & Insights</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Analytics & Insights</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Checkbox
@@ -260,7 +260,7 @@ const PrivacySettings: React.FC = () => {
               Enable personal analytics dashboard
             </label>
           </div>
-          <p className="text-sm text-gray-600 ml-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400 ml-6">
             When enabled, you'll see insights about your cooking preferences, search patterns, and recipe discovery trends.
           </p>
         </div>
@@ -268,8 +268,8 @@ const PrivacySettings: React.FC = () => {
 
       {/* Data Rights */}
       <Card>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Your Data Rights</h2>
-        <div className="space-y-3 text-sm text-gray-600">
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Your Data Rights</h2>
+        <div className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
           <p>• <strong>Right to Access:</strong> You can view all your data through your profile and settings.</p>
           <p>• <strong>Right to Rectification:</strong> You can edit or correct your data at any time.</p>
           <p>• <strong>Right to Erasure:</strong> You can delete your search history and other data.</p>
@@ -303,8 +303,8 @@ const PrivacySettings: React.FC = () => {
           <p className="text-sm text-gray-600">
             This action cannot be undone. Clearing your search history will also affect your personalized recommendations.
           </p>
-          <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
-            <p className="text-sm text-yellow-800">
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded p-3">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
               <strong>Note:</strong> You currently have {searchHistoryCount} search entries that will be permanently deleted.
             </p>
           </div>

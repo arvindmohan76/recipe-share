@@ -305,8 +305,8 @@ const RecommendedRecipes: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Recommended for You</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Recommended for You</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Personalized recipe suggestions based on your preferences and activity
           </p>
         </div>
@@ -398,10 +398,10 @@ const RecommendedRecipes: React.FC = () => {
             <div key={type}>
               <div className="flex items-center gap-3 mb-4">
                 <i className={`pi ${getRecommendationIcon(type)} text-blue-500 text-xl`}></i>
-                <h2 className="text-xl font-bold text-gray-800">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                   {getRecommendationTypeLabel(type)}
                 </h2>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   ({recs.length} recipe{recs.length !== 1 ? 's' : ''})
                 </span>
               </div>
@@ -425,14 +425,14 @@ const RecommendedRecipes: React.FC = () => {
                     })()}
                     
                     {/* Confidence indicator */}
-                    <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                    <div className="absolute top-2 left-2 bg-blue-500 dark:bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
                       {Math.round(recommendation.confidence_score * 100)}% match
                     </div>
                     
                     {/* Reasoning tooltip */}
                     {recommendation.reasoning && (
                       <div className="absolute bottom-2 left-2 right-2">
-                        <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded">
+                        <div className="bg-black dark:bg-gray-900 bg-opacity-75 text-white text-xs p-2 rounded">
                           {recommendation.reasoning}
                         </div>
                       </div>
@@ -446,12 +446,12 @@ const RecommendedRecipes: React.FC = () => {
       )}
 
       {/* Privacy notice */}
-      <Card className="bg-blue-50 border border-blue-200">
+      <Card className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700">
         <div className="flex items-start gap-3">
-          <i className="pi pi-info-circle text-blue-500 text-lg mt-1"></i>
+          <i className="pi pi-info-circle text-blue-500 dark:text-blue-400 text-lg mt-1"></i>
           <div className="space-y-2">
-            <h4 className="font-medium text-blue-800">About Your Recommendations</h4>
-            <p className="text-sm text-blue-700">
+            <h4 className="font-medium text-blue-800 dark:text-blue-200">About Your Recommendations</h4>
+            <p className="text-sm text-blue-700 dark:text-blue-300">
               These recommendations are generated based on your search history, saved recipes, and preferences. 
               You can manage your privacy settings and data usage in your account settings.
             </p>
@@ -459,7 +459,7 @@ const RecommendedRecipes: React.FC = () => {
               label="Privacy Settings"
               icon="pi pi-cog"
               onClick={() => navigate('/privacy-settings')}
-              className="p-button-text p-button-sm text-blue-600"
+              className="p-button-text p-button-sm text-blue-600 dark:text-blue-400"
             />
           </div>
         </div>
