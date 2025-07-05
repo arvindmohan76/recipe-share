@@ -309,7 +309,7 @@ const RecipeCollections: React.FC = () => {
             <p className="text-gray-500 dark:text-gray-400">No recipes in this collection yet</p>
             <Button
               label="Add"
-              icon="pi pi-plus"
+              
               className="p-button-success p-button p-component"
               onClick={() => openEditDialog(collection)}
             />
