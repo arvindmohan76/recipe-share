@@ -2,236 +2,244 @@ import React, { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
-import { DataView } from 'primereact/dataview';
-import { Skeleton } from 'primereact/skeleton';
-import { ChefHat, Clock, Users, Star } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
+import { getUserRecommendations, generateRecommendations } from '../../lib/searchHistory';
+import RecipeCard from './RecipeCard';
 
-interface Recipe {
+interface RecipeRecommendation {
   id: string;
-  title: string;
-  description: string;
-  prep_time: number;
-  cook_time: number;
-  servings: number;
-  difficulty: string;
-  cuisine_type: string;
-  ingredients: string[];
-  instructions: string[];
-  image_url?: string;
-  rating?: number;
-  created_at: string;
   user_id: string;
+  recipe_id: string;
+  recommendation_type: string;
+  confidence_score: number;
+  reasoning?: string;
+  created_at: string;
+  recipe?: any;
 }
 
-interface RecommendedRecipesProps {
-  currentRecipeId?: string;
-  limit?: number;
-}
-
-export const RecommendedRecipes: React.FC<RecommendedRecipesProps> = ({ 
-  currentRecipeId, 
-  limit = 6 
-}) => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+const RecommendedRecipes: React.FC = () => {
+  const [recommendations, setRecommendations] = useState<RecipeRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [savedRecipes, setSavedRecipes] = useState<Set<string>>(new Set());
+
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRecommendedRecipes();
-  }, [currentRecipeId, limit]);
+    if (user) {
+      fetchRecommendations();
+      fetchSavedRecipes();
+    }
+  }, [user]);
 
-  const fetchRecommendedRecipes = async () => {
+  const fetchRecommendations = async () => {
+    if (!user) return;
+
     try {
-      setLoading(true);
-      setError(null);
-
-      let query = supabase
-        .from('recipes')
-        .select('*')
-        .eq('is_public', true)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
-      // Exclude current recipe if provided
-      if (currentRecipeId) {
-        query = query.neq('id', currentRecipeId);
-      }
-
-      const { data, error: fetchError } = await query;
-
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      setRecipes(data || []);
+      const userRecommendations = await getUserRecommendations(user.id, 12);
+      setRecommendations(userRecommendations);
     } catch (err) {
-      console.error('Error fetching recommended recipes:', err);
-      setError('Failed to load recommended recipes');
+      console.error('Failed to fetch recommendations:', err);
+      setError('Failed to load recommendations');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewRecipe = (recipeId: string) => {
-    // Navigate to recipe detail - you can implement routing here
-    window.location.href = `/recipe/${recipeId}`;
+  const fetchSavedRecipes = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('saved_recipes')
+        .select('recipe_id')
+        .eq('user_id', user.id);
+
+      if (!error && data) {
+        setSavedRecipes(new Set(data.map(item => item.recipe_id)));
+      }
+    } catch (err) {
+      console.error('Failed to fetch saved recipes:', err);
+    }
   };
 
-  const itemTemplate = (recipe: Recipe) => {
+  const handleGenerateRecommendations = async () => {
+    if (!user) return;
+
+    setGenerating(true);
+    try {
+      const success = await generateRecommendations(user.id);
+      if (success) {
+        await fetchRecommendations();
+      } else {
+        setError('Failed to generate recommendations. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred while generating recommendations.');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const handleSaveRecipe = async (recipeId: string) => {
+    if (!user) return;
+
+    try {
+      const isSaved = savedRecipes.has(recipeId);
+      
+      if (isSaved) {
+        const { error } = await supabase
+          .from('saved_recipes')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('recipe_id', recipeId);
+
+        if (!error) {
+          setSavedRecipes(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(recipeId);
+            return newSet;
+          });
+        }
+      } else {
+        const { error } = await supabase
+          .from('saved_recipes')
+          .insert([{ user_id: user.id, recipe_id: recipeId }]);
+
+        if (!error) {
+          setSavedRecipes(prev => new Set([...prev, recipeId]));
+        }
+      }
+    } catch (err) {
+      console.error('Failed to save/unsave recipe:', err);
+    }
+  };
+
+  if (!user) {
     return (
-      <div className="col-12 sm:col-6 lg:col-4 p-2">
-        <Card className="h-full shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex flex-column h-full">
-            {/* Recipe Image */}
-            <div className="relative mb-3">
-              {recipe.image_url ? (
-                <img
-                  src={recipe.image_url}
-                  alt={recipe.title}
-                  className="w-full h-48 object-cover border-round"
-                />
-              ) : (
-                <div className="w-full h-48 bg-gray-100 border-round flex align-items-center justify-content-center">
-                  <ChefHat className="w-12 h-12 text-gray-400" />
-                </div>
-              )}
-              {recipe.rating && (
-                <div className="absolute top-2 right-2 bg-white bg-opacity-90 px-2 py-1 border-round flex align-items-center gap-1">
-                  <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                  <span className="text-sm font-medium">{recipe.rating.toFixed(1)}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Recipe Info */}
-            <div className="flex-1 flex flex-column">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 line-height-3">
-                {recipe.title}
-              </h3>
-              
-              <p className="text-gray-600 text-sm mb-3 line-height-3 flex-1">
-                {recipe.description}
-              </p>
-
-              {/* Recipe Meta */}
-              <div className="flex align-items-center gap-4 mb-3 text-sm text-gray-500">
-                <div className="flex align-items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  <span>{recipe.prep_time + recipe.cook_time} min</span>
-                </div>
-                <div className="flex align-items-center gap-1">
-                  <Users className="w-4 h-4" />
-                  <span>{recipe.servings} servings</span>
-                </div>
-              </div>
-
-              {/* Difficulty Badge */}
-              <div className="mb-3">
-                <span className={`px-2 py-1 border-round text-xs font-medium ${
-                  recipe.difficulty === 'Easy' 
-                    ? 'bg-green-100 text-green-800'
-                    : recipe.difficulty === 'Medium'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {recipe.difficulty}
-                </span>
-              </div>
-
-              {/* Action Button */}
-              <Button
-                label="View Recipe"
-                className="w-full p-button-outlined p-button-sm"
-                onClick={() => handleViewRecipe(recipe.id)}
-              />
-            </div>
-          </div>
-        </Card>
+      <div className="space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Recipe Recommendations</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Discover personalized recipe suggestions based on your preferences
+          </p>
+        </div>
+        <Message severity="info" text="Please sign in to view personalized recipe recommendations." className="w-full" />
       </div>
     );
-  };
+  }
 
-  const loadingTemplate = () => {
+  if (loading) {
     return (
-      <div className="col-12 sm:col-6 lg:col-4 p-2">
-        <Card className="h-full">
-          <div className="flex flex-column h-full">
-            <Skeleton width="100%" height="12rem" className="mb-3" />
-            <Skeleton width="80%" height="1.5rem" className="mb-2" />
-            <Skeleton width="100%" height="3rem" className="mb-3" />
-            <div className="flex gap-4 mb-3">
-              <Skeleton width="4rem" height="1rem" />
-              <Skeleton width="4rem" height="1rem" />
-            </div>
-            <Skeleton width="3rem" height="1.5rem" className="mb-3" />
-            <Skeleton width="100%" height="2.5rem" />
-          </div>
-        </Card>
-      </div>
-    );
-  };
-
-  if (error) {
-    return (
-      <div className="w-full">
-        <Message 
-          severity="error" 
-          text={error}
-          className="w-full"
-        />
+      <div className="space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Recipe Recommendations</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Discover personalized recipe suggestions based on your preferences
+          </p>
+        </div>
+        <div className="flex justify-center items-center h-64">
+          <i className="pi pi-spinner pi-spin text-4xl text-blue-500"></i>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
-      <div className="flex align-items-center justify-content-between mb-4">
-        <h2 className="text-2xl font-bold text-gray-900 m-0">
-          Recommended Recipes
-        </h2>
-        {recipes.length > 0 && (
-          <Button
-            label="View All"
-            className="p-button-text p-button-sm"
-            onClick={() => window.location.href = '/recipes'}
-          />
-        )}
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Recipe Recommendations</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Discover personalized recipe suggestions based on your preferences
+          </p>
+        </div>
+        <Button
+          label="Generate New"
+          icon="pi pi-refresh"
+          onClick={handleGenerateRecommendations}
+          loading={generating}
+          className="p-button-outlined"
+        />
       </div>
 
-      {loading ? (
-        <div className="grid">
-          {Array.from({ length: limit }).map((_, index) => (
-            <React.Fragment key={index}>
-              {loadingTemplate()}
-            </React.Fragment>
-          ))}
-        </div>
-      ) : recipes.length === 0 ? (
-        <div className="text-center py-8">
-          <ChefHat className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No recipes found
-          </h3>
-          <p className="text-gray-500 mb-4">
-            Be the first to share a recipe with the community!
-          </p>
-          <Button
-            label="Create Recipe"
-            className="p-button-primary"
-            onClick={() => window.location.href = '/recipe/new'}
-          />
-        </div>
+      {error && (
+        <Message severity="error" text={error} className="w-full" />
+      )}
+
+      {recommendations.length === 0 ? (
+        <Card className="text-center p-8">
+          <div className="space-y-4">
+            <i className="pi pi-lightbulb text-6xl text-gray-300"></i>
+            <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400">No Recommendations Yet</h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Start exploring recipes and searching to get personalized recommendations based on your preferences.
+            </p>
+            <div className="space-y-3">
+              <Button
+                label="Generate Recommendations"
+                icon="pi pi-sparkles"
+                onClick={handleGenerateRecommendations}
+                loading={generating}
+                className="p-button-success"
+              />
+              <div className="text-center">
+                <Button
+                  label="Browse All Recipes"
+                  icon="pi pi-search"
+                  onClick={() => navigate('/recipes')}
+                  className="p-button-outlined"
+                />
+              </div>
+            </div>
+          </div>
+        </Card>
       ) : (
-        <DataView
-          value={recipes}
-          itemTemplate={itemTemplate}
-          layout="grid"
-          paginator={false}
-          className="recipe-dataview"
-        />
+        <div className="space-y-6">
+          {/* Recommendation Categories */}
+          {['search_history', 'saved_recipes', 'trending', 'seasonal'].map(type => {
+            const typeRecommendations = recommendations.filter(rec => rec.recommendation_type === type);
+            if (typeRecommendations.length === 0) return null;
+
+            const typeLabels = {
+              search_history: 'Based on Your Searches',
+              saved_recipes: 'Similar to Your Saved Recipes',
+              trending: 'Trending Now',
+              seasonal: 'Popular Recipes'
+            };
+
+            return (
+              <div key={type} className="space-y-4">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                  {typeLabels[type as keyof typeof typeLabels]}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {typeRecommendations.slice(0, 4).map((recommendation) => (
+                    <div key={recommendation.id} className="h-full">
+                      <RecipeCard
+                        recipe={recommendation.recipe}
+                        onSave={handleSaveRecipe}
+                        isSaved={savedRecipes.has(recommendation.recipe_id)}
+                      />
+                      {recommendation.reasoning && (
+                        <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+                          <p className="text-xs text-blue-700 dark:text-blue-300">
+                            <i className="pi pi-info-circle mr-1"></i>
+                            {recommendation.reasoning}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );
