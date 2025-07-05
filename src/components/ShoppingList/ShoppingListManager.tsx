@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -35,6 +36,7 @@ const ShoppingListManager: React.FC = () => {
   const [newListName, setNewListName] = useState('');
   const [editingList, setEditingList] = useState<ShoppingList | null>(null);
 
+  const location = useLocation();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -42,6 +44,26 @@ const ShoppingListManager: React.FC = () => {
       fetchShoppingLists();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Check if we're adding a recipe from recipe detail page
+    if (location.state?.addRecipe && user) {
+      const { addRecipe } = location.state;
+      createShoppingListFromRecipe(addRecipe);
+    }
+  }, [location.state, user]);
+
+  const createShoppingListFromRecipe = async (recipeData: any) => {
+    const listName = `Shopping for ${recipeData.title}`;
+    const ingredients = recipeData.ingredients.map((ing: any) => ({
+      name: ing.name,
+      amount: ing.amount,
+      unit: ing.unit,
+      checked: false
+    }));
+
+    await createShoppingListWithIngredients(listName, ingredients, [recipeData.id]);
+  };
 
   const fetchShoppingLists = async () => {
     if (!user) return;
@@ -65,7 +87,7 @@ const ShoppingListManager: React.FC = () => {
     }
   };
 
-  const createShoppingList = async () => {
+  const createShoppingListWithIngredients = async (name: string, ingredients: any[], recipeIds: string[] = []) => {
     if (!user || !newListName.trim()) return;
 
     try {
@@ -73,9 +95,9 @@ const ShoppingListManager: React.FC = () => {
         .from('shopping_lists')
         .insert([{
           user_id: user.id,
-          name: newListName.trim(),
-          ingredients: [],
-          recipe_ids: [],
+          name: name,
+          ingredients: ingredients,
+          recipe_ids: recipeIds,
           is_completed: false
         }]);
 
@@ -89,6 +111,10 @@ const ShoppingListManager: React.FC = () => {
     } catch (err) {
       setError('Failed to create shopping list');
     }
+  };
+
+  const createShoppingList = async () => {
+    await createShoppingListWithIngredients(newListName.trim(), [], []);
   };
 
   const updateShoppingList = async (listId: string, updates: Partial<ShoppingList>) => {

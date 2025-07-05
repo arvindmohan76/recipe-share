@@ -8,6 +8,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { Menu } from 'primereact/menu';
+import { MenuItem } from 'primereact/menuitem';
 import { Toast } from 'primereact/toast';
 import { supabase, Recipe, RecipeComment } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
@@ -27,7 +29,10 @@ const RecipeDetail: React.FC = () => {
   const [isCookingMode, setIsCookingMode] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const toast = React.useRef<Toast>(null);
+  const moreOptionsMenu = React.useRef<Menu>(null);
 
   const { user } = useAuth();
 
@@ -42,6 +47,7 @@ const RecipeDetail: React.FC = () => {
     if (id) {
       fetchRecipe();
       fetchComments();
+      checkIfSaved();
       // Set the share URL when component mounts
       setShareUrl(window.location.href);
     }
@@ -91,6 +97,25 @@ const RecipeDetail: React.FC = () => {
     }
   };
 
+  const checkIfSaved = async () => {
+    if (!user || !id) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('saved_recipes')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('recipe_id', id)
+        .single();
+
+      if (!error && data) {
+        setIsSaved(true);
+      }
+    } catch (err) {
+      // Recipe not saved, which is fine
+    }
+  };
+
   const handleAddComment = async () => {
     if (!user || !newComment.trim()) return;
 
@@ -113,6 +138,110 @@ const RecipeDetail: React.FC = () => {
       console.error('Failed to add comment:', err);
     }
   };
+
+  const handleSaveRecipe = async () => {
+    if (!user || !id) return;
+
+    try {
+      if (isSaved) {
+        // Remove from saved
+        const { error } = await supabase
+          .from('saved_recipes')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('recipe_id', id);
+
+        if (!error) {
+          setIsSaved(false);
+          toast.current?.show({
+            severity: 'info',
+            summary: 'Removed',
+            detail: 'Recipe removed from bookmarks',
+            life: 3000
+          });
+        }
+      } else {
+        // Add to saved
+        const { error } = await supabase
+          .from('saved_recipes')
+          .insert([{ user_id: user.id, recipe_id: id }]);
+
+        if (!error) {
+          setIsSaved(true);
+          toast.current?.show({
+            severity: 'success',
+            summary: 'Saved!',
+            detail: 'Recipe added to your bookmarks',
+            life: 3000
+          });
+        }
+      }
+    } catch (err) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to update bookmark',
+        life: 3000
+      });
+    }
+  };
+
+  const handleAddToShoppingList = () => {
+    // Navigate to shopping lists with recipe ingredients
+    navigate('/shopping-lists', { 
+      state: { 
+        addRecipe: {
+          id: recipe?.id,
+          title: recipe?.title,
+          ingredients: recipe?.ingredients
+        }
+      }
+    });
+  };
+
+  const handleAddToCollection = () => {
+    // Navigate to collections page
+    navigate('/collections', {
+      state: {
+        addRecipe: recipe?.id
+      }
+    });
+  };
+
+  const handlePrintRecipe = () => {
+    window.print();
+  };
+
+  const moreOptionsItems: MenuItem[] = [
+    {
+      label: isSaved ? 'Remove Bookmark' : 'Add Bookmark',
+      icon: isSaved ? 'pi pi-heart-fill' : 'pi pi-heart',
+      command: handleSaveRecipe
+    },
+    {
+      label: 'Add to Shopping List',
+      icon: 'pi pi-shopping-cart',
+      command: handleAddToShoppingList
+    },
+    {
+      label: 'Add to Collection',
+      icon: 'pi pi-folder-plus',
+      command: handleAddToCollection
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Print Recipe',
+      icon: 'pi pi-print',
+      command: handlePrintRecipe
+    },
+    {
+      label: 'Share Recipe',
+      icon: 'pi pi-share-alt',
+      command: handleShareRecipe
+    }
+  ];
 
   const handleVoiceCommand = (command: string) => {
     const lowerCommand = command.toLowerCase();
@@ -286,13 +415,19 @@ const RecipeDetail: React.FC = () => {
             </div>
 
             <div className="recipe-actions mb-4">
-              <Rating value={4.5} readOnly stars={5} cancel={false} />
               <Button
-                label="Share"
-                icon="pi pi-share-alt"
-                className="p-button-outlined flex-shrink-0"
-                onClick={handleShareRecipe}
+                label={isSaved ? 'Bookmarked' : 'Bookmark'}
+                icon={isSaved ? 'pi pi-heart-fill' : 'pi pi-heart'}
+                className={`flex-shrink-0 ${isSaved ? 'p-button-success' : 'p-button-outlined'}`}
+                onClick={handleSaveRecipe}
               />
+              <Button
+                label="More Options"
+                icon="pi pi-ellipsis-v"
+                className="p-button-outlined flex-shrink-0"
+                onClick={(e) => moreOptionsMenu.current?.toggle(e)}
+              />
+              <Rating value={4.5} readOnly stars={5} cancel={false} />
               {user && recipe.user_id === user.id && (
                 <Button
                   label="Edit"
@@ -302,6 +437,13 @@ const RecipeDetail: React.FC = () => {
                 />
               )}
             </div>
+
+            {/* More Options Menu */}
+            <Menu
+              ref={moreOptionsMenu}
+              model={moreOptionsItems}
+              popup
+            />
             
             {/* Cooking Mode Button - Separate Row */}
             <div className="mt-4">

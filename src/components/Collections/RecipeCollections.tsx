@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -40,6 +41,7 @@ const RecipeCollections: React.FC = () => {
   const [isPublic, setIsPublic] = useState(false);
 
   const { user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     if (user) {
@@ -48,6 +50,16 @@ const RecipeCollections: React.FC = () => {
       fetchSavedRecipes();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Check if we're adding a recipe from recipe detail page
+    if (location.state?.addRecipe) {
+      const recipeId = location.state.addRecipe;
+      setSelectedRecipes([recipeId]);
+      setShowCreateDialog(true);
+      setCollectionName('New Collection');
+    }
+  }, [location.state]);
 
   const fetchCollections = async () => {
     if (!user) return;
@@ -163,6 +175,11 @@ const RecipeCollections: React.FC = () => {
 
   const openCreateDialog = () => {
     resetForm();
+    // If we have a recipe from navigation state, pre-select it
+    if (location.state?.addRecipe) {
+      setSelectedRecipes([location.state.addRecipe]);
+      setCollectionName('New Collection');
+    }
     setShowCreateDialog(true);
   };
 

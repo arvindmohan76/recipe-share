@@ -1,3 +1,14 @@
+/* Print styles for recipe printing */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
