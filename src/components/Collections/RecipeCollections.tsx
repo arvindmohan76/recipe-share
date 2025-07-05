@@ -395,7 +395,7 @@ const RecipeCollections: React.FC = () => {
               label="Save"
               onClick={handleSubmit}
               disabled={!collectionName.trim()}
-              className="p-button-secondary"
+              className="p-button-primary p-button p-component"
             />
           </div>
         }
