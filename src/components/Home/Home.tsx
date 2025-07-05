@@ -169,16 +169,16 @@ const Home: React.FC = () => {
   };
 
   const heroSection = (
-    <div className="relative overflow-hidden rounded-xl shadow-xl mb-10 h-[500px]">
+    <div className="relative overflow-hidden rounded-xl shadow-xl mb-6 h-[400px] max-w-5xl mx-auto">
       <div className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-red-600/80 dark:from-orange-600/80 dark:to-red-700/80 z-10"></div>
       <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-cover bg-center bg-fixed"></div>
       
-      <div className="relative z-20 max-w-5xl mx-auto py-20 px-6 text-center h-full flex flex-col justify-center">
+      <div className="relative z-20 max-w-4xl mx-auto py-16 px-6 text-center h-full flex flex-col justify-center">
         <div className="animate-fadeIn">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg">
             Discover & Share <span className="text-yellow-300 animate-pulse">Delicious</span> Recipes
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed">
             Join our community of food lovers to find inspiration, share your culinary creations, and explore flavors from around the world.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -204,7 +204,7 @@ const Home: React.FC = () => {
               />
             )}
           </div>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center">
             <div className="animate-bounce bg-white/20 p-2 w-10 h-10 ring-1 ring-white/20 shadow-lg rounded-full flex items-center justify-center">
               <i className="pi pi-chevron-down text-white"></i>
             </div>
@@ -248,11 +248,11 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       {heroSection}
 
       {/* Stats Section */}
-      <section className="py-4">
+      <section className="py-2">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center shadow-md hover:shadow-lg transition-shadow">
             <div className="text-3xl font-bold text-orange-500 mb-2">1,200+</div>
@@ -274,7 +274,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Recipes */}
-      <section>
+      <section className="mt-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Featured Recipes</h2>
@@ -321,7 +321,7 @@ const Home: React.FC = () => {
         )}
       </section>
 
-      <Divider className="my-8" />
+      <Divider className="my-6" />
 
       {/* Trending Recipes */}
       {trendingRecipes.length > 0 && (
@@ -356,7 +356,7 @@ const Home: React.FC = () => {
         </section>
       )}
 
-      <Divider className="my-8" />
+      <Divider className="my-6" />
 
       {/* Recipe Categories - More recipe-focused */}
       <section>
@@ -392,15 +392,15 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <Divider className="my-8" />
+      <Divider className="my-6" />
 
       {/* Call to Action */}
       <Card className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-2 border-orange-200 dark:border-orange-700 shadow-lg">
-        <div className="text-center p-8">
-          <h3 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+        <div className="text-center p-6">
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-3">
             Ready to Start Cooking?
           </h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 mb-6 text-base max-w-2xl mx-auto">
             Join thousands of home cooks sharing their favorite recipes and discovering new ones.
           </p>
           {!user ? (
@@ -438,7 +438,7 @@ const Home: React.FC = () => {
       </Card>
 
       {/* Subtle Features Footer - Much more subtle */}
-      <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div className="text-center p-4">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-500 mb-4">
