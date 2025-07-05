@@ -26,6 +26,32 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
       recognitionInstance.interimResults = false;
       recognitionInstance.lang = 'en-US';
 
+     // Request microphone permission before setting up recognition
+     const requestMicPermission = async () => {
+       try {
+         // Request microphone permission again if needed
+         navigator.mediaDevices.getUserMedia({ audio: true })
+           .then(stream => {
+             // Stop the stream immediately after getting permission
+             stream.getTracks().forEach(track => track.stop());
+             
+             setIsListening(true);
+             recognition.start();
+           })
+           .catch(err => {
+             console.error('Microphone permission error:', err);
+             setIsListening(false);
+           });
+         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+         // Stop the stream immediately after getting permission
+         stream.getTracks().forEach(track => track.stop());
+       } catch (err) {
+         console.error('Microphone permission error:', err);
+       }
+     };
+     
+     // Try to request permission early
+     requestMicPermission();
       recognitionInstance.onresult = (event: any) => {
         const command = event.results[event.results.length - 1][0].transcript;
         setLastCommand(command);
@@ -56,8 +82,6 @@ const VoiceController: React.FC<VoiceControllerProps> = ({ onCommand }) => {
       // Add a small delay to ensure the recognition state has fully reset
       setTimeout(() => {
         try {
-          setIsListening(true);
-          recognition.start();
         } catch (error) {
           console.error('Failed to start speech recognition:', error);
           setIsListening(false);
