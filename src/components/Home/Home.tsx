@@ -169,40 +169,45 @@ const Home: React.FC = () => {
   };
 
   const heroSection = (
-    <div className="relative overflow-hidden rounded-xl shadow-xl mb-10">
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/90 to-red-600/90 dark:from-orange-600/90 dark:to-red-700/90 z-10"></div>
-      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-cover bg-center"></div>
+    <div className="relative overflow-hidden rounded-xl shadow-xl mb-10 h-[500px]">
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-red-600/80 dark:from-orange-600/80 dark:to-red-700/80 z-10"></div>
+      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-cover bg-center bg-fixed"></div>
       
-      <div className="relative z-20 max-w-5xl mx-auto py-16 px-6 text-center">
+      <div className="relative z-20 max-w-5xl mx-auto py-20 px-6 text-center h-full flex flex-col justify-center">
         <div className="animate-fadeIn">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white drop-shadow-md">
-            Discover & Share <span className="text-yellow-300">Delicious</span> Recipes
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg">
+            Discover & Share <span className="text-yellow-300 animate-pulse">Delicious</span> Recipes
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
             Join our community of food lovers to find inspiration, share your culinary creations, and explore flavors from around the world.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button
               label="Explore Recipes"
               icon="pi pi-search"
-              className="p-button-lg shadow-lg bg-white text-orange-600 border-white hover:bg-orange-50"
+              className="p-button-lg shadow-lg bg-white text-orange-600 border-white hover:bg-orange-50 hover:scale-105 transition-transform"
               onClick={() => navigate('/recipes')}
             />
             {user ? (
               <Button
                 label="Create Recipe"
                 icon="pi pi-plus"
-                className="p-button-lg p-button-outlined shadow-lg text-white border-white hover:bg-white/20"
+                className="p-button-lg shadow-lg bg-yellow-400 text-orange-800 border-yellow-400 hover:bg-yellow-300 hover:scale-105 transition-transform"
                 onClick={() => navigate('/recipes/new')}
               />
             ) : (
               <Button
                 label="Join Now"
                 icon="pi pi-user-plus"
-                className="p-button-lg p-button-outlined shadow-lg text-white border-white hover:bg-white/20"
+                className="p-button-lg shadow-lg bg-yellow-400 text-orange-800 border-yellow-400 hover:bg-yellow-300 hover:scale-105 transition-transform"
                 onClick={() => navigate('/auth?mode=signup')}
               />
             )}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <div className="animate-bounce bg-white/20 p-2 w-10 h-10 ring-1 ring-white/20 shadow-lg rounded-full flex items-center justify-center">
+              <i className="pi pi-chevron-down text-white"></i>
+            </div>
           </div>
         </div>
       </div>
