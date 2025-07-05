@@ -297,7 +297,7 @@ const RecipeListWithHistory: React.FC = () => {
     const matchesDietary = selectedDietary.length === 0 ||
                           selectedDietary.some(tag => recipe.dietary_tags.includes(tag));
     
-    const matchesDifficulty = difficulty === '' || recipe.difficulty === difficulty;
+    const matchesDifficulty = !difficulty || difficulty === '' || recipe.difficulty === difficulty;
     
     const matchesTime = recipe.cooking_time <= maxCookingTime;
 
