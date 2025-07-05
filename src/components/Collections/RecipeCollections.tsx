@@ -433,6 +433,7 @@ const RecipeCollections: React.FC = () => {
               inputId="is-public"
               checked={isPublic}
               onChange={(e) => setIsPublic(e.checked || false)}
+              className="p-checkbox-custom"
             />
             <label htmlFor="is-public" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Make this collection public (others can view it)

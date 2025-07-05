@@ -47,11 +47,6 @@ const Navbar: React.FC = () => {
       icon: 'pi pi-folder',
       command: () => navigate('/collections'),
     },
-    {
-      label: 'Shopping Lists',
-      icon: 'pi pi-shopping-cart',
-      command: () => navigate('/shopping-lists'),
-    },
   ];
 
   const handleNavClick = (command: () => void) => {

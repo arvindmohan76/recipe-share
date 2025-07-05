@@ -221,7 +221,7 @@ const ShoppingListManager: React.FC = () => {
               <Checkbox
                 checked={item.checked}
                 onChange={() => toggleItemChecked(list, index)}
-                className="flex-shrink-0 transform transition-transform duration-200"
+                className="flex-shrink-0 transform transition-transform duration-200 p-checkbox-custom"
               />
               <span className={`flex-1 font-medium transition-all duration-200 ${item.checked ? 'line-through text-gray-500' : 'text-gray-800'}`}>
                 {item.amount} {item.unit} {item.name}
