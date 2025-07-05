@@ -107,7 +107,7 @@ const VoiceToText: React.FC<VoiceToTextProps> = ({
         
         switch (event.error) {
           case 'no-speech':
-            setError('No speech detected. Please try speaking again.');
+            setError('No speech detected. Please ensure your microphone is connected and unmuted, speak clearly, and try again.');
             break;
           case 'audio-capture':
             setError('Microphone not accessible. Please check your microphone connection.');
