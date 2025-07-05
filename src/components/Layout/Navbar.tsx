@@ -4,6 +4,7 @@ import { Avatar } from 'primereact/avatar';
 import { Sidebar } from 'primereact/sidebar';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
+import { MenuItemCommandEvent } from 'primereact/menuitem';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
@@ -62,17 +63,17 @@ const Navbar: React.FC = () => {
     {
       label: 'Privacy Settings',
       icon: 'pi pi-cog',
-      command: () => {
+      command: (event: MenuItemCommandEvent) => {
         navigate('/privacy-settings');
-        profileMenuRef.current?.hide();
+        profileMenuRef.current?.hide(event.originalEvent);
       }
     },
     {
       label: 'My Profile',
       icon: 'pi pi-user',
-      command: () => {
+      command: (event: MenuItemCommandEvent) => {
         // Placeholder for future profile page
-        profileMenuRef.current?.hide();
+        profileMenuRef.current?.hide(event.originalEvent);
       }
     },
     {
@@ -81,7 +82,10 @@ const Navbar: React.FC = () => {
     {
       label: 'Sign Out',
       icon: 'pi pi-sign-out',
-      command: handleSignOut
+      command: (event: MenuItemCommandEvent) => {
+        handleSignOut();
+        profileMenuRef.current?.hide(event.originalEvent);
+      }
     }
   ];
 
