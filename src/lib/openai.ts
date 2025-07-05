@@ -10,6 +10,110 @@ export const openai = apiKey ? new OpenAI({
 
 export const isOpenAIAvailable = !!apiKey;
 
+/**
+ * Generate personalized recipe recommendations based on user preferences
+ */
+export async function generateAIRecommendations(
+  userPreferences: any,
+  availableRecipes: any[]
+): Promise<any[]> {
+  if (!openai) {
+    return [];
+  }
+
+  try {
+    // Prepare user preference data for the AI
+    const searchHistory = userPreferences.searchHistory || [];
+    const savedRecipes = userPreferences.savedRecipes || [];
+    const viewedRecipes = userPreferences.viewedRecipes || [];
+    
+    // Extract search terms and viewed recipe details
+    const searchTerms = searchHistory.map((item: any) => item.search_query).join(', ');
+    const savedRecipeTitles = savedRecipes.map((recipe: any) => recipe.title).join(', ');
+    const savedRecipeCuisines = [...new Set(savedRecipes.map((recipe: any) => recipe.cuisine))].join(', ');
+    const savedRecipeDietary = [...new Set(savedRecipes.flatMap((recipe: any) => recipe.dietary_tags || []))].join(', ');
+    
+    // Create a list of available recipes for the AI to choose from
+    const availableRecipeData = availableRecipes.map(recipe => ({
+      id: recipe.id,
+      title: recipe.title,
+      cuisine: recipe.cuisine,
+      dietary_tags: recipe.dietary_tags,
+      difficulty: recipe.difficulty,
+      cooking_time: recipe.cooking_time,
+      description: recipe.description?.substring(0, 100) + '...'
+    }));
+
+    // Generate recommendations using OpenAI
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a culinary recommendation expert that analyzes user preferences and suggests personalized recipes.
+          Your task is to select the most relevant recipes for a user based on their search history, saved recipes, and viewing patterns.
+          For each recommendation, provide a brief explanation of why it matches their preferences.
+          Focus on cuisine types, ingredients, dietary preferences, and cooking difficulty that align with the user's history.`
+        },
+        {
+          role: 'user',
+          content: `Generate personalized recipe recommendations for a user with the following preferences:
+          
+          Search History: ${searchTerms || 'No search history available'}
+          Saved Recipe Titles: ${savedRecipeTitles || 'No saved recipes'}
+          Preferred Cuisines: ${savedRecipeCuisines || 'No cuisine preference detected'}
+          Dietary Preferences: ${savedRecipeDietary || 'No dietary preferences detected'}
+          
+          Available Recipes:
+          ${JSON.stringify(availableRecipeData, null, 2)}
+          
+          Select 6-10 recipes from the available list that best match this user's preferences.
+          For each recommendation, include:
+          1. The recipe ID
+          2. A confidence score between 0.1 and 0.9 indicating how well it matches their preferences
+          3. A brief, personalized explanation of why this recipe was recommended (1-2 sentences)
+          4. The recommendation type (one of: "search_history", "saved_recipes", "similar_users", "trending", "seasonal")
+          
+          Return the results as a JSON array of objects with the following structure:
+          [
+            {
+              "recipe_id": "the-recipe-id",
+              "confidence_score": 0.85,
+              "reasoning": "This recipe was recommended because...",
+              "recommendation_type": "search_history"
+            }
+          ]
+          
+          IMPORTANT: Only include recipes from the available list. Do not make up recipe IDs.`
+        }
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7
+    });
+
+    const responseText = response.choices[0]?.message?.content || '';
+    
+    try {
+      const parsedResponse = JSON.parse(responseText);
+      const recommendations = parsedResponse.recommendations || [];
+      
+      // Validate and format recommendations
+      return recommendations.map((rec: any) => ({
+        recipe_id: rec.recipe_id,
+        confidence_score: Math.min(0.9, Math.max(0.1, rec.confidence_score)),
+        reasoning: rec.reasoning,
+        recommendation_type: rec.recommendation_type
+      }));
+    } catch (parseError) {
+      console.error('Error parsing AI recommendations:', parseError);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error generating AI recommendations:', error);
+    return [];
+  }
+}
+
 export async function generateRecipeSummary(recipe: any): Promise<string | null> {
   if (!openai) {
     return null;

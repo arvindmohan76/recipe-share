@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { Skeleton } from 'primereact/skeleton';
 import { useAuth } from '../../context/AuthContext';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { useNavigate } from 'react-router-dom';
 import {
   getUserRecommendations,
@@ -12,6 +13,7 @@ import {
 } from '../../lib/searchHistory';
 import RecipeCard from './RecipeCard';
 import { supabase } from '../../lib/supabase';
+import { generateAIRecommendations } from '../../lib/openai';
 
 const RecommendedRecipes: React.FC = () => {
   const [recommendations, setRecommendations] = useState<RecipeRecommendation[]>([]);
@@ -19,6 +21,8 @@ const RecommendedRecipes: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
+  const [generatingAI, setGeneratingAI] = useState(false);
+  const [aiError, setAiError] = useState('');
   const [savedRecipes, setSavedRecipes] = useState<Set<string>>(new Set());
 
   const { user } = useAuth();
@@ -195,6 +199,99 @@ const RecommendedRecipes: React.FC = () => {
     }
   };
 
+  const handleGenerateAIRecommendations = async () => {
+    if (!user) return;
+    
+    setGeneratingAI(true);
+    setAiError('');
+    
+    try {
+      // Fetch user's search history
+      const { data: searchHistory, error: searchError } = await supabase
+        .from('user_search_history')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (searchError) throw searchError;
+      
+      // Fetch user's saved recipes
+      const { data: savedRecipesData, error: savedError } = await supabase
+        .from('saved_recipes')
+        .select('recipes(*)')
+        .eq('user_id', user.id);
+      
+      if (savedError) throw savedError;
+      
+      const savedRecipesList = savedRecipesData
+        .map(item => item.recipes)
+        .filter(Boolean);
+      
+      // Fetch available recipes (that the user hasn't saved)
+      const { data: availableRecipes, error: availableError } = await supabase
+        .from('recipes')
+        .select('*')
+        .eq('is_public', true)
+        .not('id', 'in', `(${savedRecipesList.map((r: any) => r.id).join(',')})`)
+        .limit(50);
+      
+      if (availableError) throw availableError;
+      
+      if (!availableRecipes || availableRecipes.length === 0) {
+        throw new Error('No available recipes to recommend');
+      }
+      
+      // Prepare user preferences for AI
+      const userPreferences = {
+        searchHistory,
+        savedRecipes: savedRecipesList,
+        viewedRecipes: [] // Could add view history if tracked
+      };
+      
+      // Generate AI recommendations
+      const aiRecommendations = await generateAIRecommendations(
+        userPreferences,
+        availableRecipes
+      );
+      
+      if (aiRecommendations.length === 0) {
+        throw new Error('Could not generate AI recommendations');
+      }
+      
+      // Clear existing recommendations
+      await supabase
+        .from('recipe_recommendations')
+        .delete()
+        .eq('user_id', user.id);
+      
+      // Insert AI recommendations into database
+      const recommendationsToInsert = aiRecommendations.map(rec => ({
+        user_id: user.id,
+        recipe_id: rec.recipe_id,
+        recommendation_type: rec.recommendation_type,
+        confidence_score: rec.confidence_score,
+        reasoning: rec.reasoning,
+        created_at: new Date().toISOString()
+      }));
+      
+      const { error: insertError } = await supabase
+        .from('recipe_recommendations')
+        .insert(recommendationsToInsert);
+      
+      if (insertError) throw insertError;
+      
+      // Reload recommendations
+      await loadRecommendations();
+      
+    } catch (err: any) {
+      console.error('Error generating AI recommendations:', err);
+      setAiError(err.message || 'Failed to generate AI recommendations');
+    } finally {
+      setGeneratingAI(false);
+    }
+  };
+
   const handleSaveRecipe = async (recipeId: string) => {
     if (!user) return;
 
@@ -310,6 +407,15 @@ const RecommendedRecipes: React.FC = () => {
             Personalized recipe suggestions based on your preferences and activity
           </p>
         </div>
+        <div className="flex gap-2">
+          <Button
+            label="Generate AI Recommendations"
+            icon="pi pi-bolt"
+            onClick={handleGenerateAIRecommendations}
+            loading={generatingAI}
+            className="p-button-outlined p-button-info"
+          />
+        </div>
         <Button
           label="Refresh Recommendations"
           icon="pi pi-refresh"
@@ -317,43 +423,29 @@ const RecommendedRecipes: React.FC = () => {
           loading={generating}
           className="p-button-outlined"
         />
-        <Button
-          label="Debug Info"
-          icon="pi pi-info"
-          onClick={async () => {
-            if (!user) return;
-            
-            console.log('=== DEBUGGING RECOMMENDATION SYSTEM ===');
-            
-            // Check user data
-            const { data: userData } = await supabase.from('users').select('*').eq('id', user.id).single();
-            console.log('User data:', userData);
-            
-            // Check privacy settings
-            const { data: privacyData } = await supabase.from('user_privacy_settings').select('*').eq('user_id', user.id).single();
-            console.log('Privacy settings:', privacyData);
-            
-            // Check search history
-            const { data: searchData } = await supabase.from('user_search_history').select('*').eq('user_id', user.id);
-            console.log('Search history:', searchData);
-            
-            // Check saved recipes
-            const { data: savedData } = await supabase.from('saved_recipes').select('*').eq('user_id', user.id);
-            console.log('Saved recipes:', savedData);
-            
-            // Check existing recommendations
-            const { data: recData } = await supabase.from('recipe_recommendations').select('*').eq('user_id', user.id);
-            console.log('Existing recommendations:', recData);
-            
-            // Check available recipes
-            const { data: recipesData } = await supabase.from('recipes').select('id, title, is_public').eq('is_public', true).limit(5);
-            console.log('Available public recipes:', recipesData);
-            
-            console.log('=== END DEBUG INFO ===');
-          }}
-          className="p-button-info p-button-outlined ml-2"
-        />
       </div>
+
+      {/* AI Recommendation Status */}
+      {generatingAI && (
+        <Card className="mb-6">
+          <div className="flex flex-col items-center justify-center p-6 text-center">
+            <ProgressSpinner style={{width: '50px', height: '50px'}} className="mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Generating AI Recommendations</h3>
+            <p className="text-gray-600 dark:text-gray-400 max-w-lg">
+              Our AI is analyzing your preferences, search history, and saved recipes to create personalized recommendations just for you. This may take a moment...
+            </p>
+          </div>
+        </Card>
+      )}
+      
+      {/* AI Error Message */}
+      {aiError && (
+        <Message 
+          severity="error" 
+          text={aiError}
+          className="w-full mb-6"
+        />
+      )}
 
       {recommendations.length === 0 ? (
         <Card className="text-center p-8">
@@ -363,6 +455,7 @@ const RecommendedRecipes: React.FC = () => {
             <p className="text-gray-500">
               Start searching for recipes and saving your favorites to get personalized recommendations. 
               You need some search history or saved recipes for the system to generate recommendations.
+              You can also try our AI-powered recommendations for more personalized suggestions.
             </p>
             <div className="flex justify-center gap-4">
               <Button
@@ -370,6 +463,13 @@ const RecommendedRecipes: React.FC = () => {
                 icon="pi pi-search"
                className="p-button-outlined"
                onClick={() => navigate('/recipes')}
+              />
+              <Button
+                label="Generate AI Recommendations"
+                icon="pi pi-bolt"
+                onClick={handleGenerateAIRecommendations}
+                loading={generatingAI}
+                className="p-button-outlined p-button-info"
               />
               <Button
                 label="Generate"
@@ -381,6 +481,7 @@ const RecommendedRecipes: React.FC = () => {
             </div>
             <div className="text-sm text-gray-400 mt-4">
               <p>💡 Tip: Search for recipes, save some favorites, then generate recommendations!</p>
+              <p className="mt-2">✨ Try our new AI-powered recommendations for even better personalization!</p>
             </div>
           </div>
         </Card>
@@ -449,10 +550,21 @@ const RecommendedRecipes: React.FC = () => {
       <Card className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700">
         <div className="flex items-start gap-3">
           <i className="pi pi-info-circle text-blue-500 dark:text-blue-400 text-lg mt-1"></i>
-          <div className="space-y-2">
+          <div className="space-y-2 flex-1">
             <h4 className="font-medium text-blue-800 dark:text-blue-200">About Your Recommendations</h4>
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              These recommendations are generated based on your search history, saved recipes, and preferences. 
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  <strong>Standard Recommendations:</strong> Generated based on your search history, saved recipes, and preferences.
+                </p>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  <strong>AI Recommendations:</strong> Uses advanced AI to analyze your preferences and suggest recipes you might enjoy.
+                </p>
+              </div>
+            </div>
+            <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">
               You can manage your privacy settings and data usage in your account settings.
             </p>
             <Button
