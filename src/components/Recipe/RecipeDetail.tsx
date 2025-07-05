@@ -359,11 +359,45 @@ const RecipeDetail: React.FC = () => {
       if (recipe && currentStep < recipe.steps.length - 1) {
         setCurrentStep(currentStep + 1);
         console.log('Moving to next step:', currentStep + 1);
+        
+        // Read the new current step instruction
+        if ('speechSynthesis' in window && recipe.steps[currentStep + 1]) {
+          const nextStepText = recipe.steps[currentStep + 1].instruction;
+          const utterance = new SpeechSynthesisUtterance(`Step ${currentStep + 2}: ${nextStepText}`);
+          utterance.rate = 0.8;
+          utterance.volume = 0.8;
+          speechSynthesis.speak(utterance);
+        }
+      } else if (recipe && currentStep === recipe.steps.length - 1) {
+        // At the last step, inform user
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('You are already at the last step of the recipe.');
+          utterance.rate = 0.8;
+          utterance.volume = 0.8;
+          speechSynthesis.speak(utterance);
+        }
       }
     } else if (lowerCommand.includes('previous step')) {
       if (currentStep > 0) {
         setCurrentStep(currentStep - 1);
         console.log('Moving to previous step:', currentStep - 1);
+        
+        // Read the new current step instruction
+        if ('speechSynthesis' in window && recipe && recipe.steps[currentStep - 1]) {
+          const prevStepText = recipe.steps[currentStep - 1].instruction;
+          const utterance = new SpeechSynthesisUtterance(`Step ${currentStep}: ${prevStepText}`);
+          utterance.rate = 0.8;
+          utterance.volume = 0.8;
+          speechSynthesis.speak(utterance);
+        }
+      } else {
+        // At the first step, inform user
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('You are already at the first step of the recipe.');
+          utterance.rate = 0.8;
+          utterance.volume = 0.8;
+          speechSynthesis.speak(utterance);
+        }
       }
     } else if (lowerCommand.includes('read ingredients')) {
       console.log('Reading ingredients...');
@@ -389,8 +423,17 @@ const RecipeDetail: React.FC = () => {
       setIsCookingMode(true);
       console.log('Starting cooking mode');
       if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance('Cooking mode activated. You can now use voice commands to navigate through the recipe.');
+        let message = 'Cooking mode activated. You can now use voice commands to navigate through the recipe.';
+        
+        // Read the first step when starting cooking mode
+        if (recipe && recipe.steps[0]) {
+          const firstStepText = recipe.steps[0].instruction;
+          message += ` Let's start with step 1: ${firstStepText}`;
+        }
+        
+        const utterance = new SpeechSynthesisUtterance(message);
         utterance.rate = 0.8;
+        utterance.volume = 0.8;
         speechSynthesis.speak(utterance);
       }
     } else if (lowerCommand.includes('stop cooking')) {
@@ -399,6 +442,7 @@ const RecipeDetail: React.FC = () => {
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance('Cooking mode deactivated.');
         utterance.rate = 0.8;
+        utterance.volume = 0.8;
         speechSynthesis.speak(utterance);
       }
     }
