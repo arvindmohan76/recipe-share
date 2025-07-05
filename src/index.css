@@ -426,34 +426,25 @@
 
 /* Custom button styles */
 .p-button-success {
-  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:border-emerald-600 !important;
+  @apply bg-emerald-500 hover:bg-emerald-600 border-emerald-500 text-white dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:border-emerald-600 shadow-sm hover:shadow-md !important;
   font-weight: 400 !important;
+  transition: all 0.2s ease !important;
 }
 
-.p-button-success.p-button-outlined {
-  @apply bg-white hover:bg-emerald-50 dark:bg-gray-800 dark:hover:bg-emerald-900/20 border-emerald-500 text-emerald-700 dark:text-emerald-300 !important;
-  font-weight: 400 !important;
-  color: #047857 !important;
-  border-width: 2px !important;
+.p-button-success .p-button-icon {
+  color: white !important;
+  font-size: 1rem !important;
+  margin-right: 0.5rem !important;
+}
+
+.p-button-success .p-button-label {
+  color: white !important;
   font-weight: 500 !important;
 }
 
-.dark .p-button-success.p-button-outlined {
-  color: #6ee7b7 !important;
-  background-color: #1f2937 !important;
-  border-color: #10b981 !important;
-}
-
-.p-button-success.p-button-outlined:hover {
-  background-color: #f0fdf4 !important;
-  color: #065f46 !important;
-  border-color: #059669 !important;
-}
-
-.dark .p-button-success.p-button-outlined:hover {
-  background-color: rgba(16, 185, 129, 0.1) !important;
-  color: #a7f3d0 !important;
-  border-color: #34d399 !important;
+.p-button-success.p-button-outlined {
+  @apply bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border-emerald-500 text-emerald-600 dark:text-emerald-400 !important;
+  font-weight: 400 !important;
 }
 
 /* Subtle success button styles */
